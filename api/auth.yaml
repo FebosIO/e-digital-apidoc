@@ -1,0 +1,25 @@
+operation:
+  summary: Obtener token de autenticación
+  operationId: auth
+  tags:
+    - Security
+  description: |
+    Retorna un token de autenticación para consumir el resto de los endpoint.
+
+  responses:
+    "200":
+      description: Respuesta a todo evento
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - token
+            properties:
+              token:
+                type: string
+                description: Token de autenticación
+          examples:
+            Respuesta OK:
+              value:
+                token: "ASDFGHJKLQWERTYUIO"

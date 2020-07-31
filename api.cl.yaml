@@ -1,0 +1,24 @@
+openapi: 3.0.0
+info:
+  title: "API E-Digital"
+  description: |
+   API de firmado para E-Digital
+  version: v1.2
+  contact:
+    name: Carlos Garcia
+    email: carlos.garcia@e-digital.cl
+    url: www.e-digital.cl
+  x-logo:
+    url: 'https://e-digital.cl/wp-content/uploads/2016/11/logo_final_2_slogan_menor2.png'
+    altText: E-Digital
+servers:
+  - url: https://e-digital.cl/api
+
+paths:
+  /auth:
+    post:
+      $ref: api/auth.yaml#/operation
+
+tags:
+ - name: Security
+   description: Mecanismos de seguridad

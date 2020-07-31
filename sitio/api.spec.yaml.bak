@@ -1,0 +1,143 @@
+openapi: 3.0.0
+info:
+  title: API E-Digital
+  description: |
+    API de firmado para E-Digital
+  version: v1.2
+  contact:
+    name: Carlos Garcia
+    email: carlos.garcia@e-digital.cl
+    url: www.e-digital.cl
+  x-logo:
+    url: >-
+      https://e-digital.cl/wp-content/uploads/2016/11/logo_final_2_slogan_menor2.png
+    altText: E-Digital
+servers:
+  - url: 'https://e-digital.cl/api'
+paths:
+  /auth:
+    post:
+      summary: Obtener token de autenticación
+      operationId: auth
+      tags:
+        - Security
+      description: >
+        Retorna un token de autenticación para consumir el resto de los
+        endpoint.
+      responses:
+        '200':
+          description: Respuesta a todo evento
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - token
+                properties:
+                  token:
+                    type: string
+                    description: Token de autenticación
+              examples:
+                Respuesta OK:
+                  value:
+                    token: ASDFGHJKLQWERTYUIO
+      x-codeSamples:
+        - lang: Shell + Curl
+          source: |-
+            curl --request POST \
+              --url https://e-digital.cl/api/auth
+        - lang: Java + Okhttp
+          source: |-
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+              .url("https://e-digital.cl/api/auth")
+              .post(null)
+              .build();
+
+            Response response = client.newCall(request).execute();
+        - lang: Csharp + Restsharp
+          source: |-
+            var client = new RestClient("https://e-digital.cl/api/auth");
+            var request = new RestRequest(Method.POST);
+            IRestResponse response = client.Execute(request);
+        - lang: Javascript + Jquery
+          source: |-
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "https://e-digital.cl/api/auth",
+              "method": "POST",
+              "headers": {}
+            }
+
+            $.ajax(settings).done(function (response) {
+              console.log(response);
+            });
+        - lang: Node + Native
+          source: |-
+            var http = require("https");
+
+            var options = {
+              "method": "POST",
+              "hostname": "e-digital.cl",
+              "port": null,
+              "path": "/api/auth",
+              "headers": {}
+            };
+
+            var req = http.request(options, function (res) {
+              var chunks = [];
+
+              res.on("data", function (chunk) {
+                chunks.push(chunk);
+              });
+
+              res.on("end", function () {
+                var body = Buffer.concat(chunks);
+                console.log(body.toString());
+              });
+            });
+
+            req.end();
+        - lang: Php + Curl
+          source: |-
+            <?php
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://e-digital.cl/api/auth",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 30,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "POST",
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              echo $response;
+            }
+        - lang: Python + Python3
+          source: |-
+            import http.client
+
+            conn = http.client.HTTPSConnection("e-digital.cl")
+
+            conn.request("POST", "/api/auth")
+
+            res = conn.getresponse()
+            data = res.read()
+
+            print(data.decode("utf-8"))
+tags:
+  - name: Security
+    description: Mecanismos de seguridad
