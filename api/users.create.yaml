@@ -20,12 +20,12 @@ operation:
           type: object
           required:
             - name
-            - surname
-            - apMaterno
+            - surName
+            - middleName
             - email
-            - identity_document
-            - type_identity_document
-            - serie_identity_document
+            - identityDocument
+            - typeIdentityDocument
+            - serieIdentityDocument
             - password
             - address
             - gender
@@ -33,68 +33,68 @@ operation:
             - phone
           properties:
             name:
-                description: Indica el nombre del usuario a crear
-                 <br> Ejemplo = `Ramon`
+                description: "Indica el nombre del usuario a crear
+                  <br> Ejemplo : `Ramon` "
                 example: 'Ramon'
                 type: string
-            surname:
+            surName:
                 type: string
-                description: Indica el apellido paterno del usuario a crear.
-                  <br> Ejemplo = `Montalva`
+                description: "Indica el apellido paterno del usuario a crear.
+                  <br> Ejemplo : `Montalva` "
                 example: 'Montalva'
-            apMaterno:
+            middleName:
               type: string
-              description: Indica el apellido materno del usuario a crear.
-                <br> Ejemplo = `Montoya`
+              description: "Indica el apellido materno del usuario a crear.
+                <br> Ejemplo : `Montoya` "
               example: 'Montoya'
             email:
                 type: string
-                description: Indica el email del usuario a crear.
-                  <br> Ejemplo = `tucorreo@empresa.cl`
+                description: "Indica el email del usuario a crear.
+                  <br> Ejemplo : `tucorreo@empresa.cl` "
                 example: 'tucorreo@empresa.cl'
-            identity_document:
+            identityDocument:
                 type: string
-                description: Indica el rut del documento del usuario a crear.
-                  <br> Ejemplo = `12345678-9`
+                description: "Indica el rut del documento del usuario a crear.
+                  <br> Ejemplo : `12345678-9` "
                 example: '12345678-9'
-            type_identity_document:
+            typeIdentityDocument:
                 type: string
-                description: Indica el tipo documento del usuario a crear
-                  <br> Ejemplo = `CEDULA_EXT`
+                description: "Indica el tipo documento del usuario a crear
+                  <br> Ejemplo : `CEDULA_EXT` "
                 example: 'CEDULA_EXT'
-            serie_identity_document:
+            serieIdentityDocument:
                 type: string
-                description: Indica el rut del documento del usuario a crear.
-                  <br> Ejemplo = `12345678-9`
+                description: "Indica el rut del documento del usuario a crear.
+                  <br> Ejemplo : `12345678-9` "
                 example: '12345678-9'
             password:
                 type: string
-                description: Indica la password del usuario a crear.
-                  <br> Ejemplo = `a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b`
-                example: 'a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b'
+                description: "Indica la password del usuario a crear.
+                  <br> Ejemplo : `myS3cretPass` "
+                example: 'myS3cretPass'
             address:
                 type: string
-                description: Indica la direccion del usuario a crear
-                 <br> Ejemplo = `Mi Casa 123`
-                example: 'Mi Casa 123'
+                description: "Indica la dirección del usuario a crear
+                 <br> Ejemplo : `Badajoz 100 – Piso 15 (Oficina 1519), Las Condes` "
+                example: 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes'
             gender:
                 type: string
                 enum:
                   - "male"
                   - "female"
-                description: Indica el genero del usuario a crear.
-                  <br> Ejemplo = `male`
+                description: "Indica el genero del usuario a crear.
+                  <br> Ejemplo : `male` "
                 example: 'male'
             birth:
                 type: string
-                description: Indica la fecha de nacimiento del usuario a crear.
-                  <br> Ejemplo = `1970-12-31 (Format yyyy-MM-dd)`
+                description: "Indica la fecha de nacimiento del usuario a crear `(Format yyyy-MM-dd)`
+                  <br> Ejemplo : `1970-12-31` "
                 example: '1970-12-31'
             phone:
                 type: string
-                description: Indica el numero de telefono del usuario a crear.
-                  <br> Ejemplo = `55555555`
-                example: '55555555'
+                description: "Indica el número de teléfono del usuario a crear.
+                  <br> Ejemplo : `(2) 2219 8406` "
+                example: '(2) 2219 8406'
   responses:
     "200":
       description: Respuesta a todo evento

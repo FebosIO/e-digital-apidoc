@@ -164,7 +164,9 @@ paths:
         - &ref_0
           name: token
           in: header
-          description: Token de acceso creado con usuario y clave.
+          description: >-
+            Token de acceso que permite el consumo de los EndPoint el cual se
+            puede obtener en la API `/auth`.
           required: true
           schema:
             type: string
@@ -175,12 +177,12 @@ paths:
               type: object
               required:
                 - name
-                - surname
-                - apMaterno
+                - surName
+                - middleName
                 - email
-                - identity_document
-                - type_identity_document
-                - serie_identity_document
+                - identityDocument
+                - typeIdentityDocument
+                - serieIdentityDocument
                 - password
                 - address
                 - gender
@@ -188,76 +190,76 @@ paths:
                 - phone
               properties:
                 name:
-                  description: Indica el nombre del usuario a crear <br> Ejemplo = `Ramon`
+                  description: 'Indica el nombre del usuario a crear <br> Ejemplo : `Ramon` '
                   example: Ramon
                   type: string
-                surname:
+                surName:
                   type: string
                   description: >-
                     Indica el apellido paterno del usuario a crear. <br> Ejemplo
-                    = `Montalva`
+                    : `Montalva` 
                   example: Montalva
-                apMaterno:
+                middleName:
                   type: string
                   description: >-
                     Indica el apellido materno del usuario a crear. <br> Ejemplo
-                    = `Montoya`
+                    : `Montoya` 
                   example: Montoya
                 email:
                   type: string
                   description: >-
-                    Indica el email del usuario a crear. <br> Ejemplo =
-                    `tucorreo@empresa.cl`
+                    Indica el email del usuario a crear. <br> Ejemplo :
+                    `tucorreo@empresa.cl` 
                   example: tucorreo@empresa.cl
-                identity_document:
+                identityDocument:
                   type: string
                   description: >-
                     Indica el rut del documento del usuario a crear. <br>
-                    Ejemplo = `12345678-9`
+                    Ejemplo : `12345678-9` 
                   example: 12345678-9
-                type_identity_document:
+                typeIdentityDocument:
                   type: string
                   description: >-
-                    Indica el tipo documento del usuario a crear <br> Ejemplo =
-                    `CEDULA_EXT`
+                    Indica el tipo documento del usuario a crear <br> Ejemplo :
+                    `CEDULA_EXT` 
                   example: CEDULA_EXT
-                serie_identity_document:
+                serieIdentityDocument:
                   type: string
                   description: >-
                     Indica el rut del documento del usuario a crear. <br>
-                    Ejemplo = `12345678-9`
+                    Ejemplo : `12345678-9` 
                   example: 12345678-9
                 password:
                   type: string
                   description: >-
-                    Indica la password del usuario a crear. <br> Ejemplo =
-                    `a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b`
-                  example: a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b
+                    Indica la password del usuario a crear. <br> Ejemplo :
+                    `myS3cretPass` 
+                  example: myS3cretPass
                 address:
                   type: string
                   description: >-
-                    Indica la direccion del usuario a crear <br> Ejemplo = `Mi
-                    Casa 123`
-                  example: Mi Casa 123
+                    Indica la dirección del usuario a crear <br> Ejemplo :
+                    `Badajoz 100 – Piso 15 (Oficina 1519), Las Condes` 
+                  example: 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes'
                 gender:
                   type: string
                   enum:
                     - male
                     - female
-                  description: Indica el genero del usuario a crear. <br> Ejemplo = `male`
+                  description: 'Indica el genero del usuario a crear. <br> Ejemplo : `male` '
                   example: male
                 birth:
                   type: string
                   description: >-
-                    Indica la fecha de nacimiento del usuario a crear. <br>
-                    Ejemplo = `1970-12-31 (Format yyyy-MM-dd)`
+                    Indica la fecha de nacimiento del usuario a crear `(Format
+                    yyyy-MM-dd)` <br> Ejemplo : `1970-12-31` 
                   example: '1970-12-31'
                 phone:
                   type: string
                   description: >-
-                    Indica el numero de telefono del usuario a crear. <br>
-                    Ejemplo = `55555555`
-                  example: '55555555'
+                    Indica el número de teléfono del usuario a crear. <br>
+                    Ejemplo : `(2) 2219 8406` 
+                  example: (2) 2219 8406
       responses:
         '200':
           description: Respuesta a todo evento
@@ -277,7 +279,7 @@ paths:
               --url https://e-digital.cl/api/users \
               --header 'content-type: application/json' \
               --header 'token: SOME_STRING_VALUE' \
-              --data '{"name":"Ramon","surname":"Montalva","apMaterno":"Montoya","email":"tucorreo@empresa.cl","identity_document":"12345678-9","type_identity_document":"CEDULA_EXT","serie_identity_document":"12345678-9","password":"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b","address":"Mi Casa 123","gender":"male","birth":"1970-12-31","phone":"55555555"}'
+              --data '{"name":"Ramon","surName":"Montalva","middleName":"Montoya","email":"tucorreo@empresa.cl","identityDocument":"12345678-9","typeIdentityDocument":"CEDULA_EXT","serieIdentityDocument":"12345678-9","password":"myS3cretPass","address":"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes","gender":"male","birth":"1970-12-31","phone":"(2) 2219 8406"}'
         - lang: Java + Okhttp
           source: >-
             OkHttpClient client = new OkHttpClient();
@@ -286,9 +288,10 @@ paths:
             MediaType mediaType = MediaType.parse("application/json");
 
             RequestBody body = RequestBody.create(mediaType,
-            "{\"name\":\"Ramon\",\"surname\":\"Montalva\",\"apMaterno\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"12345678-9\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"Mi
-            Casa
-            123\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}");
+            "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"12345678-9\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
+            100 – Piso 15 (Oficina 1519), Las
+            Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2)
+            2219 8406\"}");
 
             Request request = new Request.Builder()
               .url("https://e-digital.cl/api/users")
@@ -309,10 +312,10 @@ paths:
             request.AddHeader("token", "SOME_STRING_VALUE");
 
             request.AddParameter("application/json",
-            "{\"name\":\"Ramon\",\"surname\":\"Montalva\",\"apMaterno\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"12345678-9\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"Mi
-            Casa
-            123\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}",
-            ParameterType.RequestBody);
+            "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"12345678-9\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
+            100 – Piso 15 (Oficina 1519), Las
+            Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2)
+            2219 8406\"}", ParameterType.RequestBody);
 
             IRestResponse response = client.Execute(request);
         - lang: Javascript + Jquery
@@ -327,7 +330,7 @@ paths:
                 "token": "SOME_STRING_VALUE"
               },
               "processData": false,
-              "data": "{\"name\":\"Ramon\",\"surname\":\"Montalva\",\"apMaterno\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"12345678-9\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"Mi Casa 123\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}"
+              "data": "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"12345678-9\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2) 2219 8406\"}"
             }
 
             $.ajax(settings).done(function (response) {
@@ -363,17 +366,17 @@ paths:
 
             req.write(JSON.stringify({
               name: 'Ramon',
-              surname: 'Montalva',
-              apMaterno: 'Montoya',
+              surName: 'Montalva',
+              middleName: 'Montoya',
               email: 'tucorreo@empresa.cl',
-              identity_document: '12345678-9',
-              type_identity_document: 'CEDULA_EXT',
-              serie_identity_document: '12345678-9',
-              password: 'a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b',
-              address: 'Mi Casa 123',
+              identityDocument: '12345678-9',
+              typeIdentityDocument: 'CEDULA_EXT',
+              serieIdentityDocument: '12345678-9',
+              password: 'myS3cretPass',
+              address: 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes',
               gender: 'male',
               birth: '1970-12-31',
-              phone: '55555555'
+              phone: '(2) 2219 8406'
             }));
             req.end();
         - lang: Php + Curl
@@ -390,7 +393,7 @@ paths:
               CURLOPT_TIMEOUT => 30,
               CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
               CURLOPT_CUSTOMREQUEST => "POST",
-              CURLOPT_POSTFIELDS => "{\"name\":\"Ramon\",\"surname\":\"Montalva\",\"apMaterno\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"12345678-9\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"Mi Casa 123\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}",
+              CURLOPT_POSTFIELDS => "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"12345678-9\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2) 2219 8406\"}",
               CURLOPT_HTTPHEADER => array(
                 "content-type: application/json",
                 "token: SOME_STRING_VALUE"
@@ -416,9 +419,10 @@ paths:
 
 
             payload =
-            "{\"name\":\"Ramon\",\"surname\":\"Montalva\",\"apMaterno\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"12345678-9\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"Mi
-            Casa
-            123\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}"
+            "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"12345678-9\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
+            100 – Piso 15 (Oficina 1519), Las
+            Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2)
+            2219 8406\"}"
 
 
             headers = {
@@ -581,7 +585,7 @@ tags:
   - name: Security
     description: Mecanismos de seguridad
   - name: Users
-    description: Descripcion Users
+    description: Conjunto de API's que permiten la administración de los usuarios.
   - name: Organization
     description: Descripcion Documentos
   - name: Documents

@@ -28,7 +28,7 @@ tags:
  - name: Security
    description: Mecanismos de seguridad
  - name: Users
-   description: Descripcion Users
+   description: Conjunto de API's que permiten la administración de los usuarios.
  - name: Organization
    description: Descripcion Documentos
  - name: Documents
