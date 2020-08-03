@@ -27,3 +27,9 @@ paths:
 tags:
  - name: Security
    description: Mecanismos de seguridad
+ - name: Users
+   description: Descripcion Users
+ - name: Organization
+   description: Descripcion Documentos
+ - name: Documents
+   description: Descripcion Documentos

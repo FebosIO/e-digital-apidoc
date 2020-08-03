@@ -143,9 +143,23 @@ paths:
       summary: Crea un Usuario
       operationId: users.create
       tags:
-        - Security
-      description: |
-        EndPoint para Crear un usario.
+        - Users
+      description: >
+        Cada usuario final es representado por un usuario único de sistema.
+
+        En esta API es posible crear dicho usuario en el sistema para que pueda
+        recibir y firmar documentos.
+
+        Cada documento debe ser firmado por un usuari existente en la
+        plataforma.
+
+        Es a los usuarios finalmente a quienes les llegan los documentos que se
+        encuentran pendientes de firma.
+
+        Cada usuarios puede pertenecer a mas de una empresa, esta vinculación se
+        puede hacer con la API
+
+        `/organizations/{organitzationID}/users/{usuarioID}`
       parameters:
         - &ref_0
           name: token
@@ -162,6 +176,7 @@ paths:
               required:
                 - name
                 - surname
+                - apMaterno
                 - email
                 - identity_document
                 - type_identity_document
@@ -173,48 +188,75 @@ paths:
                 - phone
               properties:
                 name:
+                  description: Indica el nombre del usuario a crear <br> Ejemplo = `Ramon`
+                  example: Ramon
                   type: string
-                  description: Indica el nombre de usuario.
-                  example: Nombre Usuario
                 surname:
                   type: string
-                  description: Indica el apellido paterno
-                  example: Apellido Paterno
+                  description: >-
+                    Indica el apellido paterno del usuario a crear. <br> Ejemplo
+                    = `Montalva`
+                  example: Montalva
+                apMaterno:
+                  type: string
+                  description: >-
+                    Indica el apellido materno del usuario a crear. <br> Ejemplo
+                    = `Montoya`
+                  example: Montoya
                 email:
                   type: string
-                  description: Indica el email
+                  description: >-
+                    Indica el email del usuario a crear. <br> Ejemplo =
+                    `tucorreo@empresa.cl`
                   example: tucorreo@empresa.cl
                 identity_document:
                   type: string
-                  description: Indica el rut
-                  example: xxxxxxxx-x
+                  description: >-
+                    Indica el rut del documento del usuario a crear. <br>
+                    Ejemplo = `12345678-9`
+                  example: 12345678-9
                 type_identity_document:
                   type: string
-                  description: Indica el tipo documento
+                  description: >-
+                    Indica el tipo documento del usuario a crear <br> Ejemplo =
+                    `CEDULA_EXT`
                   example: CEDULA_EXT
                 serie_identity_document:
                   type: string
-                  description: Indica el rut
-                  example: xxxxxxxx-x
+                  description: >-
+                    Indica el rut del documento del usuario a crear. <br>
+                    Ejemplo = `12345678-9`
+                  example: 12345678-9
                 password:
                   type: string
-                  description: Indica la password
+                  description: >-
+                    Indica la password del usuario a crear. <br> Ejemplo =
+                    `a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b`
                   example: a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b
                 address:
                   type: string
-                  description: Indica la direccion
-                  example: una direccion
+                  description: >-
+                    Indica la direccion del usuario a crear <br> Ejemplo = `Mi
+                    Casa 123`
+                  example: Mi Casa 123
                 gender:
                   type: string
-                  description: Indica el genero
+                  enum:
+                    - male
+                    - female
+                  description: Indica el genero del usuario a crear. <br> Ejemplo = `male`
                   example: male
                 birth:
                   type: string
-                  description: Indica la fecha de nacimiento
+                  description: >-
+                    Indica la fecha de nacimiento del usuario a crear. <br>
+                    Ejemplo = `1970-12-31 (Format yyyy-MM-dd)`
                   example: '1970-12-31'
                 phone:
                   type: string
-                  description: Indica el numero de telefono
+                  description: >-
+                    Indica el numero de telefono del usuario a crear. <br>
+                    Ejemplo = `55555555`
                   example: '55555555'
       responses:
         '200':
@@ -235,7 +277,7 @@ paths:
               --url https://e-digital.cl/api/users \
               --header 'content-type: application/json' \
               --header 'token: SOME_STRING_VALUE' \
-              --data '{"name":"Nombre Usuario","surname":"Apellido Paterno","email":"tucorreo@empresa.cl","identity_document":"xxxxxxxx-x","type_identity_document":"CEDULA_EXT","serie_identity_document":"xxxxxxxx-x","password":"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b","address":"una direccion","gender":"male","birth":"1970-12-31","phone":"55555555"}'
+              --data '{"name":"Ramon","surname":"Montalva","apMaterno":"Montoya","email":"tucorreo@empresa.cl","identity_document":"12345678-9","type_identity_document":"CEDULA_EXT","serie_identity_document":"12345678-9","password":"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b","address":"Mi Casa 123","gender":"male","birth":"1970-12-31","phone":"55555555"}'
         - lang: Java + Okhttp
           source: >-
             OkHttpClient client = new OkHttpClient();
@@ -243,10 +285,10 @@ paths:
 
             MediaType mediaType = MediaType.parse("application/json");
 
-            RequestBody body = RequestBody.create(mediaType, "{\"name\":\"Nombre
-            Usuario\",\"surname\":\"Apellido
-            Paterno\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"xxxxxxxx-x\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"xxxxxxxx-x\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"una
-            direccion\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}");
+            RequestBody body = RequestBody.create(mediaType,
+            "{\"name\":\"Ramon\",\"surname\":\"Montalva\",\"apMaterno\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"12345678-9\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"Mi
+            Casa
+            123\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}");
 
             Request request = new Request.Builder()
               .url("https://e-digital.cl/api/users")
@@ -266,10 +308,10 @@ paths:
 
             request.AddHeader("token", "SOME_STRING_VALUE");
 
-            request.AddParameter("application/json", "{\"name\":\"Nombre
-            Usuario\",\"surname\":\"Apellido
-            Paterno\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"xxxxxxxx-x\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"xxxxxxxx-x\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"una
-            direccion\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}",
+            request.AddParameter("application/json",
+            "{\"name\":\"Ramon\",\"surname\":\"Montalva\",\"apMaterno\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"12345678-9\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"Mi
+            Casa
+            123\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}",
             ParameterType.RequestBody);
 
             IRestResponse response = client.Execute(request);
@@ -285,7 +327,7 @@ paths:
                 "token": "SOME_STRING_VALUE"
               },
               "processData": false,
-              "data": "{\"name\":\"Nombre Usuario\",\"surname\":\"Apellido Paterno\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"xxxxxxxx-x\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"xxxxxxxx-x\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"una direccion\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}"
+              "data": "{\"name\":\"Ramon\",\"surname\":\"Montalva\",\"apMaterno\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"12345678-9\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"Mi Casa 123\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}"
             }
 
             $.ajax(settings).done(function (response) {
@@ -320,14 +362,15 @@ paths:
             });
 
             req.write(JSON.stringify({
-              name: 'Nombre Usuario',
-              surname: 'Apellido Paterno',
+              name: 'Ramon',
+              surname: 'Montalva',
+              apMaterno: 'Montoya',
               email: 'tucorreo@empresa.cl',
-              identity_document: 'xxxxxxxx-x',
+              identity_document: '12345678-9',
               type_identity_document: 'CEDULA_EXT',
-              serie_identity_document: 'xxxxxxxx-x',
+              serie_identity_document: '12345678-9',
               password: 'a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b',
-              address: 'una direccion',
+              address: 'Mi Casa 123',
               gender: 'male',
               birth: '1970-12-31',
               phone: '55555555'
@@ -347,7 +390,7 @@ paths:
               CURLOPT_TIMEOUT => 30,
               CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
               CURLOPT_CUSTOMREQUEST => "POST",
-              CURLOPT_POSTFIELDS => "{\"name\":\"Nombre Usuario\",\"surname\":\"Apellido Paterno\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"xxxxxxxx-x\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"xxxxxxxx-x\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"una direccion\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}",
+              CURLOPT_POSTFIELDS => "{\"name\":\"Ramon\",\"surname\":\"Montalva\",\"apMaterno\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"12345678-9\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"Mi Casa 123\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}",
               CURLOPT_HTTPHEADER => array(
                 "content-type: application/json",
                 "token: SOME_STRING_VALUE"
@@ -372,9 +415,10 @@ paths:
             conn = http.client.HTTPSConnection("e-digital.cl")
 
 
-            payload = "{\"name\":\"Nombre Usuario\",\"surname\":\"Apellido
-            Paterno\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"xxxxxxxx-x\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"xxxxxxxx-x\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"una
-            direccion\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}"
+            payload =
+            "{\"name\":\"Ramon\",\"surname\":\"Montalva\",\"apMaterno\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"12345678-9\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"Mi
+            Casa
+            123\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}"
 
 
             headers = {
@@ -393,16 +437,16 @@ paths:
             print(data.decode("utf-8"))
   '/users/{userID}':
     get:
-      summary: Obtiene informacion de un usuario según au ID
+      summary: Obtiene informacion de un usuario según su ID
       operationId: users.info
       tags:
-        - Security
+        - Users
       description: |
         EndPoint que permite obtener la información de un usuario según su ID.
       parameters:
         - *ref_0
         - name: userID
-          in: query
+          in: path
           description: Identificador del Usuario
           required: true
           example: 10009
@@ -424,14 +468,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url 'https://e-digital.cl/api/users/%7BuserID%7D?userID=SOME_NUMBER_VALUE' \
+              --url https://e-digital.cl/api/users/%7BuserID%7D \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/users/%7BuserID%7D?userID=SOME_NUMBER_VALUE")
+              .url("https://e-digital.cl/api/users/%7BuserID%7D")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -440,7 +484,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/users/%7BuserID%7D?userID=SOME_NUMBER_VALUE");
+            RestClient("https://e-digital.cl/api/users/%7BuserID%7D");
 
             var request = new RestRequest(Method.GET);
 
@@ -452,7 +496,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/users/%7BuserID%7D?userID=SOME_NUMBER_VALUE",
+              "url": "https://e-digital.cl/api/users/%7BuserID%7D",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -470,7 +514,7 @@ paths:
               "method": "GET",
               "hostname": "e-digital.cl",
               "port": null,
-              "path": "/api/users/%7BuserID%7D?userID=SOME_NUMBER_VALUE",
+              "path": "/api/users/%7BuserID%7D",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -497,7 +541,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D?userID=SOME_NUMBER_VALUE",
+              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -520,26 +564,25 @@ paths:
               echo $response;
             }
         - lang: Python + Python3
-          source: >-
+          source: |-
             import http.client
-
 
             conn = http.client.HTTPSConnection("e-digital.cl")
 
-
             headers = { 'token': "SOME_STRING_VALUE" }
 
-
-            conn.request("GET",
-            "/api/users/%7BuserID%7D?userID=SOME_NUMBER_VALUE", headers=headers)
-
+            conn.request("GET", "/api/users/%7BuserID%7D", headers=headers)
 
             res = conn.getresponse()
-
             data = res.read()
-
 
             print(data.decode("utf-8"))
 tags:
   - name: Security
     description: Mecanismos de seguridad
+  - name: Users
+    description: Descripcion Users
+  - name: Organization
+    description: Descripcion Documentos
+  - name: Documents
+    description: Descripcion Documentos

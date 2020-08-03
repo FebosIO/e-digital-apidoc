@@ -1,15 +1,15 @@
 operation:
-  summary: Obtiene informacion de un usuario según au ID
+  summary: Obtiene informacion de un usuario según su ID
   operationId: users.info
   tags:
-    - Security
+    - Users
   description: |
      EndPoint que permite obtener la información de un usuario según su ID.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
     - name: userID
-      in: query
+      in: path
       description: Identificador del Usuario
       required: true
       example: 10009
