@@ -1,0 +1,30 @@
+operation:
+  summary: Obtiene informacion de un usuario según au ID
+  operationId: users.info
+  tags:
+    - Security
+  description: |
+     EndPoint que permite obtener la información de un usuario según su ID.
+
+  parameters:
+    - $ref: '../api/components/parameters/header.token.yaml#/parameter'
+    - name: userID
+      in: query
+      description: Identificador del Usuario
+      required: true
+      example: 10009
+      schema:
+       type: number
+
+  responses:
+    "200":
+      description: Respuesta a todo evento
+      content:
+        application/json:
+          schema:
+            type: object
+          examples:
+            Respuesta OK:
+              value:
+                status: "success"
+                message: "El usuario ha sido registrado"

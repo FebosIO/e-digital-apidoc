@@ -1,0 +1,84 @@
+operation:
+  summary: Crea un Usuario
+  operationId: users.create
+  tags:
+    - Security
+  description: |
+    EndPoint para Crear un usario.
+
+  parameters:
+    - $ref: '../api/components/parameters/header.token.yaml#/parameter'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+            - surname
+            - email
+            - identity_document
+            - type_identity_document
+            - serie_identity_document
+            - password
+            - address
+            - gender
+            - birth
+            - phone
+          properties:
+            name:
+                type: string
+                description: Indica el nombre de usuario.
+                example: 'Nombre Usuario'
+            surname:
+                type: string
+                description: Indica el apellido paterno
+                example: 'Apellido Paterno'
+            email:
+                type: string
+                description: Indica el email
+                example: 'tucorreo@empresa.cl'
+            identity_document:
+                type: string
+                description: Indica el rut
+                example: 'xxxxxxxx-x'
+            type_identity_document:
+                type: string
+                description: Indica el tipo documento
+                example: 'CEDULA_EXT'
+            serie_identity_document:
+                type: string
+                description: Indica el rut
+                example: 'xxxxxxxx-x'
+            password:
+                type: string
+                description: Indica la password
+                example: 'a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b'
+            address:
+                type: string
+                description: Indica la direccion
+                example: 'una direccion'
+            gender:
+                type: string
+                description: Indica el genero
+                example: 'male'
+            birth:
+                type: string
+                description: Indica la fecha de nacimiento
+                example: '1970-12-31'
+            phone:
+                type: string
+                description: Indica el numero de telefono
+                example: '55555555'
+  responses:
+    "200":
+      description: Respuesta a todo evento
+      content:
+        application/json:
+          schema:
+            type: object
+          examples:
+            Respuesta OK:
+              value:
+                status: "success"
+                message: "El usuario ha sido registrado"

@@ -138,6 +138,408 @@ paths:
             data = res.read()
 
             print(data.decode("utf-8"))
+  /users:
+    post:
+      summary: Crea un Usuario
+      operationId: users.create
+      tags:
+        - Security
+      description: |
+        EndPoint para Crear un usario.
+      parameters:
+        - &ref_0
+          name: token
+          in: header
+          description: Token de acceso creado con usuario y clave.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - surname
+                - email
+                - identity_document
+                - type_identity_document
+                - serie_identity_document
+                - password
+                - address
+                - gender
+                - birth
+                - phone
+              properties:
+                name:
+                  type: string
+                  description: Indica el nombre de usuario.
+                  example: Nombre Usuario
+                surname:
+                  type: string
+                  description: Indica el apellido paterno
+                  example: Apellido Paterno
+                email:
+                  type: string
+                  description: Indica el email
+                  example: tucorreo@empresa.cl
+                identity_document:
+                  type: string
+                  description: Indica el rut
+                  example: xxxxxxxx-x
+                type_identity_document:
+                  type: string
+                  description: Indica el tipo documento
+                  example: CEDULA_EXT
+                serie_identity_document:
+                  type: string
+                  description: Indica el rut
+                  example: xxxxxxxx-x
+                password:
+                  type: string
+                  description: Indica la password
+                  example: a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b
+                address:
+                  type: string
+                  description: Indica la direccion
+                  example: una direccion
+                gender:
+                  type: string
+                  description: Indica el genero
+                  example: male
+                birth:
+                  type: string
+                  description: Indica la fecha de nacimiento
+                  example: '1970-12-31'
+                phone:
+                  type: string
+                  description: Indica el numero de telefono
+                  example: '55555555'
+      responses:
+        '200':
+          description: Respuesta a todo evento
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                Respuesta OK:
+                  value:
+                    status: success
+                    message: El usuario ha sido registrado
+      x-codeSamples:
+        - lang: Shell + Curl
+          source: |-
+            curl --request POST \
+              --url https://e-digital.cl/api/users \
+              --header 'content-type: application/json' \
+              --header 'token: SOME_STRING_VALUE' \
+              --data '{"name":"Nombre Usuario","surname":"Apellido Paterno","email":"tucorreo@empresa.cl","identity_document":"xxxxxxxx-x","type_identity_document":"CEDULA_EXT","serie_identity_document":"xxxxxxxx-x","password":"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b","address":"una direccion","gender":"male","birth":"1970-12-31","phone":"55555555"}'
+        - lang: Java + Okhttp
+          source: >-
+            OkHttpClient client = new OkHttpClient();
+
+
+            MediaType mediaType = MediaType.parse("application/json");
+
+            RequestBody body = RequestBody.create(mediaType, "{\"name\":\"Nombre
+            Usuario\",\"surname\":\"Apellido
+            Paterno\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"xxxxxxxx-x\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"xxxxxxxx-x\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"una
+            direccion\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}");
+
+            Request request = new Request.Builder()
+              .url("https://e-digital.cl/api/users")
+              .post(body)
+              .addHeader("content-type", "application/json")
+              .addHeader("token", "SOME_STRING_VALUE")
+              .build();
+
+            Response response = client.newCall(request).execute();
+        - lang: Csharp + Restsharp
+          source: >-
+            var client = new RestClient("https://e-digital.cl/api/users");
+
+            var request = new RestRequest(Method.POST);
+
+            request.AddHeader("content-type", "application/json");
+
+            request.AddHeader("token", "SOME_STRING_VALUE");
+
+            request.AddParameter("application/json", "{\"name\":\"Nombre
+            Usuario\",\"surname\":\"Apellido
+            Paterno\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"xxxxxxxx-x\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"xxxxxxxx-x\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"una
+            direccion\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}",
+            ParameterType.RequestBody);
+
+            IRestResponse response = client.Execute(request);
+        - lang: Javascript + Jquery
+          source: |-
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "https://e-digital.cl/api/users",
+              "method": "POST",
+              "headers": {
+                "content-type": "application/json",
+                "token": "SOME_STRING_VALUE"
+              },
+              "processData": false,
+              "data": "{\"name\":\"Nombre Usuario\",\"surname\":\"Apellido Paterno\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"xxxxxxxx-x\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"xxxxxxxx-x\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"una direccion\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}"
+            }
+
+            $.ajax(settings).done(function (response) {
+              console.log(response);
+            });
+        - lang: Node + Native
+          source: |-
+            var http = require("https");
+
+            var options = {
+              "method": "POST",
+              "hostname": "e-digital.cl",
+              "port": null,
+              "path": "/api/users",
+              "headers": {
+                "content-type": "application/json",
+                "token": "SOME_STRING_VALUE"
+              }
+            };
+
+            var req = http.request(options, function (res) {
+              var chunks = [];
+
+              res.on("data", function (chunk) {
+                chunks.push(chunk);
+              });
+
+              res.on("end", function () {
+                var body = Buffer.concat(chunks);
+                console.log(body.toString());
+              });
+            });
+
+            req.write(JSON.stringify({
+              name: 'Nombre Usuario',
+              surname: 'Apellido Paterno',
+              email: 'tucorreo@empresa.cl',
+              identity_document: 'xxxxxxxx-x',
+              type_identity_document: 'CEDULA_EXT',
+              serie_identity_document: 'xxxxxxxx-x',
+              password: 'a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b',
+              address: 'una direccion',
+              gender: 'male',
+              birth: '1970-12-31',
+              phone: '55555555'
+            }));
+            req.end();
+        - lang: Php + Curl
+          source: |-
+            <?php
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://e-digital.cl/api/users",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 30,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => "{\"name\":\"Nombre Usuario\",\"surname\":\"Apellido Paterno\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"xxxxxxxx-x\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"xxxxxxxx-x\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"una direccion\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}",
+              CURLOPT_HTTPHEADER => array(
+                "content-type: application/json",
+                "token: SOME_STRING_VALUE"
+              ),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              echo $response;
+            }
+        - lang: Python + Python3
+          source: >-
+            import http.client
+
+
+            conn = http.client.HTTPSConnection("e-digital.cl")
+
+
+            payload = "{\"name\":\"Nombre Usuario\",\"surname\":\"Apellido
+            Paterno\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"xxxxxxxx-x\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"xxxxxxxx-x\",\"password\":\"a1da64b9-48af-43ce-a4d3-25fd9e3c5c5b\",\"address\":\"una
+            direccion\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"55555555\"}"
+
+
+            headers = {
+                'content-type': "application/json",
+                'token': "SOME_STRING_VALUE"
+                }
+
+            conn.request("POST", "/api/users", payload, headers)
+
+
+            res = conn.getresponse()
+
+            data = res.read()
+
+
+            print(data.decode("utf-8"))
+  '/users/{userID}':
+    get:
+      summary: Obtiene informacion de un usuario según au ID
+      operationId: users.info
+      tags:
+        - Security
+      description: |
+        EndPoint que permite obtener la información de un usuario según su ID.
+      parameters:
+        - *ref_0
+        - name: userID
+          in: query
+          description: Identificador del Usuario
+          required: true
+          example: 10009
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Respuesta a todo evento
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                Respuesta OK:
+                  value:
+                    status: success
+                    message: El usuario ha sido registrado
+      x-codeSamples:
+        - lang: Shell + Curl
+          source: |-
+            curl --request GET \
+              --url 'https://e-digital.cl/api/users/%7BuserID%7D?userID=SOME_NUMBER_VALUE' \
+              --header 'token: SOME_STRING_VALUE'
+        - lang: Java + Okhttp
+          source: |-
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+              .url("https://e-digital.cl/api/users/%7BuserID%7D?userID=SOME_NUMBER_VALUE")
+              .get()
+              .addHeader("token", "SOME_STRING_VALUE")
+              .build();
+
+            Response response = client.newCall(request).execute();
+        - lang: Csharp + Restsharp
+          source: >-
+            var client = new
+            RestClient("https://e-digital.cl/api/users/%7BuserID%7D?userID=SOME_NUMBER_VALUE");
+
+            var request = new RestRequest(Method.GET);
+
+            request.AddHeader("token", "SOME_STRING_VALUE");
+
+            IRestResponse response = client.Execute(request);
+        - lang: Javascript + Jquery
+          source: |-
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "https://e-digital.cl/api/users/%7BuserID%7D?userID=SOME_NUMBER_VALUE",
+              "method": "GET",
+              "headers": {
+                "token": "SOME_STRING_VALUE"
+              }
+            }
+
+            $.ajax(settings).done(function (response) {
+              console.log(response);
+            });
+        - lang: Node + Native
+          source: |-
+            var http = require("https");
+
+            var options = {
+              "method": "GET",
+              "hostname": "e-digital.cl",
+              "port": null,
+              "path": "/api/users/%7BuserID%7D?userID=SOME_NUMBER_VALUE",
+              "headers": {
+                "token": "SOME_STRING_VALUE"
+              }
+            };
+
+            var req = http.request(options, function (res) {
+              var chunks = [];
+
+              res.on("data", function (chunk) {
+                chunks.push(chunk);
+              });
+
+              res.on("end", function () {
+                var body = Buffer.concat(chunks);
+                console.log(body.toString());
+              });
+            });
+
+            req.end();
+        - lang: Php + Curl
+          source: |-
+            <?php
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D?userID=SOME_NUMBER_VALUE",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 30,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "GET",
+              CURLOPT_HTTPHEADER => array(
+                "token: SOME_STRING_VALUE"
+              ),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              echo $response;
+            }
+        - lang: Python + Python3
+          source: >-
+            import http.client
+
+
+            conn = http.client.HTTPSConnection("e-digital.cl")
+
+
+            headers = { 'token': "SOME_STRING_VALUE" }
+
+
+            conn.request("GET",
+            "/api/users/%7BuserID%7D?userID=SOME_NUMBER_VALUE", headers=headers)
+
+
+            res = conn.getresponse()
+
+            data = res.read()
+
+
+            print(data.decode("utf-8"))
 tags:
   - name: Security
     description: Mecanismos de seguridad

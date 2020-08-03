@@ -1,0 +1,7 @@
+parameter:
+  name: token
+  in: header
+  description: Token de acceso creado con usuario y clave.
+  required: true
+  schema:
+    type: string
