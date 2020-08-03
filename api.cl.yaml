@@ -18,7 +18,12 @@ paths:
   /auth:
     post:
       $ref: api/auth.yaml#/operation
-
+  /users:
+    post:
+      $ref: api/users.create.yaml#/operation
+  /users/{userID}:
+    get:
+        $ref: api/users.info.yaml#/operation
 tags:
  - name: Security
    description: Mecanismos de seguridad
