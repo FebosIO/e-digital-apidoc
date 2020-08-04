@@ -12,19 +12,48 @@ operation:
       in: path
       description: Identificador del Usuario
       required: true
-      example: 10009
+      example: 1119
       schema:
-       type: number
-
+       type: integer
+       format: int32
   responses:
-    "200":
+    '200':
       description: Respuesta a todo evento
       content:
         application/json:
           schema:
             type: object
+            required:
+              - codigo
+              - mensaje
+            properties:
+              codigo:
+                type: integer
+                format: int32
+                description: Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.
+                example:
+              mensaje:
+                type: string
+                description: Mensaje de respuesta, traducción humana del código de resultado.
+              duracion:
+                type: integer
+                format: int32
+                description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+              hora:
+                type: string
+                description: Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`
+              seguimientoId:
+                type: string
+                description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
           examples:
-            Respuesta OK:
-              value:
-                status: "success"
-                message: "El usuario ha sido registrado"
+              Token Inválido:
+                $ref: '../api/components/responses/token.invalido.yaml#/example'
+              Sin Permiso:
+                $ref: '../api/components/responses/sin.permiso.yaml#/example'
+              Respuesta OK:
+                value:
+                  codigo: 0
+                  duracion: 780
+                  hora: 2020-08-04 09:44:42.245
+                  mensaje: Usuario registrado de forma satisfactoria
+                  seguimientoId: eaa362909975204aa43bd28-ba9e4503db58
