@@ -107,6 +107,8 @@ operation:
   responses:
     '400':
       $ref: '../api/components/responses/response.400.yaml#/response'
+    '500':
+      $ref: '../api/components/responses/response.500.yaml#/response'
     '200':
       description: Operación efectuada de forma satisfactoria
       content:

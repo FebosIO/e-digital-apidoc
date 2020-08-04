@@ -17,6 +17,10 @@ operation:
        type: integer
        format: int32
   responses:
+    '400':
+      $ref: '../api/components/responses/response.400.yaml#/response'
+    '500':
+      $ref: '../api/components/responses/response.500.yaml#/response'
     '200':
       description: Respuesta a todo evento
       content:
