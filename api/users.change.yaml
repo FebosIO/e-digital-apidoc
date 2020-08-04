@@ -1,0 +1,167 @@
+operation:
+  summary: Modifica un Usuario
+  operationId: users.change
+  tags:
+    - Users
+  description: |
+    En esta API es posible actualizar los datos del usuario del sistema
+
+  parameters:
+    - $ref: '../api/components/parameters/header.token.yaml#/parameter'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - id
+            - name
+            - surName
+            - middleName
+            - email
+            - identityDocument
+            - typeIdentityDocument
+            - serieIdentityDocument
+            - password
+            - address
+            - gender
+            - birth
+            - phone
+            - organization
+            - move
+          properties:
+            id:
+              type: integer
+              description: Ejemplo &#58; `1119`
+                <br> Es el id interno del usuario que se quiere modificar.
+              example: '1119'
+            name:
+              type: string
+              description: Ejemplo &#58; `Ramon`
+                <br> Nombre compuesto del usuario a crear
+              example: 'Ramon'
+            surName:
+              type: string
+              description: Ejemplo &#58; `Montalva`
+                <br>  Apellido paterno del usuario a crear.
+              example: 'Montalva'
+            middleName:
+              type: string
+              description: Ejemplo &#58; `Montoya`
+                <br> Apellido materno del usuario a crear.
+              example: 'Montoya'
+            email:
+              type: string
+              description:  Ejemplo &#58; `tucorreo@empresa.cl`
+                <br> Corresponde al email del usuario a crear.
+              example: 'tucorreo@empresa.cl'
+            identityDocument:
+              type: string
+              description: Ejemplo &#58; `12345678-9`
+                <br>  Rut del usuario a crear.
+              example: '12345678-9'
+            typeIdentityDocument:
+              type: string
+              enum:
+                - "CEDULA_EXT"
+                - "CEDULA"
+              description: |
+                Ejemplo &#58; `CEDULA`
+                 <br> Corresponde al tipo de cedula del usuario a crear <br>
+
+                | Valor| Descripción |
+                |-------|-------------|
+                |CEDULA_EXT| En el caso de ser una cedula extranjera|
+                |CEDULA| En el caso de ser una cedula chilena   |
+              example: 'CEDULA_EXT'
+            serieIdentityDocument:
+              type: string
+              description: Ejemplo &#58; `123123123`
+                <br> Nro de Serie del documento del usuario a crear.
+              example: '123123123'
+            password:
+              type: string
+              description: Ejemplo &#58; `myS3cretPass`
+                <br> Password del usuario a crear.
+              example: 'myS3cretPass'
+            address:
+              type: string
+              description: Ejemplo &#58; `Badajoz 100 – Piso 15 (Oficina 1519), Las Condes`
+                <br> Drección del usuario a crear
+              example: 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes'
+            gender:
+              type: string
+              enum:
+                - "male"
+                - "female"
+              description:  Ejemplo &#58; `male`
+                <br>  Corresponde al genero del usuario a crear.
+              example: 'male'
+            birth:
+              type: string
+              description: Ejemplo &#58; `1970-12-31`
+                <br> Fecha de nacimiento del usuario a crear `(Format yyyy-MM-dd)`
+              example: '1970-12-31'
+            phone:
+              type: string
+              description: Ejemplo &#58; `(2) 2219 8406`
+                <br>  Número de teléfono del usuario a crear.
+              example: '(2) 2219 8406'
+            organization:
+              type: string
+              description: Ejemplo &#58; `FEBOS-EXT`
+                <br>  La organización a donde pertenece al usuario a modificar.
+              example: 'FEBOS-EXT'
+            move:
+              type: boolean
+              enum:
+                - "true"
+                - "false"
+              description: Ejemplo &#58; `true`
+                <br>  Corresponde a si se quiere mover de unidad.
+              example: 'true'
+  responses:
+    '400':
+      $ref: '../api/components/responses/response.400.yaml#/response'
+    '500':
+      $ref: '../api/components/responses/response.500.yaml#/response'
+    '200':
+      description: Operación efectuada de forma satisfactoria
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - codigo
+              - mensaje
+            properties:
+              code:
+                type: integer
+                format: int32
+                description: Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.
+                example:
+              message:
+                type: string
+                description: Mensaje de respuesta, traducción humana del código de resultado.
+              duration:
+                type: integer
+                format: int32
+                description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+              hour:
+                type: string
+                description: Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`
+              tracingId:
+                type: string
+                description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
+          examples:
+            Token Inválido:
+              $ref: '../api/components/responses/token.invalido.yaml#/example'
+            Sin Permiso:
+              $ref: '../api/components/responses/sin.permiso.yaml#/example'
+            Respuesta OK:
+              value:
+                code: 0
+                duration: 780
+                hour: 2020-08-04 09:44:42.245
+                message: Usuario actualizado de forma satisfactoria
+                tracingId: eaa362909975204aa43bd28-ba9e4503db58

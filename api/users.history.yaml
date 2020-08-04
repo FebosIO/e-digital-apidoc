@@ -1,11 +1,11 @@
 operation:
-  summary: Obtiene informacion de un usuario según su ID
-  operationId: users.info
+  summary: Obtiene un historial de un usuario según su ID
+  operationId: users.history
   tags:
     - Users
   description: |
-     Cada usuario final es representado por un usuario único de sistema.
-     En esta API es posible obtener la informacion de dicho usuario.
+     En esta API es posible obtener la historia del usuario.
+     Documentos firmados.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
@@ -19,7 +19,7 @@ operation:
        format: int32
   responses:
     '200':
-      description: Operación efectuada de forma satisfactoria
+      description: Respuesta a todo evento
       content:
         application/json:
           schema:
@@ -46,9 +46,11 @@ operation:
               tracingId:
                 type: string
                 description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
-              user:
-                type: object
-                description: Es el objeto de la información obtenida del usuario.
+              history:
+                type: array
+                items:
+                  type: string
+                description: Historial obtenido del usuario.
           examples:
               Token Inválido:
                 $ref: '../api/components/responses/token.invalido.yaml#/example'
@@ -59,6 +61,5 @@ operation:
                   code: 0
                   duration: 780
                   hour: 2020-08-04 09:44:42.245
-                  message: Usuario registrado de forma satisfactoria
+                  message: Historial obtenido de forma satisfactoria.
                   tracingId: eaa362909975204aa43bd28-ba9e4503db58
-                  user: {name="Ramon", surname="Montalva ", middleName = "Montoya"}

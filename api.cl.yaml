@@ -21,9 +21,20 @@ paths:
   /users:
     post:
       $ref: api/users.create.yaml#/operation
+    put:
+      $ref: api/users.change.yaml#/operation
   /users/{userID}:
     get:
-        $ref: api/users.info.yaml#/operation
+      $ref: api/users.info.yaml#/operation
+  /users/{userID}/history:
+    get:
+      $ref: api/users.history.yaml#/operation
+  /users/{userID}/documents:
+    get:
+      $ref: api/users.documents.yaml#/operation
+  /users/{userID}/cetificates:
+    get:
+      $ref: api/users.certificates.list.yaml#/operation
 tags:
  - name: Security
    description: Mecanismos de seguridad

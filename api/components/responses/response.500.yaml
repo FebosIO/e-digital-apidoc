@@ -9,24 +9,21 @@ response:
           - mensaje
           - errores
         properties:
-          codigo:
-            parameter:
-              type: integer
-              format: int32
-              description: Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.
-          mensaje:
-              parameter:
-                type: string
-                description: Mesage de respuesta, traducción humana del código de resultado.
-          errores:
-              parameter:
-                type: array
-                items:
-                  type: string
-                description: Listado de errores encontrados durante el procesamiento de la solicitud
+          code:
+            type: integer
+            format: int32
+            description: Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.
+          message:
+            type: string
+            description: Mesage de respuesta, traducción humana del código de resultado.
+          errors:
+            type: array
+            items:
+              type: string
+            description: Listado de errores encontrados durante el procesamiento de la solicitud
       examples:
         Error:
           value:
-            codigo: 500
-            mensaje: Error de configuracion (APIGW)
-            errores: ["Missing Authentication Token"]
+            code: 500
+            message: Error interno en el servidor.
+            errors: ["Internal Error Server"]
