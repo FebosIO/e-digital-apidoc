@@ -1,0 +1,8 @@
+example:
+  value:
+    codigo: 3
+    duracion: 207
+    hora: 2020-08-04 09:44:42.245
+    errores: []
+    mensaje: Acceso denegado
+    seguimientoId: eaa362909975204aa43bd28-ba9e4503db58

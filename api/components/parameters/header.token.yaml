@@ -1,7 +1,7 @@
 parameter:
   name: token
   in: header
-  description: Token de acceso que permite el consumo de los EndPoint el cual se puede obtener en la API `/auth`.
+  description: Token de acceso que permite el consumo de los EndPoint el cual se puede obtener en la API [/auth](https://e-digital.cl/api/auth).
   required: true
   schema:
     type: string
