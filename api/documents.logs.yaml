@@ -1,22 +1,20 @@
 operation:
-  summary: Obtiene un historial de un usuario según su ID
-  operationId: users.history
+  summary: Obtiene Logs de un documento según su ID
+  operationId: documents.logs
   tags:
-    - Users
+    - Documents
   description: |
-     En esta API es posible obtener la historia del usuario.
-     Documentos firmados.
+     En esta API es posible obtener los logs de un documento, especificamente todo lo que se hizo con el documento.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: userID
+    - name: documentsID
       in: path
-      description: Identificador del Usuario
+      description: Identificador del Documentos
       required: true
-      example: 1119
+      example: c60974ea92b8ef69ed552b5f7f173063
       schema:
-       type: integer
-       format: int32
+        type: string
   responses:
     '200':
       description: Operación efectuada de forma satisfactoria
@@ -46,11 +44,11 @@ operation:
               trackingId:
                 type: string
                 description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
-              history:
+              logs:
                 type: array
                 items:
                   type: string
-                description: Historial obtenido del usuario.
+                description: Logs de lo que se ha hecho con el documento.
           examples:
               Token Inválido:
                 $ref: '../api/components/responses/token.invalido.yaml#/example'
@@ -63,3 +61,4 @@ operation:
                   time: 2020-08-04 09:44:42.245
                   message: Historial obtenido de forma satisfactoria.
                   trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                  logs: ["Documento Creado","Documento firmado"]

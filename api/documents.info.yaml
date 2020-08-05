@@ -1,23 +1,25 @@
 operation:
-  summary: Obtiene un historial de un usuario según su ID
-  operationId: users.history
+  summary: Obtiene undocumento según su ID
+  operationId: documents.info
   tags:
-    - Users
+    - Documents
   description: |
-     En esta API es posible obtener la historia del usuario.
-     Documentos firmados.
+     En esta API es posible obtener un documento por su ID generado en la API [Crear Documento](https://e-digital.cl/api/documents).
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: userID
+    - name: documentsID
       in: path
-      description: Identificador del Usuario
+      description: Identificador del Documentos
       required: true
-      example: 1119
+      example: c60974ea92b8ef69ed552b5f7f173063
       schema:
-       type: integer
-       format: int32
+       type: string
   responses:
+    '400':
+      $ref: '../api/components/responses/response.400.yaml#/response'
+    '500':
+      $ref: '../api/components/responses/response.500.yaml#/response'
     '200':
       description: Operación efectuada de forma satisfactoria
       content:
@@ -46,11 +48,9 @@ operation:
               trackingId:
                 type: string
                 description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
-              history:
-                type: array
-                items:
-                  type: string
-                description: Historial obtenido del usuario.
+              urlDocument:
+                type: string
+                description: La url generada para poder ver/descargar el documento.
           examples:
               Token Inválido:
                 $ref: '../api/components/responses/token.invalido.yaml#/example'
@@ -61,5 +61,6 @@ operation:
                   code: 0
                   duration: 780
                   time: 2020-08-04 09:44:42.245
-                  message: Historial obtenido de forma satisfactoria.
+                  message: Usuario obtenido de forma satisfactoria
                   trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                  urlDocument: https://urlDocumento

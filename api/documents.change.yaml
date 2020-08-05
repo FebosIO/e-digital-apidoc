@@ -1,0 +1,95 @@
+operation:
+  summary: Modifica el estado de un documento
+  operationId: documents.change
+  tags:
+    - Documents
+  description: |
+    En esta API es posible cambiar el estado de un documento
+    Los posibles estado que se pueden aplicar son los que se muestra a continuación.
+
+    <details>
+            <summary>Ver tabla de tipos de estado </summary>
+
+    |    Estado   |                               Descripción                                       |
+    |-------------|---------------------------------------------------------------------------------|
+    |    anula    | Se utiliza cuando el documento se quiere anular.                                |
+    |   rechaza   | Se utiliza cuando el documento se quiere rechazar.                              |
+    |    firma    | Se utiliza cuando se quiere firmar el documento.                                |
+    |   aprueba   | Se utiliza cuando se quiere aprobar el documento.                               |
+
+    s</details>
+
+  parameters:
+    - $ref: '../api/components/parameters/header.token.yaml#/parameter'
+    - name: documentsID
+      in: path
+      description: Identificador del Documentos
+      required: true
+      example: c60974ea92b8ef69ed552b5f7f173063
+      schema:
+        type: string
+    - name: estado
+      in: query
+      description: Corresponde al estado que se le quiere dar al documento.
+      required: true
+      example: anula
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - comment
+          properties:
+            comment:
+              type: string
+              description: Ejemplo &#58; `Documento Erroneo en las fechas`
+                <br> Es el comentario de por que se le esta dando este estado al documento.
+              example: 'Documento Erroneo en las fechas'
+  responses:
+    '400':
+      $ref: '../api/components/responses/response.400.yaml#/response'
+    '500':
+      $ref: '../api/components/responses/response.500.yaml#/response'
+    '200':
+      description: Operación efectuada de forma satisfactoria
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - codigo
+              - mensaje
+            properties:
+              code:
+                type: integer
+                format: int32
+                description: Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.
+                example:
+              message:
+                type: string
+                description: Mensaje de respuesta, traducción humana del código de resultado.
+              duration:
+                type: integer
+                format: int32
+                description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+              time:
+                type: string
+                description: Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`
+              trackingId:
+                type: string
+                description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
+          examples:
+            Token Inválido:
+              $ref: '../api/components/responses/token.invalido.yaml#/example'
+            Sin Permiso:
+              $ref: '../api/components/responses/sin.permiso.yaml#/example'
+            Respuesta OK:
+              value:
+                code: 0
+                duration: 780
+                time: 2020-08-04 09:44:42.245
+                message: Usuario actualizado de forma satisfactoria
+                trackingId: eaa362909975204aa43bd28-ba9e4503db58
