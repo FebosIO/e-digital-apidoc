@@ -35,6 +35,15 @@ paths:
   /users/{userID}/cetificates:
     get:
       $ref: api/users.certificates.list.yaml#/operation
+    post:
+      $ref: api/users.certificates.create.yaml#/operation
+  /users/{userID}/cetificates/{certificateID}:
+    get:
+      $ref: api/users.certificates.info.yaml#/operation
+    put:
+      $ref: api/users.certificates.remove.yaml#/operation
+    delete:
+      $ref: api/users.certificates.revoke.yaml#/operation
 tags:
  - name: Security
    description: Mecanismos de seguridad

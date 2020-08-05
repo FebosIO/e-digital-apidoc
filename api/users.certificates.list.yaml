@@ -42,10 +42,10 @@ operation:
                 type: integer
                 format: int32
                 description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
-              hour:
+              time:
                 type: string
                 description: Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`
-              tracingId:
+              trackingId:
                 type: string
                 description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
               certificates:
@@ -62,6 +62,6 @@ operation:
                 value:
                   code: 0
                   duration: 780
-                  hour: 2020-08-04 09:44:42.245
+                  time: 2020-08-04 09:44:42.245
                   message: Listado de certificado obtenido de forma satisfactoria.
-                  tracingId: eaa362909975204aa43bd28-ba9e4503db58
+                  trackingId: eaa362909975204aa43bd28-ba9e4503db58
