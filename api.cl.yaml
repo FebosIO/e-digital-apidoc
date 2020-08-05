@@ -57,13 +57,38 @@ paths:
   /documents/{documentsID}/logs:
     get:
       $ref: api/documents.logs.yaml#/operation
-
+  /organizations:
+    get:
+      $ref: api/organizations.list.yaml#/operation
+  /organizations/{organizationID}:
+    get:
+      $ref: api/organizations.info.yaml#/operation
+  /organizations/{organizationID}/templates:
+    get:
+      $ref: api/organizations.templates.list.yaml#/operation
+    post:
+      $ref: api/organizations.templates.create.yaml#/operation
+  /organizations/{organizationID}/templates{templateID}:
+    delete:
+      $ref: api/organizations.templates.remove.yaml#/operation
+    get:
+      $ref: api/organizations.templates.yaml#/operation
+    put:
+      $ref: api/organizations.templates.change.yaml#/operation
+  /organizations/{organitzationID}/users:
+    get:
+      $ref: api/organizations.users.list.yaml#/operation
+  /organizations/{organitzationID}/users/{userID}:
+    delete:
+      $ref: api/organizations.users.remove.yaml#/operation
+    post:
+      $ref: api/organizations.users.invite.yaml#/operation
 tags:
  - name: Security
    description: Mecanismos de seguridad
  - name: Users
    description: Conjunto de API's que permiten la administración de los usuarios.
  - name: Organization
-   description: Descripcion Documentos
+   description: Conjunto de API's que permiten la administración de los organizaciones.
  - name: Documents
-   description: Descripcion Documentos
+   description: Conjunto de API's que permiten la administración de los documentos.

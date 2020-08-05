@@ -1,25 +1,35 @@
 operation:
-  summary: Obtiene un listado de los certificados de un usuario según su ID
-  operationId: users.certificates.list
+  summary: Permite desvincular un usario de una organización
+  operationId: organizations.users.remove
   tags:
-    - Users
+    - Organization
   description: |
-     Un certificado es la identificación virtual de cada persona.
-     En esta API es posible listar dichos certificado que pertenescan a un usuario previamente indicado.
-     Cada usuario debe tener al menos un certificado para poder firmar documentos.
-     La carga de estos se pueden hacer con la API [Crear Certificado Usuario]()
+     En esta API es posible desvincular un usario de una organización indicando el ID
+     del usuario que de desea desvincular.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: userID
+    - name: organizationID
       in: path
-      description: Identificador del Usuario
+      description: Identificador de la organización
       required: true
-      example: 1119
+      example: 1120
       schema:
        type: integer
        format: int32
+    - name: userID
+      in: path
+      description: Identificador del usuario
+      required: true
+      example: 1119
+      schema:
+        type: integer
+        format: int32
   responses:
+    '400':
+      $ref: '../api/components/responses/response.400.yaml#/response'
+    '500':
+      $ref: '../api/components/responses/response.500.yaml#/response'
     '200':
       description: Operación efectuada de forma satisfactoria
       content:
@@ -48,11 +58,6 @@ operation:
               trackingId:
                 type: string
                 description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
-              certificates:
-                type: array
-                items:
-                  type: string
-                description: Listado de los certificado asociados al usuario indicado
           examples:
               Token Inválido:
                 $ref: '../api/components/responses/token.invalido.yaml#/example'
@@ -63,5 +68,6 @@ operation:
                   code: 0
                   duration: 780
                   time: 2020-08-04 09:44:42.245
-                  message: Listado de certificado obtenido de forma satisfactoria.
+                  message: Usuario desvinculado de forma satisfactoria
                   trackingId: eaa362909975204aa43bd28-ba9e4503db58
+

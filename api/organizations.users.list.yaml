@@ -1,24 +1,21 @@
 operation:
-  summary: Obtiene un listado de los certificados de un usuario según su ID
-  operationId: users.certificates.list
+  summary: Obtiene el listado de las usuarios de una organización
+  operationId: organizations.users.list
   tags:
-    - Users
+    - Organization
   description: |
-     Un certificado es la identificación virtual de cada persona.
-     En esta API es posible listar dichos certificado que pertenescan a un usuario previamente indicado.
-     Cada usuario debe tener al menos un certificado para poder firmar documentos.
-     La carga de estos se pueden hacer con la API [Crear Certificado Usuario]()
+     En esta API es posible obtener un listado de todos los usarios pertenecientes a la organización según su ID.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: userID
+    - name: organizationID
       in: path
-      description: Identificador del Usuario
+      description: Identificador de la organización
       required: true
-      example: 1119
+      example: 1120
       schema:
-       type: integer
-       format: int32
+        type: integer
+        format: int32
   responses:
     '200':
       description: Operación efectuada de forma satisfactoria
@@ -48,11 +45,11 @@ operation:
               trackingId:
                 type: string
                 description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
-              certificates:
+              users:
                 type: array
                 items:
                   type: string
-                description: Listado de los certificado asociados al usuario indicado
+                description: Listado de los usuarios pertenicientes a la organización
           examples:
               Token Inválido:
                 $ref: '../api/components/responses/token.invalido.yaml#/example'
@@ -63,5 +60,6 @@ operation:
                   code: 0
                   duration: 780
                   time: 2020-08-04 09:44:42.245
-                  message: Listado de certificado obtenido de forma satisfactoria.
+                  message: Listado de los usuarios obtenido de forma satisfactoria.
                   trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                  users: ["User1","User2"]
