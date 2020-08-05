@@ -1,23 +1,11 @@
 operation:
-  summary: Modifica el estado de un documento
-  operationId: documents.change
+  summary: Remueve un documento del flujo
+  operationId: documents.remove
   tags:
     - Documents
   description: |
-    En esta API es posible cambiar el estado de un documento
-    Los posibles estado que se pueden aplicar son los que se muestra a continuación.
-
-    <details>
-            <summary>Ver tabla de tipos de estado </summary>
-
-    |    Estado   |                               Descripción                                       |
-    |-------------|---------------------------------------------------------------------------------|
-    |    anula    | Se utiliza cuando el documento se quiere anular.                                |
-    |   rechaza   | Se utiliza cuando el documento se quiere rechazar.                              |
-    |    firma    | Se utiliza cuando se quiere firmar el documento.                                |
-    |   aprueba   | Se utiliza cuando se quiere aprobar el documento.                               |
-
-    s</details>
+    En esta API es posible remover un documento del flujo.
+    Para que de esta forma no se considerado como documento pendiente dentro del flujo.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
@@ -26,13 +14,6 @@ operation:
       description: Identificador del Documentos
       required: true
       example: c60974ea92b8ef69ed552b5f7f173063
-      schema:
-        type: string
-    - name: estado
-      in: query
-      description: Corresponde al estado que se le quiere dar al documento.
-      required: true
-      example: anula
       schema:
         type: string
   requestBody:
@@ -45,9 +26,9 @@ operation:
           properties:
             comment:
               type: string
-              description: Ejemplo &#58; `Documento Erroneo en las fechas`
-                <br> Es el comentario de por que se le esta dando este estado al documento.
-              example: 'Documento Erroneo en las fechas'
+              description: Ejemplo &#58; `Documento Sacado del Flujo`
+                <br> Es el comentario de por que se le esta sacando del flujo el documento
+              example: 'Documento Sacado del Flujo'
   responses:
     '400':
       $ref: '../api/components/responses/response.400.yaml#/response'
@@ -91,5 +72,5 @@ operation:
                 code: 0
                 duration: 780
                 time: 2020-08-04 09:44:42.245
-                message: Documento actualizado de forma satisfactoria
+                message: Documento removido de forma satisfactoria
                 trackingId: eaa362909975204aa43bd28-ba9e4503db58
