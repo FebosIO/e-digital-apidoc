@@ -58,8 +58,8 @@ operation:
               trackingId:
                 type: string
                 description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
-              certificate:
-                type: object
+              vigencia:
+                type: string
                 description: Es el objeto de la información obtenida del certificado.
           examples:
               Token Inválido:
@@ -73,4 +73,4 @@ operation:
                   time: 2020-08-04 09:44:42.245
                   message: Certificado obtenido de forma satisfactoria
                   trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                  certificate: {nameCertificate="certificadoPrueba.pfx", password="MiS3cretP4as$word", base64 = "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg=="}
+                  vigencia: desde 14-03-2020 hasta 14-03-2022
