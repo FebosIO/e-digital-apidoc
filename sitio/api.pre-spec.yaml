@@ -1,0 +1,2261 @@
+openapi: 3.0.0
+info:
+  title: API E-Digital
+  description: |
+    API de firmado para E-Digital
+  version: v1.2
+  contact:
+    name: Carlos Garcia
+    email: carlos.garcia@e-digital.cl
+    url: www.e-digital.cl
+  x-logo:
+    url: 'https://e-digital.cl/wp-content/uploads/2016/11/logo_final_2_slogan_menor2.png'
+    altText: E-Digital
+servers:
+  - url: 'https://e-digital.cl/api'
+paths:
+  /auth:
+    post:
+      summary: Obtener token de autenticación
+      operationId: auth
+      tags:
+        - Security
+      description: |
+        Retorna un token de autenticación para consumir el resto de los endpoint.
+      responses:
+        '200':
+          description: Respuesta a todo evento
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - token
+                properties:
+                  token:
+                    type: string
+                    description: Token de autenticación
+              examples:
+                Respuesta OK:
+                  value:
+                    token: ASDFGHJKLQWERTYUIO
+  /users:
+    post:
+      summary: Crea un Usuario
+      operationId: users.create
+      tags:
+        - Users
+      description: |
+        Cada usuario final es representado por un usuario único de sistema.
+        En esta API es posible crear dicho usuario en el sistema para que pueda recibir y firmar documentos.
+        Cada documento debe ser firmado por un usuario existente en la plataforma.
+        Es a los usuarios finalmente a quienes les llegan los documentos que se encuentran pendientes de firma.
+        Cada usuarios puede pertenecer a más de una empresa, esta vinculación se puede hacer con la API
+        [Invitar Usuario](#operation/organizations.users.invite)
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - surName
+                - middleName
+                - email
+                - identityDocument
+                - typeIdentityDocument
+                - serieIdentityDocument
+                - password
+                - address
+                - gender
+                - birth
+                - phone
+              properties:
+                name:
+                  type: string
+                  description: Ejemplo &#58; `Ramon` <br> Nombre compuesto del usuario a crear
+                  example: Ramon
+                surName:
+                  type: string
+                  description: Ejemplo &#58; `Montalva` <br>  Apellido paterno del usuario a crear.
+                  example: Montalva
+                middleName:
+                  type: string
+                  description: Ejemplo &#58; `Montoya` <br> Apellido materno del usuario a crear.
+                  example: Montoya
+                email:
+                  type: string
+                  description: Ejemplo &#58; `tucorreo@empresa.cl` <br> Corresponde al email del usuario a crear.
+                  example: tucorreo@empresa.cl
+                identityDocument:
+                  type: string
+                  description: Ejemplo &#58; `12345678-9` <br>  Rut del usuario a crear.
+                  example: 12345678-9
+                typeIdentityDocument:
+                  type: string
+                  enum:
+                    - CEDULA_EXT
+                    - CEDULA
+                  description: |
+                    Ejemplo &#58; `CEDULA`
+                     <br> Corresponde al tipo de cedula del usuario a crear <br>
+
+                    | Valor| Descripción |
+                    |-------|-------------|
+                    |CEDULA_EXT| En el caso de ser una cedula extranjera|
+                    |CEDULA| En el caso de ser una cedula chilena   |
+                  example: CEDULA_EXT
+                serieIdentityDocument:
+                  type: string
+                  description: Ejemplo &#58; `123123123` <br> Nro de Serie del documento del usuario a crear.
+                  example: '123123123'
+                password:
+                  type: string
+                  description: Ejemplo &#58; `myS3cretPass` <br> Password del usuario a crear.
+                  example: myS3cretPass
+                address:
+                  type: string
+                  description: 'Ejemplo &#58; `Badajoz 100 – Piso 15 (Oficina 1519), Las Condes` <br> Drección del usuario a crear'
+                  example: 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes'
+                gender:
+                  type: string
+                  enum:
+                    - male
+                    - female
+                  description: Ejemplo &#58; `male` <br>  Corresponde al genero del usuario a crear.
+                  example: male
+                birth:
+                  type: string
+                  description: Ejemplo &#58; `1970-12-31` <br> Fecha de nacimiento del usuario a crear `(Format yyyy-MM-dd)`
+                  example: '1970-12-31'
+                phone:
+                  type: string
+                  description: Ejemplo &#58; `(2) 2219 8406` <br>  Número de teléfono del usuario a crear.
+                  example: (2) 2219 8406
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  userId:
+                    type: integer
+                    format: int32
+                    description: Código único de usuario. Este código representa el id que se genero al momento de guardar el usuario.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Usuario registrado de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    userId: 1119
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+    put:
+      summary: Modifica un Usuario
+      operationId: users.change
+      tags:
+        - Users
+      description: |
+        Los usuarios finales pueden ser creados en la API [Crear Usuario](#operation/users.create),
+        si en algún momento se desea efectuar modificación a los datos de este es posible llamar
+        este método y de esta forma efectuar tal acción.
+      parameters:
+        - name: token
+          in: header
+          description: 'Token de acceso que permite el consumo de las API''s, el cual se puede obtener en la API [/auth](#operation/auth).'
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - name
+                - surName
+                - middleName
+                - email
+                - identityDocument
+                - typeIdentityDocument
+                - serieIdentityDocument
+                - password
+                - address
+                - gender
+                - birth
+                - phone
+                - organization
+                - move
+              properties:
+                id:
+                  type: integer
+                  description: Ejemplo &#58; `1119` <br> Es el id interno del usuario que se quiere modificar.
+                  example: '1119'
+                name:
+                  type: string
+                  description: Ejemplo &#58; `Ramon` <br> Nombre compuesto del usuario a crear
+                  example: Ramon
+                surName:
+                  type: string
+                  description: Ejemplo &#58; `Montalva` <br>  Apellido paterno del usuario a crear.
+                  example: Montalva
+                middleName:
+                  type: string
+                  description: Ejemplo &#58; `Montoya` <br> Apellido materno del usuario a crear.
+                  example: Montoya
+                email:
+                  type: string
+                  description: Ejemplo &#58; `tucorreo@empresa.cl` <br> Corresponde al email del usuario a crear.
+                  example: tucorreo@empresa.cl
+                identityDocument:
+                  type: string
+                  description: Ejemplo &#58; `12345678-9` <br>  Rut del usuario a crear.
+                  example: 12345678-9
+                typeIdentityDocument:
+                  type: string
+                  enum:
+                    - CEDULA_EXT
+                    - CEDULA
+                  description: |
+                    Ejemplo &#58; `CEDULA`
+                     <br> Corresponde al tipo de cedula del usuario a crear <br>
+
+                    | Valor| Descripción |
+                    |-------|-------------|
+                    |CEDULA_EXT| En el caso de ser una cedula extranjera|
+                    |CEDULA| En el caso de ser una cedula chilena   |
+                  example: CEDULA_EXT
+                serieIdentityDocument:
+                  type: string
+                  description: Ejemplo &#58; `123123123` <br> Nro de Serie del documento del usuario a crear.
+                  example: '123123123'
+                password:
+                  type: string
+                  description: Ejemplo &#58; `myS3cretPass` <br> Password del usuario a crear.
+                  example: myS3cretPass
+                address:
+                  type: string
+                  description: 'Ejemplo &#58; `Badajoz 100 – Piso 15 (Oficina 1519), Las Condes` <br> Drección del usuario a crear'
+                  example: 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes'
+                gender:
+                  type: string
+                  enum:
+                    - male
+                    - female
+                  description: Ejemplo &#58; `male` <br>  Corresponde al genero del usuario a crear.
+                  example: male
+                birth:
+                  type: string
+                  description: Ejemplo &#58; `1970-12-31` <br> Fecha de nacimiento del usuario a crear `(Format yyyy-MM-dd)`
+                  example: '1970-12-31'
+                phone:
+                  type: string
+                  description: Ejemplo &#58; `(2) 2219 8406` <br>  Número de teléfono del usuario a crear.
+                  example: (2) 2219 8406
+                organization:
+                  type: string
+                  description: Ejemplo &#58; `FEBOS-EXT` <br>  La organización a donde pertenece al usuario a modificar.
+                  example: FEBOS-EXT
+                move:
+                  type: boolean
+                  enum:
+                    - 'true'
+                    - 'false'
+                  description: Ejemplo &#58; `true` <br>  Corresponde a si se quiere mover de unidad.
+                  example: 'true'
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+              examples:
+                Token Inválido:
+                  value:
+                    code: 3
+                    duration: 207
+                    time: 2020-08-04T09:44:42.245Z
+                    errors: []
+                    message: Acceso denegado
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                Sin Permiso:
+                  value:
+                    code: 5
+                    duration: 207
+                    time: 2020-08-04T09:44:42.245Z
+                    errors: []
+                    message: Usted no tiene permiso para efectuar esta actividad
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Usuario actualizado de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+        '400':
+          description: Error de solicitud
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                  - errors
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `10` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                  message:
+                    type: string
+                    description: 'mensaje de respuesta, traducción humana del código de resultado.'
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    description: Listado de errores encontrados durante el procesamiento de la solicitud
+              examples:
+                Error:
+                  value:
+                    code: 400
+                    message: Bad Request
+                    errors:
+                      - Verifique el Request Enviado
+        '500':
+          description: Error de servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                  - errors
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo 11` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                  message:
+                    type: string
+                    description: 'Mesage de respuesta, traducción humana del código de resultado.'
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    description: Listado de errores encontrados durante el procesamiento de la solicitud
+              examples:
+                Error:
+                  value:
+                    code: 500
+                    message: Error interno en el servidor.
+                    errors:
+                      - Internal Error Server
+  '/users/{userID}':
+    get:
+      summary: Obtiene información de un usuario
+      operationId: users.info
+      tags:
+        - Users
+      description: |
+        Los usuarios finales luego de ser creados en la API [Crear Usuario](#operation/users.create),
+        y asociados a una organización en la API [Invitar Usuario](#operation/organizations.users.invite).
+        Si en algún momento de desea obtener la información de dicho usuario se debe llamar este método
+        indicando el ID de usuario.
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: userID
+          in: path
+          description: Identificador del Usuario
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  user:
+                    type: object
+                    description: Es el objeto de la información obtenida del usuario.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Usuario obtenido de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    user:
+                      name: Ramon
+                      surName: Montalva
+                      middleName: Montoya
+                      email: tucorreo@empresa.cl
+                      identityDocument: 12345678-9
+                      typeIdentityDocument: CEDULA
+                      serieIdentityDocument: '123123123'
+                      password: myS3cretPass
+                      address: 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes'
+                      gender: male
+                      birth: 31-12-1970
+                      phone: (2) 2219 8406
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+  '/users/{userID}/history':
+    get:
+      summary: Obtiene un historial de un usuario según su ID
+      operationId: users.history
+      tags:
+        - Users
+      description: |
+        Los usuarios finales desde el momento que se crean van generando un log(registros de actividades)
+        Si en algún momento se desea verificar la historia de un usuario en específico se puede llamar este
+        método y así obtener el total de estos registros.
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: userID
+          in: path
+          description: Identificador del Usuario
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  history:
+                    type: array
+                    items:
+                      type: string
+                    description: Historial obtenido del usuario.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Historial obtenido de forma satisfactoria.
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+  '/users/{userID}/documents':
+    get:
+      summary: Obtiene una lista de documenetos de un usuario según su ID
+      operationId: users.documents
+      tags:
+        - Users
+      description: |
+        Los usuarios finales aparte de pertenecer a una organización en particular tienen un listado
+        de documentos los cuales podrían estar en diferentes estados ya sea pendientes, finalizados,
+        rechazados. Si en algún momento se desea tener un listado con tal data se debe llamar este
+        método aplicando algún filtro de los que se detalla a continuación.
+
+        Estos documentos pueden ser filtrados por tipos (Pendientes, Finalizados, Rechazados).
+
+        Para listar estos documentos, deberás tener en cuenta lo que coloques en los filtros.
+
+        <details>
+                <summary>Ver tabla de tipos de filtros </summary>
+
+        |    Filtro   |                               Descripción                                       |
+        |-------------|---------------------------------------------------------------------------------|
+        |    todos    | Se obtiene el listado completo de los documentos del usuario.                   |
+        | pendiente   | Se obtienen solo los documentos pendietes del usuario.                          |
+        | finalizados | Se obtienen solo los documentos finalizados del usuario.                        |
+        | rechazados  | Se obtiene solo los documentos rechazados del usuario.                          |
+
+         </details>
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: userID
+          in: path
+          description: Identificador del Usuario
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+        - name: tipoDocumento
+          description: Corresponde al filtro que se quiere aplicar a la lista obtenida.
+          in: query
+          schema:
+            type: string
+          required: true
+          example: todos
+      responses:
+        '200':
+          description: Respuesta a todo evento
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  documents:
+                    type: array
+                    items:
+                      type: string
+                    description: Lista de documentos obtenidos para el usario y filtro solicitado.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Listado de documentos obtenido de forma satisfactoria.
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+  '/users/{userID}/cetificates':
+    get:
+      summary: Obtiene un listado de los certificados de un usuario según su ID
+      operationId: users.certificates.list
+      tags:
+        - Users
+      description: |
+        Un certificado es la identificación virtual de cada persona.
+        En esta API es posible listar dichos certificado que pertenezcan a un usuario previamente indicado.
+        Cada usuario debe tener al menos un certificado para poder firmar documentos.
+        La creación y vinculación ha un usuario se pueden efectuar con la API [Crear Certificado Usuario](#operation/users.certificates.create)
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: userID
+          in: path
+          description: Identificador del Usuario
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  certificates:
+                    type: array
+                    items:
+                      type: string
+                    description: Listado de los certificado asociados al usuario indicado
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Listado de certificado obtenido de forma satisfactoria.
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+    post:
+      summary: Carga un certificado para un usuario existente.
+      operationId: users.certificates.create
+      tags:
+        - Users
+      description: |
+        Cada usuario final debe de tener un certificado asociado para poder firmar documentos
+        en esta API es posible crear un certificado para un usuario que pertenezca al sistema.
+        Los usuarios pueden ser creado en la API [Crear Usuario](https://e-digital.cl/api/users)
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: userID
+          in: path
+          description: Identificador del Usuario
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nameCertificate
+                - password
+                - base64
+              properties:
+                nameCertificate:
+                  type: string
+                  description: Ejemplo &#58; `certificadoPrueba.pfx` <br> Nombre del certificado
+                  example: certificadoPrueba.pfx
+                password:
+                  type: string
+                  description: Ejemplo &#58; `MiS3cretP4as$word` <br>  Password del certificado para poder abrirlo.
+                  example: MiS3cretP4as$word
+                base64:
+                  type: string
+                  description: Ejemplo &#58; `PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==` <br>Documento codificado en Base64 con encode UTF-8 que contiene la estructura del certificado.
+                  example: PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  certificateId:
+                    type: integer
+                    format: int32
+                    description: Código único de usuario. Este código representa el id que se genero al momento de guardar el usuario.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Usuario registrado de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    certificateId: 1119
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+  '/users/{userID}/cetificates/{certificateID}':
+    get:
+      summary: Obtiene informacion de un certificado según su usuarioId y certificadoId
+      operationId: users.certificates.info
+      tags:
+        - Users
+      description: |
+        Los certificados deben pertenecer a un usuario y son necesarios para la firma de los documentos,
+        Los cuales pueden ser creados y vinculados en la API [Crear Certificado](#operation/users.certificates.create)
+        En esta API es posible obtener la información de dicho certificado indicando su fecha de vigencia.
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: userID
+          in: path
+          description: Identificador del Usuario
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+        - name: certificateID
+          in: path
+          description: Identificador del Certificado
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  vigenciaDesde:
+                    type: string
+                    description: 'Es la fecha desde cuando tiene vigencia el certificado, en formato `dd-MM-yyyy`'
+                  vigenciaHasta:
+                    type: string
+                    description: 'Es la fecha hasta cuando tiene vigencia el certificado, en formato `dd-MM-yyyy`'
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Certificado obtenido de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    vigenciaDesde: 14-03-2020
+                    vigenciaHasta: 14-03-2022
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+    put:
+      summary: Permite remover un certificado de un usuario según su usuarioId y certicadoId
+      operationId: users.certificates.remove
+      tags:
+        - Users
+      description: |
+        Si en algún momento determinado se requiere anular o revocar un certificado,
+        es posible llamar este método para tal efecto. Al revocar un certificado este ya no
+        puede ser usado nuevamente, sin embargo los documentos que fueron firmados con él, seguirán siendo validos.
+        Si en algún momento se desea volver a crear un certificado se puede realizar en la API [Crear Certificado](#operation/users.certificates.create)
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: userID
+          in: path
+          description: Identificador del Usuario
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+        - name: certificateID
+          in: path
+          description: Identificador del Certificado
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Certificado removido forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+    delete:
+      summary: Permite revocar un certificado
+      operationId: users.certificates.revoke
+      tags:
+        - Users
+      description: |
+        Si en algún momento determinado se requiere anular o revocar un certificado,
+        es posible llamar este método para tal efecto. Al revocar un certificado este ya no
+        puede ser usado nuevamente, sin embargo los documentos que fueron firmados con él, seguirán siendo validos.
+        Si en algún momento se desea volver a crear un certificado se puede realizar en la API [Crear Certificado](#operation/users.certificates.create)
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: userID
+          in: path
+          description: Identificador del Usuario
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+        - name: certificateID
+          in: path
+          description: Identificador del Certificado
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Certificado revocado forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+  /documents:
+    post:
+      summary: Crea un Documento
+      operationId: documents.create
+      tags:
+        - Documents
+      description: |
+        En esta API es posible crear documentos en el sistema para que puedan ser verificado, firmado
+        , aprobado, rechazado por un usuario final dentro del sistema.
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - signers
+                - userRole
+                - approvers
+                - finalRecipients
+                - templateId
+                - description
+                - afterExpire
+                - flowType
+                - notificationFrecuency
+                - signRequirement
+                - vigency
+                - vigencyType
+                - isPublic
+                - document
+                - signPositionX
+                - signPositionY
+                - signaturePage
+              properties:
+                signers:
+                  type: array
+                  description: 'Ejemplo &#58; `["nuermorut1", "numerorut2"]` <br> Cantidad de firmantes según posición del arreglo'
+                  example: '["nuermorut1", "numerorut2"]'
+                userRole:
+                  type: string
+                  enum:
+                    - viewer
+                    - signer
+                    - approver
+                  description: Ejemplo &#58; `viewer` <br> Tipo de persona que firmara
+                  example: viewer
+                approvers:
+                  type: array
+                  description: 'Ejemplo &#58; `["130410847"]` <br> Rut de los aprobadores'
+                  example: '["130410847"]'
+                finalRecipients:
+                  type: array
+                  description: 'Ejemplo &#58; `["signer-2"]` <br> Destinatarios finales del documento.'
+                  example: '["signer-2"]'
+                templateId:
+                  type: integer
+                  description: Ejemplo &#58; `1047` <br>  Es template de firma documento que se ocupara.
+                  example: '1047'
+                description:
+                  type: string
+                  description: |
+                    Ejemplo &#58; `prueba jonner11 2020-01-03T13:47:31.635Z`
+                    <br>  Es la descripción al momento de guardar el documento.
+                  example: 'prueba jonner11 2020-01-03T13:47:31.635Z'
+                afterExpire:
+                  type: string
+                  description: Ejemplo &#58; `close` <br> Que pasara una vez expirado el documento.
+                  example: close
+                flowType:
+                  type: string
+                  description: Ejemplo &#58; `individual` <br> Tipo de flujo
+                  example: individual
+                notificationFrecuency:
+                  type: integer
+                  description: Ejemplo &#58; `1` <br> Frecuencia de notificaciones
+                  example: '1'
+                signRequirement:
+                  type: string
+                  description: Ejemplo &#58; `not_required` <br>  ???
+                  example: not_required
+                vigency:
+                  type: integer
+                  description: Ejemplo &#58; `5` <br> Corresponde a la vigencia que se le dara al documento.
+                  example: '5'
+                vigencyType:
+                  type: string
+                  description: Ejemplo &#58; `working_days` <br>  Es el tipo de vigencia que se le dara al documento.
+                  example: working_days
+                isPublic:
+                  type: integer
+                  description: Ejemplo &#58; `0` <br>  Es si el documento sera publico o no.
+                  example: '0'
+                document:
+                  type: string
+                  description: Ejemplo &#58; `????` <br>  ???
+                  example: '????'
+                signPositionX:
+                  type: integer
+                  description: Ejemplo &#58; `22` <br>  Coordenadas para posicionar la firma.
+                  example: '22'
+                signPositionY:
+                  type: integer
+                  description: Ejemplo &#58; `25` <br>  Coordenadas para posicionar la firma.
+                  example: '25'
+                signaturePage:
+                  type: integer
+                  description: Ejemplo &#58; `99` <br>  Página donde se debe colocar la firma.
+                  example: '99'
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  documentoId:
+                    type: integer
+                    format: int32
+                    description: Código único de documento. Este código representa el id que se genero al momento de crear el documento.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Documento creado de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    documentoId: 23456
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+  '/documents/{documentsID}':
+    get:
+      summary: Obtiene un documento según su ID
+      operationId: documents.info
+      tags:
+        - Documents
+      description: |
+        Los documentos se crean para que los usuarios finales puedan verificar, firmar, aprobar, rechazar.
+        En esta API es posible obtener un documento por su ID generado en la API [Crear Documento](#operation/documents.create).
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: documentsID
+          in: path
+          description: Identificador del Documentos
+          required: true
+          example: 23456
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  urlDocument:
+                    type: string
+                    description: La url generada para poder ver/descargar el documento.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Documento obtenido de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    urlDocument: 'https://urlDocumento'
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+    put:
+      summary: Modifica el estado de un documento
+      operationId: documents.change
+      tags:
+        - Documents
+      description: |
+        En esta API es posible cambiar el estado de un documento
+        Los posibles estado que se pueden aplicar son los que se muestra a continuación.
+
+        <details>
+                <summary>Ver tabla de tipos de estado </summary>
+
+        |    Estado   |                               Descripción                                       |
+        |-------------|---------------------------------------------------------------------------------|
+        |    anula    | Se utiliza cuando el documento se quiere anular.                                |
+        |   rechaza   | Se utiliza cuando el documento se quiere rechazar.                              |
+        |    firma    | Se utiliza cuando se quiere firmar el documento.                                |
+        |   aprueba   | Se utiliza cuando se quiere aprobar el documento.                               |
+
+        s</details>
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: documentsID
+          in: path
+          description: Identificador del Documentos
+          required: true
+          example: 23456
+          schema:
+            type: integer
+        - name: estado
+          in: query
+          description: Corresponde al estado que se le quiere dar al documento.
+          required: true
+          example: anula
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - comment
+              properties:
+                comment:
+                  type: string
+                  description: Ejemplo &#58; `Documento Erroneo en las fechas` <br> Es el comentario de por que se le esta dando este estado al documento.
+                  example: Documento Erroneo en las fechas
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Documento actualizado de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+    delete:
+      summary: Remueve un documento del flujo
+      operationId: documents.remove
+      tags:
+        - Documents
+      description: |
+        Cada documento creado en el API [Crear Documento](#operation/documents.create), pasa por un flujo de aprobaciones.
+        En esta API es posible remover un documento del flujo.
+        Para que de esta forma no sé considerado como documento pendiente dentro de este.
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: documentsID
+          in: path
+          description: Identificador del Documentos
+          required: true
+          example: c60974ea92b8ef69ed552b5f7f173063
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - comment
+              properties:
+                comment:
+                  type: string
+                  description: Ejemplo &#58; `Documento Sacado del Flujo` <br> Es el comentario de por que se le esta sacando del flujo el documento
+                  example: Documento Sacado del Flujo
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Documento removido de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+  '/documents/{documentsID}/logs':
+    get:
+      summary: Obtiene Logs de un documento según su ID
+      operationId: documents.logs
+      tags:
+        - Documents
+      description: |
+        Los documentos desde el momento que son creados hasta el final del proceso de estos van
+        registrando un logs(registros de actividades), cuando se quiera obtener el historial de
+        un documento en específico se puede llamar este método para poder visualizarlos según su ID.
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: documentsID
+          in: path
+          description: Identificador del Documentos
+          required: true
+          example: 23456
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  logs:
+                    type: array
+                    items:
+                      type: object
+                    description: Logs de lo que se ha hecho con el documento.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Historial obtenido de forma satisfactoria.
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    logs:
+                      - documet_id: 23456
+                        date: '2020-08-06'
+                        user_id: 22
+                        action: to_create
+                        text: ''
+                      - documet_id: 23456
+                        date: '2020-08-06'
+                        user_id: 22
+                        action: to_sign
+                        text: ''
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+  /organizations:
+    get:
+      summary: Obtiene el listado de las organizaciones
+      operationId: organizations.list
+      tags:
+        - Organization
+      description: |
+        Las organizaciones representan a las empresas creadas dentro del sistema.
+        En esta API es posible obtener un listado de las organizaciones suscritas actualmente.
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  organizations:
+                    type: array
+                    items:
+                      type: string
+                    description: Listado de las organizaciones subcritas.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Listado de organizaciones obtenido de forma satisfactoria.
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    organizations:
+                      - Empresa1
+                      - Empresa2
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+  '/organizations/{organizationID}':
+    get:
+      summary: Obtiene informacion de una organización según su ID
+      operationId: organizations.info
+      tags:
+        - Organization
+      description: |
+        Una organización representa una empresa dentro del sistema.
+        A su vez la organización tiene múltiples usuarios los cuales pueden ser creado en el API [Crear Usuario](#operation/users.create),
+        y asociados a un organización en el API [Invitar Usuario](#operation/organizations.users.invite)
+        En esta API es posible obtener la información de una organización en específica.
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: organizationID
+          in: path
+          description: Identificador de la organización
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  organizations:
+                    type: object
+                    description: Es el objeto de la información obtenida de la organización.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Listado de organizaciones obtenido de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    organizations:
+                      nombreOrganizacion: EmpresaUno
+                      rutOrganizacion: 55.893.293.K
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+  '/organizations/{organizationID}/templates':
+    get:
+      summary: Obtiene el listado de los template de las organizaciones
+      operationId: organizations.templates.list
+      tags:
+        - Organization
+      description: |
+        Un template son las plantilla que muestra la parte del documento donde se fijara firma, estos se pueden crear en la
+        API [Crear Template](#operation/organizations.templates.create).
+        En esta API es posible obtener un listado de todos los template de las organizaciones suscritas actualmente.
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: organizationID
+          in: path
+          description: Identificador de la organización que se quiere listar sus template.
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  templates:
+                    type: array
+                    items:
+                      type: string
+                    description: Listado de los templates de la empresas subcritas.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Listado de templates obtenido de forma satisfactoria.
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    templates:
+                      - Template1
+                      - Template2
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+    post:
+      summary: Crea un template para una organización suscrita.
+      operationId: organizations.templates.create
+      tags:
+        - Organization
+      description: |
+        Un Template es un ejemplo de donde se fijara la firma o las firmas dentro del documento.
+        Cada organización debe tener al menos un template y podría llegar a tener "n" template, para poder firmar los documentos.
+        En esta API es posible crear un template para una organización en específico.
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: organizationID
+          in: path
+          description: Identificador de la organización que se quiere crear su template
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  templateId:
+                    type: integer
+                    format: int32
+                    description: Corresponde el ID del template creado.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Template ingresado de forma satisfactoria.
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    templateId: 1131
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+  '/organizations/{organizationID}/templates{templateID}':
+    delete:
+      summary: Permite eliminar un template
+      operationId: organizations.templates.remove
+      tags:
+        - Organization
+      description: |
+        Un template es una plantilla que muestra la parte del documento donde se fijara firma,
+        en esta APi es posible eliminar esta plantilla de firma, lo que no quiere decir que los documentos
+        que ya se encuentran firmados perderán su vigencia, los documentos que ya se encuentran firmados con
+        este template se mantendrán de igual forma.
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: organizationID
+          in: path
+          description: Identificador de la organización.
+          required: true
+          example: 1120
+          schema:
+            type: integer
+            format: int32
+        - name: templateID
+          in: path
+          description: Identificador del template.
+          required: true
+          example: 1121
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Template eliminado de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+    get:
+      summary: Obtiene informacion de un template según su templateID
+      operationId: organizations.templates
+      tags:
+        - Organization
+      description: |
+        En esta API es posible obtener la información de un template de una organización según su ID
+        el cual mostrara la ubicación donde se fija la firma según lo indica este.
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: organizationID
+          in: path
+          description: Identificador de la organización
+          required: true
+          example: 1120
+          schema:
+            type: integer
+            format: int32
+        - name: templateID
+          in: path
+          description: Identificador del template
+          required: true
+          example: 1121
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  templates:
+                    type: string
+                    description: Es el templates obtenido.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Template obtenido de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    templates: template1
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+    put:
+      summary: Modifica un template para una organización suscrita.
+      operationId: organizations.templates.change
+      tags:
+        - Organization
+      description: |
+        En el caso de haber creado un template en el API [Crear Template](#operation/organizations.templates.create)
+        En esta API es posible modificar un template para una organización suscrita.
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: organizationID
+          in: path
+          description: Identificador de la organización
+          required: true
+          example: 1120
+          schema:
+            type: integer
+            format: int32
+        - name: templateID
+          in: path
+          description: Identificador del template a modificar
+          required: true
+          example: 1121
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  modificado:
+                    type: boolean
+                    enum:
+                      - 'true'
+                      - 'false'
+                    description: Corresponde a si se pudo modificar de forma satisfactoria.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Template modificado de forma satisfactoria.
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    modificado: true
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+  '/organizations/{organitzationID}/users':
+    get:
+      summary: Obtiene el listado de las usuarios de una organización
+      operationId: organizations.users.list
+      tags:
+        - Organization
+      description: |
+        Dentro de las organizaciones existen múltiples usuarios finales los cuales pueden ser invitados a
+        una organización en el API [Invitar Usuario](#operation/organizations.users.invite).
+        En esta API es posible obtener un listado de todos los usuarios pertenecientes a la organización según su ID.
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: organizationID
+          in: path
+          description: Identificador de la organización
+          required: true
+          example: 1120
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  users:
+                    type: array
+                    items:
+                      type: string
+                    description: Listado de los usuarios pertenicientes a la organización
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Listado de los usuarios obtenido de forma satisfactoria.
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    users:
+                      - User1
+                      - User2
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+  '/organizations/{organitzationID}/users/{userID}':
+    delete:
+      summary: Permite desvincular un usario de una organización
+      operationId: organizations.users.remove
+      tags:
+        - Organization
+      description: |
+        Las organizaciones se componen de múltiples usuarios finales los cuales pueden
+        participar dentro del flujo de un documento en esta API es posible desvincular un usuario
+        de una organización indicando el ID del usuario que de desea desvincular.
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: organizationID
+          in: path
+          description: Identificador de la organización
+          required: true
+          example: 1120
+          schema:
+            type: integer
+            format: int32
+        - name: userID
+          in: path
+          description: Identificador del usuario
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Usuario desvinculado de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+    post:
+      summary: Invita a un usario a una organización.
+      operationId: organizations.users.invite
+      tags:
+        - Organization
+      description: |
+        Los usuarios finales deben pertenecer a una organización para de esta forma poder participar,
+        en el flujo de los documentos en esta API es posible enviar una invitación a un usuario
+        para que se vincule a una organización.
+      parameters:
+        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: organizationID
+          in: path
+          description: Identificador de la organización que se quiere crear su template
+          required: true
+          example: 1120
+          schema:
+            type: integer
+            format: int32
+        - name: userID
+          in: path
+          description: Identificador del usuario.
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  enviado:
+                    type: boolean
+                    enum:
+                      - 'true'
+                      - 'false'
+                    description: Corresponde a si se envio o no el correo.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Usuario invitado de forma satisfactoria.
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    enviado: true
+        '400':
+          $ref: '#/paths/~1users/put/responses/400'
+        '500':
+          $ref: '#/paths/~1users/put/responses/500'
+tags:
+  - name: Security
+    description: Mecanismos de seguridad
+  - name: Users
+    description: Conjunto de API's que permiten la administración de los usuarios.
+  - name: Organization
+    description: Conjunto de API's que permiten la administración de los organizaciones.
+  - name: Documents
+    description: Conjunto de API's que permiten la administración de los documentos.
