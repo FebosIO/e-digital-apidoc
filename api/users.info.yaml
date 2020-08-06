@@ -1,11 +1,13 @@
 operation:
-  summary: Obtiene informacion de un usuario según su ID
+  summary: Obtiene información de un usuario
   operationId: users.info
   tags:
     - Users
   description: |
-     Cada usuario final es representado por un usuario único de sistema.
-     En esta API es posible obtener la informacion de dicho usuario.
+     Los usuarios finales luego de ser creados en la API [Crear Usuario](#operation/users.create),
+     y asociados a una organización en la API [Invitar Usuario](#operation/organizations.users.invite).
+     Si en algún momento de desea obtener la información de dicho usuario se debe llamar este método
+     indicando el ID de usuario.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'

@@ -4,7 +4,9 @@ operation:
   tags:
     - Organization
   description: |
-     En esta API es posible enviar una invitación a un usuario para que se vincule a una organización.
+     Los usuarios finales deben pertenecer a una organización para de esta forma poder participar,
+     en el flujo de los documentos en esta API es posible enviar una invitación a un usuario
+     para que se vincule a una organización.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'

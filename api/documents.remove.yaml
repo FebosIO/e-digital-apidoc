@@ -4,8 +4,9 @@ operation:
   tags:
     - Documents
   description: |
+    Cada documento creado en el API [Crear Documento](#operation/documents.create), pasa por un flujo de aprobaciones.
     En esta API es posible remover un documento del flujo.
-    Para que de esta forma no se considerado como documento pendiente dentro del flujo.
+    Para que de esta forma no sé considerado como documento pendiente dentro de este.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'

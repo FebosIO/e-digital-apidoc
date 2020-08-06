@@ -4,7 +4,9 @@ operation:
   tags:
     - Organization
   description: |
-     En esta API es posible obtener un listado de todos los usarios pertenecientes a la organización según su ID.
+     Dentro de las organizaciones existen múltiples usuarios finales los cuales pueden ser invitados a
+     una organización en el API [Invitar Usuario](#operation/organizations.users.invite).
+     En esta API es posible obtener un listado de todos los usuarios pertenecientes a la organización según su ID.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'

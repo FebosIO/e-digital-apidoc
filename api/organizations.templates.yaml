@@ -4,7 +4,8 @@ operation:
   tags:
     - Organization
   description: |
-     En esta API es posible obtener la información de un template de una organización por su templateID.
+     En esta API es posible obtener la información de un template de una organización según su ID
+     el cual mostrara la ubicación donde se fija la firma según lo indica este.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'

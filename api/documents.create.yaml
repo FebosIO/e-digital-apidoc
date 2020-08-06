@@ -4,7 +4,7 @@ operation:
   tags:
     - Documents
   description: |
-    En esta API es posible crear un documentos en el sistema para que pueda ser verificado, firmado
+    En esta API es posible crear documentos en el sistema para que puedan ser verificado, firmado
     , aprobado, rechazado por un usuario final dentro del sistema.
 
   parameters:

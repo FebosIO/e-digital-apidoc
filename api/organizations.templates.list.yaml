@@ -4,7 +4,9 @@ operation:
   tags:
     - Organization
   description: |
-     En esta API es posible obtener un listado de los template de las organizaciones subcritas actualmente.
+     Un template son las plantilla que muestra la parte del documento donde se fijara firma, estos se pueden crear en la
+     API [Crear Template](#operation/organizations.templates.create).
+     En esta API es posible obtener un listado de todos los template de las organizaciones suscritas actualmente.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'

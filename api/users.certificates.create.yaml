@@ -4,8 +4,9 @@ operation:
   tags:
     - Users
   description: |
-    En esta API es posible crear un certificado para un usuario que pertenesca al sistema.
-    Los usuarios pueden ser creado en la API [Crear Usurio](https://e-digital.cl/api/users)
+    Cada usuario final debe de tener un certificado asociado para poder firmar documentos
+    en esta API es posible crear un certificado para un usuario que pertenezca al sistema.
+    Los usuarios pueden ser creado en la API [Crear Usuario](https://e-digital.cl/api/users)
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'

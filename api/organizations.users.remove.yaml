@@ -4,8 +4,9 @@ operation:
   tags:
     - Organization
   description: |
-     En esta API es posible desvincular un usario de una organización indicando el ID
-     del usuario que de desea desvincular.
+     Las organizaciones se componen de múltiples usuarios finales los cuales pueden
+     participar dentro del flujo de un documento en esta API es posible desvincular un usuario
+     de una organización indicando el ID del usuario que de desea desvincular.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'

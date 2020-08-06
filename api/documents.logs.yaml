@@ -4,7 +4,9 @@ operation:
   tags:
     - Documents
   description: |
-     En esta API es posible obtener los logs de un documento, especificamente todo lo que se hizo con el documento.
+     Los documentos desde el momento que son creados hasta el final del proceso de estos van
+     registrando un logs(registros de actividades), cuando se quiera obtener el historial de
+     un documento en específico se puede llamar este método para poder visualizarlos según su ID.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'

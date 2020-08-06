@@ -4,7 +4,9 @@ operation:
   tags:
     - Users
   description: |
-    En esta API es posible actualizar los datos del usuario del sistema
+    Los usuarios finales pueden ser creados en la API [Crear Usuario](#operation/users.create),
+    si en algún momento se desea efectuar modificación a los datos de este es posible llamar
+    este método y de esta forma efectuar tal acción.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'

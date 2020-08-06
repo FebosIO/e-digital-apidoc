@@ -4,7 +4,10 @@ operation:
   tags:
     - Organization
   description: |
-     En esta API es posible obtener la informacion de una organización en especifica.
+     Una organización representa una empresa dentro del sistema.
+     A su vez la organización tiene múltiples usuarios los cuales pueden ser creado en el API [Crear Usuario](#operation/users.create),
+     y asociados a un organización en el API [Invitar Usuario](#operation/organizations.users.invite)
+     En esta API es posible obtener la información de una organización en específica.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'

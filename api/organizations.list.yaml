@@ -4,6 +4,7 @@ operation:
   tags:
     - Organization
   description: |
+     Las organizaciones representan a las empresas creadas dentro del sistema.
      En esta API es posible obtener un listado de las organizaciones suscritas actualmente.
 
   parameters:

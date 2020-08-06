@@ -4,7 +4,11 @@ operation:
   tags:
     - Users
   description: |
-    Retorna un listado con los documentos de un usuario.
+    Los usuarios finales aparte de pertenecer a una organización en particular tienen un listado
+    de documentos los cuales podrían estar en diferentes estados ya sea pendientes, finalizados,
+    rechazados. Si en algún momento se desea tener un listado con tal data se debe llamar este
+    método aplicando algún filtro de los que se detalla a continuación.
+
     Estos documentos pueden ser filtrados por tipos (Pendientes, Finalizados, Rechazados).
 
     Para listar estos documentos, deberás tener en cuenta lo que coloques en los filtros.

@@ -1,10 +1,11 @@
 operation:
-  summary: Obtiene undocumento según su ID
+  summary: Obtiene un documento según su ID
   operationId: documents.info
   tags:
     - Documents
   description: |
-     En esta API es posible obtener un documento por su ID generado en la API [Crear Documento](https://e-digital.cl/api/documents).
+     Los documentos se crean para que los usuarios finales puedan verificar, firmar, aprobar, rechazar.
+     En esta API es posible obtener un documento por su ID generado en la API [Crear Documento](#operation/documents.create).
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'

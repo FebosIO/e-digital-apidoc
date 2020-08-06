@@ -6,10 +6,10 @@ operation:
   description: |
     Cada usuario final es representado por un usuario único de sistema.
     En esta API es posible crear dicho usuario en el sistema para que pueda recibir y firmar documentos.
-    Cada documento debe ser firmado por un usuari existente en la plataforma.
+    Cada documento debe ser firmado por un usuario existente en la plataforma.
     Es a los usuarios finalmente a quienes les llegan los documentos que se encuentran pendientes de firma.
-    Cada usuarios puede pertenecer a mas de una empresa, esta vinculación se puede hacer con la API
-    [Obtener Token](https://e-digital.cl/api/auth)
+    Cada usuarios puede pertenecer a más de una empresa, esta vinculación se puede hacer con la API
+    [Invitar Usuario](#operation/organizations.users.invite)
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'

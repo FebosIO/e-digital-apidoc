@@ -4,8 +4,9 @@ operation:
   tags:
     - Users
   description: |
-     En esta API es posible obtener la historia del usuario.
-     Documentos firmados.
+     Los usuarios finales desde el momento que se crean van generando un log(registros de actividades)
+     Si en algún momento se desea verificar la historia de un usuario en específico se puede llamar este
+     método y así obtener el total de estos registros.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'

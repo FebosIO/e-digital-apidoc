@@ -5,18 +5,18 @@ response:
       schema:
         type: object
         required:
-          - codigo
-          - mensaje
-          - errores
+          - code
+          - message
+          - errors
         properties:
-          codigo:
+          code:
               type: integer
               format: int32
               description: Código de resultado de la operación, siendo `10` un resultado satisfactorio. Cualquier otro código es indicativo de error.
-          mensaje:
+          message:
               type: string
-              description: Mesage de respuesta, traducción humana del código de resultado.
-          errores:
+              description: mensaje de respuesta, traducción humana del código de resultado.
+          errors:
               type: array
               items:
                 type: string

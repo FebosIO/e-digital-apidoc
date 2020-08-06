@@ -4,7 +4,10 @@ operation:
   tags:
     - Users
   description: |
-     En esta API es posible remover un certifiado de un usuario especifico.
+    Si en algún momento determinado se requiere anular o revocar un certificado,
+    es posible llamar este método para tal efecto. Al revocar un certificado este ya no
+    puede ser usado nuevamente, sin embargo los documentos que fueron firmados con él, seguirán siendo validos.
+    Si en algún momento se desea volver a crear un certificado se puede realizar en la API [Crear Certificado](#operation/users.certificates.create)
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
