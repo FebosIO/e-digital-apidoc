@@ -10,6 +10,10 @@ operation:
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
   responses:
+    '400':
+      $ref: '../api/components/responses/response.400.yaml#/response'
+    '500':
+      $ref: '../api/components/responses/response.500.yaml#/response'
     '200':
       description: Operación efectuada de forma satisfactoria
       content:
@@ -55,4 +59,4 @@ operation:
                   time: 2020-08-04 09:44:42.245
                   message: Listado de organizaciones obtenido de forma satisfactoria.
                   trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                  organizations: ["Empresa1","Empresa2"]
+                  organizations: ['Empresa1','Empresa2']

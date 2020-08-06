@@ -25,9 +25,9 @@ operation:
       in: path
       description: Identificador del Documentos
       required: true
-      example: c60974ea92b8ef69ed552b5f7f173063
+      example: 23456
       schema:
-        type: string
+        type: integer
     - name: estado
       in: query
       description: Corresponde al estado que se le quiere dar al documento.

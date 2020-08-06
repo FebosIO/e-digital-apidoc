@@ -67,4 +67,17 @@ operation:
                   time: 2020-08-04 09:44:42.245
                   message: Usuario obtenido de forma satisfactoria
                   trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                  user: {name="Ramon", surname="Montalva ", middleName = "Montoya"}
+                  user: {
+                     name : 'Ramon' ,
+                     surName : 'Montalva' ,
+                     middleName : 'Montoya' ,
+                     email : 'tucorreo@empresa.cl' ,
+                     identityDocument : '12345678-9' ,
+                     typeIdentityDocument : 'CEDULA' ,
+                     serieIdentityDocument : '123123123' ,
+                     password : 'myS3cretPass' ,
+                     address : 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes' ,
+                     gender : 'male' ,
+                     birth : '31-12-1970' ,
+                     phone: '(2) 2219 8406'
+                    }

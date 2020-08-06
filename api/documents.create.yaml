@@ -157,7 +157,8 @@ operation:
                 type: string
                 description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
               documentoId:
-                type: string
+                type: integer
+                format: int32
                 description: Código único de documento. Este código representa el id que se genero al momento de crear el documento.
           examples:
             Token Inválido:
@@ -171,4 +172,4 @@ operation:
                 time: 2020-08-04 09:44:42.245
                 message: Documento creado de forma satisfactoria
                 trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                documentoId: c60974ea92b8ef69ed552b5f7f173063
+                documentoId: 23456

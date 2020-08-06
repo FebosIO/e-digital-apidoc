@@ -67,4 +67,7 @@ operation:
                   time: 2020-08-04 09:44:42.245
                   message: Listado de organizaciones obtenido de forma satisfactoria
                   trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                  organizations: {nombreOrganizacion="EmpresaUno",rutOrganizacion="55.893.293.K"}
+                  organizations: {
+                   nombreOrganizacion: 'EmpresaUno',
+                   rutOrganizacion: '55.893.293.K'
+                  }
