@@ -4,6 +4,10 @@ operation:
   tags:
     - Organization
   description: |
+    | Información     |               Detalle              |
+    |-----------------|------------------------------------|
+    |  ID operación   |      organizations.templates       |
+
      En esta API es posible obtener la información de un template de una organización según su ID
      el cual mostrara la ubicación donde se fija la firma según lo indica este.
 

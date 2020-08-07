@@ -4,6 +4,10 @@ operation:
   tags:
     - Users
   description: |
+    | Información     |               Detalle              |
+    |-----------------|------------------------------------|
+    |  ID operación   |             users.info             |
+
      Los usuarios finales luego de ser creados en la API [Crear Usuario](#operation/users.create),
      y asociados a una organización en la API [Invitar Usuario](#operation/organizations.users.invite).
      Si en algún momento de desea obtener la información de dicho usuario se debe llamar este método

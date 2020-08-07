@@ -4,6 +4,10 @@ operation:
   tags:
     - Users
   description: |
+    | Información     |               Detalle              |
+    |-----------------|------------------------------------|
+    |  ID operación   |      users.certificates.list       |
+
      Un certificado es la identificación virtual de cada persona.
      En esta API es posible listar dichos certificado que pertenezcan a un usuario previamente indicado.
      Cada usuario debe tener al menos un certificado para poder firmar documentos.

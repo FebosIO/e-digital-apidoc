@@ -4,6 +4,10 @@ operation:
   tags:
     - Organization
   description: |
+    | Información     |               Detalle              |
+    |-----------------|------------------------------------|
+    |  ID operación   |   organizations.users.invite       |
+
      Los usuarios finales deben pertenecer a una organización para de esta forma poder participar,
      en el flujo de los documentos en esta API es posible enviar una invitación a un usuario
      para que se vincule a una organización.

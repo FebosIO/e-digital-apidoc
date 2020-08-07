@@ -4,6 +4,10 @@ operation:
   tags:
     - Documents
   description: |
+     | Información     |         Detalle          |
+     |-----------------|--------------------------|
+     |  ID operación   |     document.logs        |
+
      Los documentos desde el momento que son creados hasta el final del proceso de estos van
      registrando un logs(registros de actividades), cuando se quiera obtener el historial de
      un documento en específico se puede llamar este método para poder visualizarlos según su ID.

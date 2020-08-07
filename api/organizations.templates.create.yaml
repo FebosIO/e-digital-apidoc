@@ -4,6 +4,10 @@ operation:
   tags:
     - Organization
   description: |
+    | Información     |               Detalle              |
+    |-----------------|------------------------------------|
+    |  ID operación   |   organizations.templates.create   |
+
      Un Template es un ejemplo de donde se fijara la firma o las firmas dentro del documento.
      Cada organización debe tener al menos un template y podría llegar a tener "n" template, para poder firmar los documentos.
      En esta API es posible crear un template para una organización en específico.

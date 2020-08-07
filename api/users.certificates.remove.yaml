@@ -4,6 +4,10 @@ operation:
   tags:
     - Users
   description: |
+    | Información     |               Detalle              |
+    |-----------------|------------------------------------|
+    |  ID operación   |    users.certificates.remove       |
+
     Si en algún momento determinado se requiere anular o revocar un certificado,
     es posible llamar este método para tal efecto. Al revocar un certificado este ya no
     puede ser usado nuevamente, sin embargo los documentos que fueron firmados con él, seguirán siendo validos.

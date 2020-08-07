@@ -21,6 +21,10 @@ paths:
       tags:
         - Security
       description: |
+        | Información     |         Detalle          |
+        |-----------------|--------------------------|
+        |  ID operación   |            auth          |
+
         Retorna un token de autenticación para consumir el resto de los endpoint.
       responses:
         '200':
@@ -46,6 +50,10 @@ paths:
       tags:
         - Users
       description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |            users.create            |
+
         Cada usuario final es representado por un usuario único de sistema.
         En esta API es posible crear dicho usuario en el sistema para que pueda recibir y firmar documentos.
         Cada documento debe ser firmado por un usuario existente en la plataforma.
@@ -190,6 +198,10 @@ paths:
       tags:
         - Users
       description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |            users.change            |
+
         Los usuarios finales pueden ser creados en la API [Crear Usuario](#operation/users.create),
         si en algún momento se desea efectuar modificación a los datos de este es posible llamar
         este método y de esta forma efectuar tal acción.
@@ -418,10 +430,14 @@ paths:
       tags:
         - Users
       description: |
-        Los usuarios finales luego de ser creados en la API [Crear Usuario](#operation/users.create),
-        y asociados a una organización en la API [Invitar Usuario](#operation/organizations.users.invite).
-        Si en algún momento de desea obtener la información de dicho usuario se debe llamar este método
-        indicando el ID de usuario.
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |             users.info             |
+
+         Los usuarios finales luego de ser creados en la API [Crear Usuario](#operation/users.create),
+         y asociados a una organización en la API [Invitar Usuario](#operation/organizations.users.invite).
+         Si en algún momento de desea obtener la información de dicho usuario se debe llamar este método
+         indicando el ID de usuario.
       parameters:
         - $ref: '#/paths/~1users/put/parameters/0'
         - name: userID
@@ -500,9 +516,13 @@ paths:
       tags:
         - Users
       description: |
-        Los usuarios finales desde el momento que se crean van generando un log(registros de actividades)
-        Si en algún momento se desea verificar la historia de un usuario en específico se puede llamar este
-        método y así obtener el total de estos registros.
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |           users.history            |
+
+         Los usuarios finales desde el momento que se crean van generando un log(registros de actividades)
+         Si en algún momento se desea verificar la historia de un usuario en específico se puede llamar este
+         método y así obtener el total de estos registros.
       parameters:
         - $ref: '#/paths/~1users/put/parameters/0'
         - name: userID
@@ -570,6 +590,10 @@ paths:
       tags:
         - Users
       description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |         users.documents            |
+
         Los usuarios finales aparte de pertenecer a una organización en particular tienen un listado
         de documentos los cuales podrían estar en diferentes estados ya sea pendientes, finalizados,
         rechazados. Si en algún momento se desea tener un listado con tal data se debe llamar este
@@ -664,10 +688,14 @@ paths:
       tags:
         - Users
       description: |
-        Un certificado es la identificación virtual de cada persona.
-        En esta API es posible listar dichos certificado que pertenezcan a un usuario previamente indicado.
-        Cada usuario debe tener al menos un certificado para poder firmar documentos.
-        La creación y vinculación ha un usuario se pueden efectuar con la API [Crear Certificado Usuario](#operation/users.certificates.create)
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |      users.certificates.list       |
+
+         Un certificado es la identificación virtual de cada persona.
+         En esta API es posible listar dichos certificado que pertenezcan a un usuario previamente indicado.
+         Cada usuario debe tener al menos un certificado para poder firmar documentos.
+         La creación y vinculación ha un usuario se pueden efectuar con la API [Crear Certificado Usuario](#operation/users.certificates.create)
       parameters:
         - $ref: '#/paths/~1users/put/parameters/0'
         - name: userID
@@ -734,6 +762,10 @@ paths:
       tags:
         - Users
       description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |    users.certificates.create       |
+
         Cada usuario final debe de tener un certificado asociado para poder firmar documentos
         en esta API es posible crear un certificado para un usuario que pertenezca al sistema.
         Los usuarios pueden ser creado en la API [Crear Usuario](https://e-digital.cl/api/users)
@@ -826,9 +858,13 @@ paths:
       tags:
         - Users
       description: |
-        Los certificados deben pertenecer a un usuario y son necesarios para la firma de los documentos,
-        Los cuales pueden ser creados y vinculados en la API [Crear Certificado](#operation/users.certificates.create)
-        En esta API es posible obtener la información de dicho certificado indicando su fecha de vigencia.
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |      users.certificates.info       |
+
+         Los certificados deben pertenecer a un usuario y son necesarios para la firma de los documentos,
+         Los cuales pueden ser creados y vinculados en la API [Crear Certificado](#operation/users.certificates.create)
+         En esta API es posible obtener la información de dicho certificado indicando su fecha de vigencia.
       parameters:
         - $ref: '#/paths/~1users/put/parameters/0'
         - name: userID
@@ -906,6 +942,10 @@ paths:
       tags:
         - Users
       description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |    users.certificates.remove       |
+
         Si en algún momento determinado se requiere anular o revocar un certificado,
         es posible llamar este método para tal efecto. Al revocar un certificado este ya no
         puede ser usado nuevamente, sin embargo los documentos que fueron firmados con él, seguirán siendo validos.
@@ -979,10 +1019,14 @@ paths:
       tags:
         - Users
       description: |
-        Si en algún momento determinado se requiere anular o revocar un certificado,
-        es posible llamar este método para tal efecto. Al revocar un certificado este ya no
-        puede ser usado nuevamente, sin embargo los documentos que fueron firmados con él, seguirán siendo validos.
-        Si en algún momento se desea volver a crear un certificado se puede realizar en la API [Crear Certificado](#operation/users.certificates.create)
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |    users.certificates.revoke       |
+
+         Si en algún momento determinado se requiere anular o revocar un certificado,
+         es posible llamar este método para tal efecto. Al revocar un certificado este ya no
+         puede ser usado nuevamente, sin embargo los documentos que fueron firmados con él, seguirán siendo validos.
+         Si en algún momento se desea volver a crear un certificado se puede realizar en la API [Crear Certificado](#operation/users.certificates.create)
       parameters:
         - $ref: '#/paths/~1users/put/parameters/0'
         - name: userID
@@ -1046,13 +1090,17 @@ paths:
           $ref: '#/paths/~1users/put/responses/400'
         '500':
           $ref: '#/paths/~1users/put/responses/500'
-  /documents:
+  /document:
     post:
       summary: Crea un Documento
-      operationId: documents.create
+      operationId: document.create
       tags:
         - Documents
       description: |
+        | Información     |         Detalle          |
+        |-----------------|--------------------------|
+        |ID operación     |     document.create      |
+
         En esta API es posible crear documentos en el sistema para que puedan ser verificado, firmado
         , aprobado, rechazado por un usuario final dentro del sistema.
       parameters:
@@ -1205,15 +1253,19 @@ paths:
           $ref: '#/paths/~1users/put/responses/400'
         '500':
           $ref: '#/paths/~1users/put/responses/500'
-  '/documents/{documentsID}':
+  '/document/{documentsID}':
     get:
       summary: Obtiene un documento según su ID
-      operationId: documents.info
+      operationId: document.info
       tags:
         - Documents
       description: |
-        Los documentos se crean para que los usuarios finales puedan verificar, firmar, aprobar, rechazar.
-        En esta API es posible obtener un documento por su ID generado en la API [Crear Documento](#operation/documents.create).
+        | Información     |         Detalle          |
+        |-----------------|--------------------------|
+        |  ID operación   |     document.info        |
+
+         Los documentos se crean para que los usuarios finales puedan verificar, firmar, aprobar, rechazar.
+         En esta API es posible obtener un documento por su ID generado en la API [Crear Documento](#operation/documents.create).
       parameters:
         - $ref: '#/paths/~1users/put/parameters/0'
         - name: documentsID
@@ -1274,10 +1326,14 @@ paths:
           $ref: '#/paths/~1users/put/responses/500'
     put:
       summary: Modifica el estado de un documento
-      operationId: documents.change
+      operationId: document.change
       tags:
         - Documents
       description: |
+        | Información     |         Detalle          |
+        |-----------------|--------------------------|
+        |  ID operación   |     document.change      |
+
         En esta API es posible cambiar el estado de un documento
         Los posibles estado que se pueden aplicar son los que se muestra a continuación.
 
@@ -1367,10 +1423,14 @@ paths:
           $ref: '#/paths/~1users/put/responses/500'
     delete:
       summary: Remueve un documento del flujo
-      operationId: documents.remove
+      operationId: document.remove
       tags:
         - Documents
       description: |
+        | Información     |         Detalle          |
+        |-----------------|--------------------------|
+        |  ID operación   |     document.remove      |
+
         Cada documento creado en el API [Crear Documento](#operation/documents.create), pasa por un flujo de aprobaciones.
         En esta API es posible remover un documento del flujo.
         Para que de esta forma no sé considerado como documento pendiente dentro de este.
@@ -1440,13 +1500,17 @@ paths:
           $ref: '#/paths/~1users/put/responses/400'
         '500':
           $ref: '#/paths/~1users/put/responses/500'
-  '/documents/{documentsID}/logs':
+  '/document/{documentsID}/logs':
     get:
       summary: Obtiene Logs de un documento según su ID
-      operationId: documents.logs
+      operationId: document.logs
       tags:
         - Documents
       description: |
+        | Información     |         Detalle          |
+        |-----------------|--------------------------|
+        |  ID operación   |     document.logs        |
+
         Los documentos desde el momento que son creados hasta el final del proceso de estos van
         registrando un logs(registros de actividades), cuando se quiera obtener el historial de
         un documento en específico se puede llamar este método para poder visualizarlos según su ID.
@@ -1527,8 +1591,12 @@ paths:
       tags:
         - Organization
       description: |
-        Las organizaciones representan a las empresas creadas dentro del sistema.
-        En esta API es posible obtener un listado de las organizaciones suscritas actualmente.
+        | Información     |         Detalle          |
+        |-----------------|--------------------------|
+        |  ID operación   |   organizations.list     |
+
+         Las organizaciones representan a las empresas creadas dentro del sistema.
+         En esta API es posible obtener un listado de las organizaciones suscritas actualmente.
       parameters:
         - $ref: '#/paths/~1users/put/parameters/0'
       responses:
@@ -1591,10 +1659,14 @@ paths:
       tags:
         - Organization
       description: |
-        Una organización representa una empresa dentro del sistema.
-        A su vez la organización tiene múltiples usuarios los cuales pueden ser creado en el API [Crear Usuario](#operation/users.create),
-        y asociados a un organización en el API [Invitar Usuario](#operation/organizations.users.invite)
-        En esta API es posible obtener la información de una organización en específica.
+        | Información     |         Detalle          |
+        |-----------------|--------------------------|
+        |  ID operación   |   organizations.info     |
+
+         Una organización representa una empresa dentro del sistema.
+         A su vez la organización tiene múltiples usuarios los cuales pueden ser creado en el API [Crear Usuario](#operation/users.create),
+         y asociados a un organización en el API [Invitar Usuario](#operation/organizations.users.invite)
+         En esta API es posible obtener la información de una organización en específica.
       parameters:
         - $ref: '#/paths/~1users/put/parameters/0'
         - name: organizationID
@@ -1663,9 +1735,13 @@ paths:
       tags:
         - Organization
       description: |
-        Un template son las plantilla que muestra la parte del documento donde se fijara firma, estos se pueden crear en la
-        API [Crear Template](#operation/organizations.templates.create).
-        En esta API es posible obtener un listado de todos los template de las organizaciones suscritas actualmente.
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |    organizations.templates.list    |
+
+         Un template son las plantilla que muestra la parte del documento donde se fijara firma, estos se pueden crear en la
+         API [Crear Template](#operation/organizations.templates.create).
+         En esta API es posible obtener un listado de todos los template de las organizaciones suscritas actualmente.
       parameters:
         - $ref: '#/paths/~1users/put/parameters/0'
         - name: organizationID
@@ -1735,9 +1811,13 @@ paths:
       tags:
         - Organization
       description: |
-        Un Template es un ejemplo de donde se fijara la firma o las firmas dentro del documento.
-        Cada organización debe tener al menos un template y podría llegar a tener "n" template, para poder firmar los documentos.
-        En esta API es posible crear un template para una organización en específico.
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |   organizations.templates.create   |
+
+         Un Template es un ejemplo de donde se fijara la firma o las firmas dentro del documento.
+         Cada organización debe tener al menos un template y podría llegar a tener "n" template, para poder firmar los documentos.
+         En esta API es posible crear un template para una organización en específico.
       parameters:
         - $ref: '#/paths/~1users/put/parameters/0'
         - name: organizationID
@@ -1805,6 +1885,10 @@ paths:
       tags:
         - Organization
       description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |  organizations.templates.remove    |
+
         Un template es una plantilla que muestra la parte del documento donde se fijara firma,
         en esta APi es posible eliminar esta plantilla de firma, lo que no quiere decir que los documentos
         que ya se encuentran firmados perderán su vigencia, los documentos que ya se encuentran firmados con
@@ -1878,8 +1962,12 @@ paths:
       tags:
         - Organization
       description: |
-        En esta API es posible obtener la información de un template de una organización según su ID
-        el cual mostrara la ubicación donde se fija la firma según lo indica este.
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |      organizations.templates       |
+
+         En esta API es posible obtener la información de un template de una organización según su ID
+         el cual mostrara la ubicación donde se fija la firma según lo indica este.
       parameters:
         - $ref: '#/paths/~1users/put/parameters/0'
         - name: organizationID
@@ -1953,8 +2041,12 @@ paths:
       tags:
         - Organization
       description: |
-        En el caso de haber creado un template en el API [Crear Template](#operation/organizations.templates.create)
-        En esta API es posible modificar un template para una organización suscrita.
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   | organizations.templates.change     |
+
+         En el caso de haber creado un template en el API [Crear Template](#operation/organizations.templates.create)
+         En esta API es posible modificar un template para una organización suscrita.
       parameters:
         - $ref: '#/paths/~1users/put/parameters/0'
         - name: organizationID
@@ -2032,9 +2124,13 @@ paths:
       tags:
         - Organization
       description: |
-        Dentro de las organizaciones existen múltiples usuarios finales los cuales pueden ser invitados a
-        una organización en el API [Invitar Usuario](#operation/organizations.users.invite).
-        En esta API es posible obtener un listado de todos los usuarios pertenecientes a la organización según su ID.
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |    organizations.users.list        |
+
+         Dentro de las organizaciones existen múltiples usuarios finales los cuales pueden ser invitados a
+         una organización en el API [Invitar Usuario](#operation/organizations.users.invite).
+         En esta API es posible obtener un listado de todos los usuarios pertenecientes a la organización según su ID.
       parameters:
         - $ref: '#/paths/~1users/put/parameters/0'
         - name: organizationID
@@ -2105,9 +2201,13 @@ paths:
       tags:
         - Organization
       description: |
-        Las organizaciones se componen de múltiples usuarios finales los cuales pueden
-        participar dentro del flujo de un documento en esta API es posible desvincular un usuario
-        de una organización indicando el ID del usuario que de desea desvincular.
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |    organizations.users.remove      |
+
+         Las organizaciones se componen de múltiples usuarios finales los cuales pueden
+         participar dentro del flujo de un documento en esta API es posible desvincular un usuario
+         de una organización indicando el ID del usuario que de desea desvincular.
       parameters:
         - $ref: '#/paths/~1users/put/parameters/0'
         - name: organizationID
@@ -2177,9 +2277,13 @@ paths:
       tags:
         - Organization
       description: |
-        Los usuarios finales deben pertenecer a una organización para de esta forma poder participar,
-        en el flujo de los documentos en esta API es posible enviar una invitación a un usuario
-        para que se vincule a una organización.
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |   organizations.users.invite       |
+
+         Los usuarios finales deben pertenecer a una organización para de esta forma poder participar,
+         en el flujo de los documentos en esta API es posible enviar una invitación a un usuario
+         para que se vincule a una organización.
       parameters:
         - $ref: '#/paths/~1users/put/parameters/0'
         - name: organizationID

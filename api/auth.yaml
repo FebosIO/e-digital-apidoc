@@ -4,6 +4,10 @@ operation:
   tags:
     - Security
   description: |
+    | Información     |         Detalle          |
+    |-----------------|--------------------------|
+    |  ID operación   |            auth          |
+
     Retorna un token de autenticación para consumir el resto de los endpoint.
 
   responses:

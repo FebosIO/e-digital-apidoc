@@ -4,6 +4,10 @@ operation:
   tags:
     - Organization
   description: |
+    | Información     |         Detalle          |
+    |-----------------|--------------------------|
+    |  ID operación   |   organizations.info     |
+
      Una organización representa una empresa dentro del sistema.
      A su vez la organización tiene múltiples usuarios los cuales pueden ser creado en el API [Crear Usuario](#operation/users.create),
      y asociados a un organización en el API [Invitar Usuario](#operation/organizations.users.invite)

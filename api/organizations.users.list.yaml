@@ -4,6 +4,10 @@ operation:
   tags:
     - Organization
   description: |
+    | Información     |               Detalle              |
+    |-----------------|------------------------------------|
+    |  ID operación   |    organizations.users.list        |
+
      Dentro de las organizaciones existen múltiples usuarios finales los cuales pueden ser invitados a
      una organización en el API [Invitar Usuario](#operation/organizations.users.invite).
      En esta API es posible obtener un listado de todos los usuarios pertenecientes a la organización según su ID.

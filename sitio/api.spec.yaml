@@ -22,6 +22,13 @@ paths:
       tags:
         - Security
       description: >
+        | Información     |         Detalle          |
+
+        |-----------------|--------------------------|
+
+        |  ID operación   |            auth          |
+
+
         Retorna un token de autenticación para consumir el resto de los
         endpoint.
       responses:
@@ -145,6 +152,13 @@ paths:
       tags:
         - Users
       description: >
+        | Información     |               Detalle              |
+
+        |-----------------|------------------------------------|
+
+        |  ID operación   |            users.create            |
+
+
         Cada usuario final es representado por un usuario único de sistema.
 
         En esta API es posible crear dicho usuario en el sistema para que pueda
@@ -589,6 +603,13 @@ paths:
       tags:
         - Users
       description: >
+        | Información     |               Detalle              |
+
+        |-----------------|------------------------------------|
+
+        |  ID operación   |            users.change            |
+
+
         Los usuarios finales pueden ser creados en la API [Crear
         Usuario](#operation/users.create),
 
@@ -952,17 +973,15 @@ paths:
       operationId: users.info
       tags:
         - Users
-      description: >
-        Los usuarios finales luego de ser creados en la API [Crear
-        Usuario](#operation/users.create),
+      description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |             users.info             |
 
-        y asociados a una organización en la API [Invitar
-        Usuario](#operation/organizations.users.invite).
-
-        Si en algún momento de desea obtener la información de dicho usuario se
-        debe llamar este método
-
-        indicando el ID de usuario.
+         Los usuarios finales luego de ser creados en la API [Crear Usuario](#operation/users.create),
+         y asociados a una organización en la API [Invitar Usuario](#operation/organizations.users.invite).
+         Si en algún momento de desea obtener la información de dicho usuario se debe llamar este método
+         indicando el ID de usuario.
       parameters:
         - *ref_0
         - name: userID
@@ -1161,14 +1180,14 @@ paths:
       operationId: users.history
       tags:
         - Users
-      description: >
-        Los usuarios finales desde el momento que se crean van generando un
-        log(registros de actividades)
+      description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |           users.history            |
 
-        Si en algún momento se desea verificar la historia de un usuario en
-        específico se puede llamar este
-
-        método y así obtener el total de estos registros.
+         Los usuarios finales desde el momento que se crean van generando un log(registros de actividades)
+         Si en algún momento se desea verificar la historia de un usuario en específico se puede llamar este
+         método y así obtener el total de estos registros.
       parameters:
         - *ref_0
         - name: userID
@@ -1364,6 +1383,13 @@ paths:
       tags:
         - Users
       description: >
+        | Información     |               Detalle              |
+
+        |-----------------|------------------------------------|
+
+        |  ID operación   |         users.documents            |
+
+
         Los usuarios finales aparte de pertenecer a una organización en
         particular tienen un listado
 
@@ -1609,17 +1635,15 @@ paths:
       operationId: users.certificates.list
       tags:
         - Users
-      description: >
-        Un certificado es la identificación virtual de cada persona.
+      description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |      users.certificates.list       |
 
-        En esta API es posible listar dichos certificado que pertenezcan a un
-        usuario previamente indicado.
-
-        Cada usuario debe tener al menos un certificado para poder firmar
-        documentos.
-
-        La creación y vinculación ha un usuario se pueden efectuar con la API
-        [Crear Certificado Usuario](#operation/users.certificates.create)
+         Un certificado es la identificación virtual de cada persona.
+         En esta API es posible listar dichos certificado que pertenezcan a un usuario previamente indicado.
+         Cada usuario debe tener al menos un certificado para poder firmar documentos.
+         La creación y vinculación ha un usuario se pueden efectuar con la API [Crear Certificado Usuario](#operation/users.certificates.create)
       parameters:
         - *ref_0
         - name: userID
@@ -1814,6 +1838,13 @@ paths:
       tags:
         - Users
       description: >
+        | Información     |               Detalle              |
+
+        |-----------------|------------------------------------|
+
+        |  ID operación   |    users.certificates.create       |
+
+
         Cada usuario final debe de tener un certificado asociado para poder
         firmar documentos
 
@@ -2080,15 +2111,14 @@ paths:
       operationId: users.certificates.info
       tags:
         - Users
-      description: >
-        Los certificados deben pertenecer a un usuario y son necesarios para la
-        firma de los documentos,
+      description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |      users.certificates.info       |
 
-        Los cuales pueden ser creados y vinculados en la API [Crear
-        Certificado](#operation/users.certificates.create)
-
-        En esta API es posible obtener la información de dicho certificado
-        indicando su fecha de vigencia.
+         Los certificados deben pertenecer a un usuario y son necesarios para la firma de los documentos,
+         Los cuales pueden ser creados y vinculados en la API [Crear Certificado](#operation/users.certificates.create)
+         En esta API es posible obtener la información de dicho certificado indicando su fecha de vigencia.
       parameters:
         - *ref_0
         - name: userID
@@ -2301,6 +2331,13 @@ paths:
       tags:
         - Users
       description: >
+        | Información     |               Detalle              |
+
+        |-----------------|------------------------------------|
+
+        |  ID operación   |    users.certificates.remove       |
+
+
         Si en algún momento determinado se requiere anular o revocar un
         certificado,
 
@@ -2510,19 +2547,15 @@ paths:
       operationId: users.certificates.revoke
       tags:
         - Users
-      description: >
-        Si en algún momento determinado se requiere anular o revocar un
-        certificado,
+      description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |    users.certificates.revoke       |
 
-        es posible llamar este método para tal efecto. Al revocar un certificado
-        este ya no
-
-        puede ser usado nuevamente, sin embargo los documentos que fueron
-        firmados con él, seguirán siendo validos.
-
-        Si en algún momento se desea volver a crear un certificado se puede
-        realizar en la API [Crear
-        Certificado](#operation/users.certificates.create)
+         Si en algún momento determinado se requiere anular o revocar un certificado,
+         es posible llamar este método para tal efecto. Al revocar un certificado este ya no
+         puede ser usado nuevamente, sin embargo los documentos que fueron firmados con él, seguirán siendo validos.
+         Si en algún momento se desea volver a crear un certificado se puede realizar en la API [Crear Certificado](#operation/users.certificates.create)
       parameters:
         - *ref_0
         - name: userID
@@ -2715,13 +2748,20 @@ paths:
 
 
             print(data.decode("utf-8"))
-  /documents:
+  /document:
     post:
       summary: Crea un Documento
-      operationId: documents.create
+      operationId: document.create
       tags:
         - Documents
       description: >
+        | Información     |         Detalle          |
+
+        |-----------------|--------------------------|
+
+        |ID operación     |     document.create      |
+
+
         En esta API es posible crear documentos en el sistema para que puedan
         ser verificado, firmado
 
@@ -2910,7 +2950,7 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request POST \
-              --url https://e-digital.cl/api/documents \
+              --url https://e-digital.cl/api/document \
               --header 'content-type: application/json' \
               --header 'token: SOME_STRING_VALUE' \
               --data '{"signers":"[\"nuermorut1\", \"numerorut2\"]","userRole":"viewer","approvers":"[\"130410847\"]","finalRecipients":"[\"signer-2\"]","templateId":"1047","description":"prueba jonner11 2020-01-03T13:47:31.635Z","afterExpire":"close","flowType":"individual","notificationFrecuency":"1","signRequirement":"not_required","vigency":"5","vigencyType":"working_days","isPublic":"0","document":"????","signPositionX":"22","signPositionY":"25","signaturePage":"99"}'
@@ -2928,7 +2968,7 @@ paths:
             2020-01-03T13:47:31.635Z\",\"afterExpire\":\"close\",\"flowType\":\"individual\",\"notificationFrecuency\":\"1\",\"signRequirement\":\"not_required\",\"vigency\":\"5\",\"vigencyType\":\"working_days\",\"isPublic\":\"0\",\"document\":\"????\",\"signPositionX\":\"22\",\"signPositionY\":\"25\",\"signaturePage\":\"99\"}");
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/documents")
+              .url("https://e-digital.cl/api/document")
               .post(body)
               .addHeader("content-type", "application/json")
               .addHeader("token", "SOME_STRING_VALUE")
@@ -2937,7 +2977,7 @@ paths:
             Response response = client.newCall(request).execute();
         - lang: Csharp + Restsharp
           source: >-
-            var client = new RestClient("https://e-digital.cl/api/documents");
+            var client = new RestClient("https://e-digital.cl/api/document");
 
             var request = new RestRequest(Method.POST);
 
@@ -2958,7 +2998,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/documents",
+              "url": "https://e-digital.cl/api/document",
               "method": "POST",
               "headers": {
                 "content-type": "application/json",
@@ -2979,7 +3019,7 @@ paths:
               "method": "POST",
               "hostname": "e-digital.cl",
               "port": null,
-              "path": "/api/documents",
+              "path": "/api/document",
               "headers": {
                 "content-type": "application/json",
                 "token": "SOME_STRING_VALUE"
@@ -3026,7 +3066,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/documents",
+              CURLOPT_URL => "https://e-digital.cl/api/document",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -3069,7 +3109,7 @@ paths:
                 'token': "SOME_STRING_VALUE"
                 }
 
-            conn.request("POST", "/api/documents", payload, headers)
+            conn.request("POST", "/api/document", payload, headers)
 
 
             res = conn.getresponse()
@@ -3078,18 +3118,19 @@ paths:
 
 
             print(data.decode("utf-8"))
-  '/documents/{documentsID}':
+  '/document/{documentsID}':
     get:
       summary: Obtiene un documento según su ID
-      operationId: documents.info
+      operationId: document.info
       tags:
         - Documents
-      description: >
-        Los documentos se crean para que los usuarios finales puedan verificar,
-        firmar, aprobar, rechazar.
+      description: |
+        | Información     |         Detalle          |
+        |-----------------|--------------------------|
+        |  ID operación   |     document.info        |
 
-        En esta API es posible obtener un documento por su ID generado en la API
-        [Crear Documento](#operation/documents.create).
+         Los documentos se crean para que los usuarios finales puedan verificar, firmar, aprobar, rechazar.
+         En esta API es posible obtener un documento por su ID generado en la API [Crear Documento](#operation/documents.create).
       parameters:
         - *ref_0
         - name: documentsID
@@ -3160,14 +3201,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url https://e-digital.cl/api/documents/%7BdocumentsID%7D \
+              --url https://e-digital.cl/api/document/%7BdocumentsID%7D \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/documents/%7BdocumentsID%7D")
+              .url("https://e-digital.cl/api/document/%7BdocumentsID%7D")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -3176,7 +3217,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/documents/%7BdocumentsID%7D");
+            RestClient("https://e-digital.cl/api/document/%7BdocumentsID%7D");
 
             var request = new RestRequest(Method.GET);
 
@@ -3188,7 +3229,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/documents/%7BdocumentsID%7D",
+              "url": "https://e-digital.cl/api/document/%7BdocumentsID%7D",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -3206,7 +3247,7 @@ paths:
               "method": "GET",
               "hostname": "e-digital.cl",
               "port": null,
-              "path": "/api/documents/%7BdocumentsID%7D",
+              "path": "/api/document/%7BdocumentsID%7D",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -3233,7 +3274,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/documents/%7BdocumentsID%7D",
+              CURLOPT_URL => "https://e-digital.cl/api/document/%7BdocumentsID%7D",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -3266,7 +3307,7 @@ paths:
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
-            conn.request("GET", "/api/documents/%7BdocumentsID%7D",
+            conn.request("GET", "/api/document/%7BdocumentsID%7D",
             headers=headers)
 
 
@@ -3278,10 +3319,17 @@ paths:
             print(data.decode("utf-8"))
     put:
       summary: Modifica el estado de un documento
-      operationId: documents.change
+      operationId: document.change
       tags:
         - Documents
       description: >
+        | Información     |         Detalle          |
+
+        |-----------------|--------------------------|
+
+        |  ID operación   |     document.change      |
+
+
         En esta API es posible cambiar el estado de un documento
 
         Los posibles estado que se pueden aplicar son los que se muestra a
@@ -3398,7 +3446,7 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request PUT \
-              --url 'https://e-digital.cl/api/documents/%7BdocumentsID%7D?estado=SOME_STRING_VALUE' \
+              --url 'https://e-digital.cl/api/document/%7BdocumentsID%7D?estado=SOME_STRING_VALUE' \
               --header 'content-type: application/json' \
               --header 'token: SOME_STRING_VALUE' \
               --data '{"comment":"Documento Erroneo en las fechas"}'
@@ -3413,7 +3461,7 @@ paths:
             "{\"comment\":\"Documento Erroneo en las fechas\"}");
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/documents/%7BdocumentsID%7D?estado=SOME_STRING_VALUE")
+              .url("https://e-digital.cl/api/document/%7BdocumentsID%7D?estado=SOME_STRING_VALUE")
               .put(body)
               .addHeader("content-type", "application/json")
               .addHeader("token", "SOME_STRING_VALUE")
@@ -3423,7 +3471,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/documents/%7BdocumentsID%7D?estado=SOME_STRING_VALUE");
+            RestClient("https://e-digital.cl/api/document/%7BdocumentsID%7D?estado=SOME_STRING_VALUE");
 
             var request = new RestRequest(Method.PUT);
 
@@ -3440,7 +3488,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/documents/%7BdocumentsID%7D?estado=SOME_STRING_VALUE",
+              "url": "https://e-digital.cl/api/document/%7BdocumentsID%7D?estado=SOME_STRING_VALUE",
               "method": "PUT",
               "headers": {
                 "content-type": "application/json",
@@ -3462,7 +3510,7 @@ paths:
               "method": "PUT",
               "hostname": "e-digital.cl",
               "port": null,
-              "path": "/api/documents/%7BdocumentsID%7D?estado=SOME_STRING_VALUE",
+              "path": "/api/document/%7BdocumentsID%7D?estado=SOME_STRING_VALUE",
               "headers": {
                 "content-type": "application/json",
                 "token": "SOME_STRING_VALUE"
@@ -3495,7 +3543,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/documents/%7BdocumentsID%7D?estado=SOME_STRING_VALUE",
+              CURLOPT_URL => "https://e-digital.cl/api/document/%7BdocumentsID%7D?estado=SOME_STRING_VALUE",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -3536,8 +3584,8 @@ paths:
                 }
 
             conn.request("PUT",
-            "/api/documents/%7BdocumentsID%7D?estado=SOME_STRING_VALUE",
-            payload, headers)
+            "/api/document/%7BdocumentsID%7D?estado=SOME_STRING_VALUE", payload,
+            headers)
 
 
             res = conn.getresponse()
@@ -3548,10 +3596,17 @@ paths:
             print(data.decode("utf-8"))
     delete:
       summary: Remueve un documento del flujo
-      operationId: documents.remove
+      operationId: document.remove
       tags:
         - Documents
       description: >
+        | Información     |         Detalle          |
+
+        |-----------------|--------------------------|
+
+        |  ID operación   |     document.remove      |
+
+
         Cada documento creado en el API [Crear
         Documento](#operation/documents.create), pasa por un flujo de
         aprobaciones.
@@ -3641,7 +3696,7 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request DELETE \
-              --url https://e-digital.cl/api/documents/%7BdocumentsID%7D \
+              --url https://e-digital.cl/api/document/%7BdocumentsID%7D \
               --header 'content-type: application/json' \
               --header 'token: SOME_STRING_VALUE' \
               --data '{"comment":"Documento Sacado del Flujo"}'
@@ -3656,7 +3711,7 @@ paths:
             "{\"comment\":\"Documento Sacado del Flujo\"}");
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/documents/%7BdocumentsID%7D")
+              .url("https://e-digital.cl/api/document/%7BdocumentsID%7D")
               .delete(body)
               .addHeader("content-type", "application/json")
               .addHeader("token", "SOME_STRING_VALUE")
@@ -3666,7 +3721,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/documents/%7BdocumentsID%7D");
+            RestClient("https://e-digital.cl/api/document/%7BdocumentsID%7D");
 
             var request = new RestRequest(Method.DELETE);
 
@@ -3683,7 +3738,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/documents/%7BdocumentsID%7D",
+              "url": "https://e-digital.cl/api/document/%7BdocumentsID%7D",
               "method": "DELETE",
               "headers": {
                 "content-type": "application/json",
@@ -3704,7 +3759,7 @@ paths:
               "method": "DELETE",
               "hostname": "e-digital.cl",
               "port": null,
-              "path": "/api/documents/%7BdocumentsID%7D",
+              "path": "/api/document/%7BdocumentsID%7D",
               "headers": {
                 "content-type": "application/json",
                 "token": "SOME_STRING_VALUE"
@@ -3733,7 +3788,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/documents/%7BdocumentsID%7D",
+              CURLOPT_URL => "https://e-digital.cl/api/document/%7BdocumentsID%7D",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -3773,7 +3828,7 @@ paths:
                 'token': "SOME_STRING_VALUE"
                 }
 
-            conn.request("DELETE", "/api/documents/%7BdocumentsID%7D", payload,
+            conn.request("DELETE", "/api/document/%7BdocumentsID%7D", payload,
             headers)
 
 
@@ -3783,13 +3838,20 @@ paths:
 
 
             print(data.decode("utf-8"))
-  '/documents/{documentsID}/logs':
+  '/document/{documentsID}/logs':
     get:
       summary: Obtiene Logs de un documento según su ID
-      operationId: documents.logs
+      operationId: document.logs
       tags:
         - Documents
       description: >
+        | Información     |         Detalle          |
+
+        |-----------------|--------------------------|
+
+        |  ID operación   |     document.logs        |
+
+
         Los documentos desde el momento que son creados hasta el final del
         proceso de estos van
 
@@ -3880,14 +3942,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url https://e-digital.cl/api/documents/%7BdocumentsID%7D/logs \
+              --url https://e-digital.cl/api/document/%7BdocumentsID%7D/logs \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/documents/%7BdocumentsID%7D/logs")
+              .url("https://e-digital.cl/api/document/%7BdocumentsID%7D/logs")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -3896,7 +3958,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/documents/%7BdocumentsID%7D/logs");
+            RestClient("https://e-digital.cl/api/document/%7BdocumentsID%7D/logs");
 
             var request = new RestRequest(Method.GET);
 
@@ -3908,7 +3970,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/documents/%7BdocumentsID%7D/logs",
+              "url": "https://e-digital.cl/api/document/%7BdocumentsID%7D/logs",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -3926,7 +3988,7 @@ paths:
               "method": "GET",
               "hostname": "e-digital.cl",
               "port": null,
-              "path": "/api/documents/%7BdocumentsID%7D/logs",
+              "path": "/api/document/%7BdocumentsID%7D/logs",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -3953,7 +4015,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/documents/%7BdocumentsID%7D/logs",
+              CURLOPT_URL => "https://e-digital.cl/api/document/%7BdocumentsID%7D/logs",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -3986,7 +4048,7 @@ paths:
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
-            conn.request("GET", "/api/documents/%7BdocumentsID%7D/logs",
+            conn.request("GET", "/api/document/%7BdocumentsID%7D/logs",
             headers=headers)
 
 
@@ -4002,12 +4064,13 @@ paths:
       operationId: organizations.list
       tags:
         - Organization
-      description: >
-        Las organizaciones representan a las empresas creadas dentro del
-        sistema.
+      description: |
+        | Información     |         Detalle          |
+        |-----------------|--------------------------|
+        |  ID operación   |   organizations.list     |
 
-        En esta API es posible obtener un listado de las organizaciones
-        suscritas actualmente.
+         Las organizaciones representan a las empresas creadas dentro del sistema.
+         En esta API es posible obtener un listado de las organizaciones suscritas actualmente.
       parameters:
         - *ref_0
       responses:
@@ -4190,17 +4253,15 @@ paths:
       operationId: organizations.info
       tags:
         - Organization
-      description: >
-        Una organización representa una empresa dentro del sistema.
+      description: |
+        | Información     |         Detalle          |
+        |-----------------|--------------------------|
+        |  ID operación   |   organizations.info     |
 
-        A su vez la organización tiene múltiples usuarios los cuales pueden ser
-        creado en el API [Crear Usuario](#operation/users.create),
-
-        y asociados a un organización en el API [Invitar
-        Usuario](#operation/organizations.users.invite)
-
-        En esta API es posible obtener la información de una organización en
-        específica.
+         Una organización representa una empresa dentro del sistema.
+         A su vez la organización tiene múltiples usuarios los cuales pueden ser creado en el API [Crear Usuario](#operation/users.create),
+         y asociados a un organización en el API [Invitar Usuario](#operation/organizations.users.invite)
+         En esta API es posible obtener la información de una organización en específica.
       parameters:
         - *ref_0
         - name: organizationID
@@ -4398,14 +4459,14 @@ paths:
       operationId: organizations.templates.list
       tags:
         - Organization
-      description: >
-        Un template son las plantilla que muestra la parte del documento donde
-        se fijara firma, estos se pueden crear en la
+      description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |    organizations.templates.list    |
 
-        API [Crear Template](#operation/organizations.templates.create).
-
-        En esta API es posible obtener un listado de todos los template de las
-        organizaciones suscritas actualmente.
+         Un template son las plantilla que muestra la parte del documento donde se fijara firma, estos se pueden crear en la
+         API [Crear Template](#operation/organizations.templates.create).
+         En esta API es posible obtener un listado de todos los template de las organizaciones suscritas actualmente.
       parameters:
         - *ref_0
         - name: organizationID
@@ -4603,15 +4664,14 @@ paths:
       operationId: organizations.templates.create
       tags:
         - Organization
-      description: >
-        Un Template es un ejemplo de donde se fijara la firma o las firmas
-        dentro del documento.
+      description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |   organizations.templates.create   |
 
-        Cada organización debe tener al menos un template y podría llegar a
-        tener "n" template, para poder firmar los documentos.
-
-        En esta API es posible crear un template para una organización en
-        específico.
+         Un Template es un ejemplo de donde se fijara la firma o las firmas dentro del documento.
+         Cada organización debe tener al menos un template y podría llegar a tener "n" template, para poder firmar los documentos.
+         En esta API es posible crear un template para una organización en específico.
       parameters:
         - *ref_0
         - name: organizationID
@@ -4808,6 +4868,13 @@ paths:
       tags:
         - Organization
       description: >
+        | Información     |               Detalle              |
+
+        |-----------------|------------------------------------|
+
+        |  ID operación   |  organizations.templates.remove    |
+
+
         Un template es una plantilla que muestra la parte del documento donde se
         fijara firma,
 
@@ -5015,12 +5082,13 @@ paths:
       operationId: organizations.templates
       tags:
         - Organization
-      description: >
-        En esta API es posible obtener la información de un template de una
-        organización según su ID
+      description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |      organizations.templates       |
 
-        el cual mostrara la ubicación donde se fija la firma según lo indica
-        este.
+         En esta API es posible obtener la información de un template de una organización según su ID
+         el cual mostrara la ubicación donde se fija la firma según lo indica este.
       parameters:
         - *ref_0
         - name: organizationID
@@ -5222,12 +5290,13 @@ paths:
       operationId: organizations.templates.change
       tags:
         - Organization
-      description: >
-        En el caso de haber creado un template en el API [Crear
-        Template](#operation/organizations.templates.create)
+      description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   | organizations.templates.change     |
 
-        En esta API es posible modificar un template para una organización
-        suscrita.
+         En el caso de haber creado un template en el API [Crear Template](#operation/organizations.templates.create)
+         En esta API es posible modificar un template para una organización suscrita.
       parameters:
         - *ref_0
         - name: organizationID
@@ -5433,15 +5502,14 @@ paths:
       operationId: organizations.users.list
       tags:
         - Organization
-      description: >
-        Dentro de las organizaciones existen múltiples usuarios finales los
-        cuales pueden ser invitados a
+      description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |    organizations.users.list        |
 
-        una organización en el API [Invitar
-        Usuario](#operation/organizations.users.invite).
-
-        En esta API es posible obtener un listado de todos los usuarios
-        pertenecientes a la organización según su ID.
+         Dentro de las organizaciones existen múltiples usuarios finales los cuales pueden ser invitados a
+         una organización en el API [Invitar Usuario](#operation/organizations.users.invite).
+         En esta API es posible obtener un listado de todos los usuarios pertenecientes a la organización según su ID.
       parameters:
         - *ref_0
         - name: organizationID
@@ -5639,15 +5707,14 @@ paths:
       operationId: organizations.users.remove
       tags:
         - Organization
-      description: >
-        Las organizaciones se componen de múltiples usuarios finales los cuales
-        pueden
+      description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |    organizations.users.remove      |
 
-        participar dentro del flujo de un documento en esta API es posible
-        desvincular un usuario
-
-        de una organización indicando el ID del usuario que de desea
-        desvincular.
+         Las organizaciones se componen de múltiples usuarios finales los cuales pueden
+         participar dentro del flujo de un documento en esta API es posible desvincular un usuario
+         de una organización indicando el ID del usuario que de desea desvincular.
       parameters:
         - *ref_0
         - name: organizationID
@@ -5845,14 +5912,14 @@ paths:
       operationId: organizations.users.invite
       tags:
         - Organization
-      description: >
-        Los usuarios finales deben pertenecer a una organización para de esta
-        forma poder participar,
+      description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |   organizations.users.invite       |
 
-        en el flujo de los documentos en esta API es posible enviar una
-        invitación a un usuario
-
-        para que se vincule a una organización.
+         Los usuarios finales deben pertenecer a una organización para de esta forma poder participar,
+         en el flujo de los documentos en esta API es posible enviar una invitación a un usuario
+         para que se vincule a una organización.
       parameters:
         - *ref_0
         - name: organizationID

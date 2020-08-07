@@ -4,6 +4,10 @@ operation:
   tags:
     - Documents
   description: |
+    | Información     |         Detalle          |
+    |-----------------|--------------------------|
+    |ID operación     |     document.create      |
+
     En esta API es posible crear documentos en el sistema para que puedan ser verificado, firmado
     , aprobado, rechazado por un usuario final dentro del sistema.
 

@@ -4,6 +4,10 @@ operation:
   tags:
     - Documents
   description: |
+    | Información     |         Detalle          |
+    |-----------------|--------------------------|
+    |  ID operación   |     document.info        |
+
      Los documentos se crean para que los usuarios finales puedan verificar, firmar, aprobar, rechazar.
      En esta API es posible obtener un documento por su ID generado en la API [Crear Documento](#operation/documents.create).
 

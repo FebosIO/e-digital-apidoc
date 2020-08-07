@@ -4,6 +4,10 @@ operation:
   tags:
     - Organization
   description: |
+    | Información     |               Detalle              |
+    |-----------------|------------------------------------|
+    |  ID operación   |  organizations.templates.remove    |
+
     Un template es una plantilla que muestra la parte del documento donde se fijara firma,
     en esta APi es posible eliminar esta plantilla de firma, lo que no quiere decir que los documentos
     que ya se encuentran firmados perderán su vigencia, los documentos que ya se encuentran firmados con

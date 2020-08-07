@@ -4,6 +4,10 @@ operation:
   tags:
     - Organization
   description: |
+    | Información     |               Detalle              |
+    |-----------------|------------------------------------|
+    |  ID operación   | organizations.templates.change     |
+
      En el caso de haber creado un template en el API [Crear Template](#operation/organizations.templates.create)
      En esta API es posible modificar un template para una organización suscrita.
 

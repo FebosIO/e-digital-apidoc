@@ -4,6 +4,10 @@ operation:
   tags:
     - Users
   description: |
+    | Información     |               Detalle              |
+    |-----------------|------------------------------------|
+    |  ID operación   |      users.certificates.info       |
+
      Los certificados deben pertenecer a un usuario y son necesarios para la firma de los documentos,
      Los cuales pueden ser creados y vinculados en la API [Crear Certificado](#operation/users.certificates.create)
      En esta API es posible obtener la información de dicho certificado indicando su fecha de vigencia.

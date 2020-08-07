@@ -4,6 +4,10 @@ operation:
   tags:
     - Users
   description: |
+    | Información     |               Detalle              |
+    |-----------------|------------------------------------|
+    |  ID operación   |            users.create            |
+
     Cada usuario final es representado por un usuario único de sistema.
     En esta API es posible crear dicho usuario en el sistema para que pueda recibir y firmar documentos.
     Cada documento debe ser firmado por un usuario existente en la plataforma.

@@ -4,6 +4,10 @@ operation:
   tags:
     - Organization
   description: |
+    | Información     |               Detalle              |
+    |-----------------|------------------------------------|
+    |  ID operación   |    organizations.users.remove      |
+
      Las organizaciones se componen de múltiples usuarios finales los cuales pueden
      participar dentro del flujo de un documento en esta API es posible desvincular un usuario
      de una organización indicando el ID del usuario que de desea desvincular.

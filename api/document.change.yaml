@@ -4,6 +4,10 @@ operation:
   tags:
     - Documents
   description: |
+    | Información     |         Detalle          |
+    |-----------------|--------------------------|
+    |  ID operación   |     document.change      |
+
     En esta API es posible cambiar el estado de un documento
     Los posibles estado que se pueden aplicar son los que se muestra a continuación.
 

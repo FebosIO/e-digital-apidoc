@@ -4,6 +4,10 @@ operation:
   tags:
     - Users
   description: |
+    | Información     |               Detalle              |
+    |-----------------|------------------------------------|
+    |  ID operación   |         users.documents            |
+
     Los usuarios finales aparte de pertenecer a una organización en particular tienen un listado
     de documentos los cuales podrían estar en diferentes estados ya sea pendientes, finalizados,
     rechazados. Si en algún momento se desea tener un listado con tal data se debe llamar este

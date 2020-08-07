@@ -4,6 +4,10 @@ operation:
   tags:
     - Users
   description: |
+    | Información     |               Detalle              |
+    |-----------------|------------------------------------|
+    |  ID operación   |            users.change            |
+
     Los usuarios finales pueden ser creados en la API [Crear Usuario](#operation/users.create),
     si en algún momento se desea efectuar modificación a los datos de este es posible llamar
     este método y de esta forma efectuar tal acción.

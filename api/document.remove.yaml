@@ -4,6 +4,10 @@ operation:
   tags:
     - Documents
   description: |
+    | Información     |         Detalle          |
+    |-----------------|--------------------------|
+    |  ID operación   |     document.remove      |
+
     Cada documento creado en el API [Crear Documento](#operation/documents.create), pasa por un flujo de aprobaciones.
     En esta API es posible remover un documento del flujo.
     Para que de esta forma no sé considerado como documento pendiente dentro de este.
