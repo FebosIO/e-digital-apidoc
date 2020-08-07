@@ -1,6 +1,6 @@
 operation:
   summary: Crea un Documento
-  operationId: documents.create
+  operationId: document.create
   tags:
     - Documents
   description: |

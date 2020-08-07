@@ -44,19 +44,19 @@ paths:
       $ref: api/users.certificates.remove.yaml#/operation
     delete:
       $ref: api/users.certificates.revoke.yaml#/operation
-  /documents:
+  /document:
     post:
-      $ref: api/documents.create.yaml#/operation
-  /documents/{documentsID}:
+      $ref: api/document.create.yaml#/operation
+  /document/{documentsID}:
     get:
-      $ref: api/documents.info.yaml#/operation
+      $ref: api/document.info.yaml#/operation
     put:
-      $ref: api/documents.change.yaml#/operation
+      $ref: api/document.change.yaml#/operation
     delete:
-      $ref: api/documents.remove.yaml#/operation
-  /documents/{documentsID}/logs:
+      $ref: api/document.remove.yaml#/operation
+  /document/{documentsID}/logs:
     get:
-      $ref: api/documents.logs.yaml#/operation
+      $ref: api/document.logs.yaml#/operation
   /organizations:
     get:
       $ref: api/organizations.list.yaml#/operation
