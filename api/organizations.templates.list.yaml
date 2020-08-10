@@ -22,6 +22,20 @@ operation:
       schema:
         type: integer
         format: int32
+    - name: page
+      in: query
+      description: Corresponde al número de páginas que se quiere obtener la respuesta.
+      required: false
+      example: 5
+      schema:
+        type: integer
+    - name: records
+      in: query
+      description: Corresponde a la cantidad de registros que se quiere por página.
+      required: false
+      example: 10
+      schema:
+        type: integer
   responses:
     '400':
       $ref: '../api/components/responses/response.400.yaml#/response'
@@ -60,6 +74,9 @@ operation:
                 items:
                   type: string
                 description: Listado de los templates de la empresas subcritas.
+              totalRegistros:
+                type: integer
+                description: Cantidad de los registros encontrados
           examples:
               Token Inválido:
                 $ref: '../api/components/responses/token.invalido.yaml#/example'
@@ -72,4 +89,5 @@ operation:
                   time: 2020-08-04 09:44:42.245
                   message: Listado de templates obtenido de forma satisfactoria.
                   trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                  totalRegistros: 50
                   templates: ['Template1','Template2']

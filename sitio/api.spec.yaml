@@ -597,376 +597,6 @@ paths:
 
 
             print(data.decode("utf-8"))
-    put:
-      summary: Modifica un Usuario
-      operationId: users.change
-      tags:
-        - Users
-      description: >
-        | Información     |               Detalle              |
-
-        |-----------------|------------------------------------|
-
-        |  ID operación   |            users.change            |
-
-
-        Los usuarios finales pueden ser creados en la API [Crear
-        Usuario](#operation/users.create),
-
-        si en algún momento se desea efectuar modificación a los datos de este
-        es posible llamar
-
-        este método y de esta forma efectuar tal acción.
-      parameters:
-        - *ref_0
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - id
-                - name
-                - surName
-                - middleName
-                - email
-                - identityDocument
-                - typeIdentityDocument
-                - serieIdentityDocument
-                - password
-                - address
-                - gender
-                - birth
-                - phone
-                - organization
-                - move
-              properties:
-                id:
-                  type: integer
-                  description: >-
-                    Ejemplo &#58; `1119` <br> Es el id interno del usuario que
-                    se quiere modificar.
-                  example: '1119'
-                name:
-                  type: string
-                  description: >-
-                    Ejemplo &#58; `Ramon` <br> Nombre compuesto del usuario a
-                    crear
-                  example: Ramon
-                surName:
-                  type: string
-                  description: >-
-                    Ejemplo &#58; `Montalva` <br>  Apellido paterno del usuario
-                    a crear.
-                  example: Montalva
-                middleName:
-                  type: string
-                  description: >-
-                    Ejemplo &#58; `Montoya` <br> Apellido materno del usuario a
-                    crear.
-                  example: Montoya
-                email:
-                  type: string
-                  description: >-
-                    Ejemplo &#58; `tucorreo@empresa.cl` <br> Corresponde al
-                    email del usuario a crear.
-                  example: tucorreo@empresa.cl
-                identityDocument:
-                  type: string
-                  description: Ejemplo &#58; `12345678-9` <br>  Rut del usuario a crear.
-                  example: 12345678-9
-                typeIdentityDocument:
-                  type: string
-                  enum:
-                    - CEDULA_EXT
-                    - CEDULA
-                  description: |
-                    Ejemplo &#58; `CEDULA`
-                     <br> Corresponde al tipo de cedula del usuario a crear <br>
-
-                    | Valor| Descripción |
-                    |-------|-------------|
-                    |CEDULA_EXT| En el caso de ser una cedula extranjera|
-                    |CEDULA| En el caso de ser una cedula chilena   |
-                  example: CEDULA_EXT
-                serieIdentityDocument:
-                  type: string
-                  description: >-
-                    Ejemplo &#58; `123123123` <br> Nro de Serie del documento
-                    del usuario a crear.
-                  example: '123123123'
-                password:
-                  type: string
-                  description: >-
-                    Ejemplo &#58; `myS3cretPass` <br> Password del usuario a
-                    crear.
-                  example: myS3cretPass
-                address:
-                  type: string
-                  description: >-
-                    Ejemplo &#58; `Badajoz 100 – Piso 15 (Oficina 1519), Las
-                    Condes` <br> Drección del usuario a crear
-                  example: 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes'
-                gender:
-                  type: string
-                  enum:
-                    - male
-                    - female
-                  description: >-
-                    Ejemplo &#58; `male` <br>  Corresponde al genero del usuario
-                    a crear.
-                  example: male
-                birth:
-                  type: string
-                  description: >-
-                    Ejemplo &#58; `1970-12-31` <br> Fecha de nacimiento del
-                    usuario a crear `(Format yyyy-MM-dd)`
-                  example: '1970-12-31'
-                phone:
-                  type: string
-                  description: >-
-                    Ejemplo &#58; `(2) 2219 8406` <br>  Número de teléfono del
-                    usuario a crear.
-                  example: (2) 2219 8406
-                organization:
-                  type: string
-                  description: >-
-                    Ejemplo &#58; `FEBOS-EXT` <br>  La organización a donde
-                    pertenece al usuario a modificar.
-                  example: FEBOS-EXT
-                move:
-                  type: boolean
-                  enum:
-                    - 'true'
-                    - 'false'
-                  description: >-
-                    Ejemplo &#58; `true` <br>  Corresponde a si se quiere mover
-                    de unidad.
-                  example: 'true'
-      responses:
-        '200':
-          description: Operación efectuada de forma satisfactoria
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - codigo
-                  - mensaje
-                properties:
-                  code:
-                    type: integer
-                    format: int32
-                    description: >-
-                      Código de resultado de la operación, siendo `0` un
-                      resultado satisfactorio. Cualquier otro código es
-                      indicativo de error.
-                    example: null
-                  message:
-                    type: string
-                    description: >-
-                      Mensaje de respuesta, traducción humana del código de
-                      resultado.
-                  duration:
-                    type: integer
-                    format: int32
-                    description: >-
-                      Tiempo (en milisegundos) que tardó en procesarse la
-                      solicitud.
-                  time:
-                    type: string
-                    description: >-
-                      Hora a la que llego la solicitud a E-Digital, en formato
-                      `yyyy-MM-dd HH:mm:ss.SSS`
-                  trackingId:
-                    type: string
-                    description: >-
-                      Código único de seguimiento. Este código representa al
-                      proceso completo de la solicitud realizada, si tienes
-                      problemas, te pediremos este código.
-              examples:
-                Token Inválido: *ref_1
-                Sin Permiso: *ref_2
-                Respuesta OK:
-                  value:
-                    code: 0
-                    duration: 780
-                    time: 2020-08-04T09:44:42.245Z
-                    message: Usuario actualizado de forma satisfactoria
-                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
-        '400': *ref_3
-        '500': *ref_4
-      x-code-samples:
-        - lang: Shell + Curl
-          source: |-
-            curl --request PUT \
-              --url https://e-digital.cl/api/users \
-              --header 'content-type: application/json' \
-              --header 'token: SOME_STRING_VALUE' \
-              --data '{"id":"1119","name":"Ramon","surName":"Montalva","middleName":"Montoya","email":"tucorreo@empresa.cl","identityDocument":"12345678-9","typeIdentityDocument":"CEDULA_EXT","serieIdentityDocument":"123123123","password":"myS3cretPass","address":"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes","gender":"male","birth":"1970-12-31","phone":"(2) 2219 8406","organization":"FEBOS-EXT","move":"true"}'
-        - lang: Java + Okhttp
-          source: >-
-            OkHttpClient client = new OkHttpClient();
-
-
-            MediaType mediaType = MediaType.parse("application/json");
-
-            RequestBody body = RequestBody.create(mediaType,
-            "{\"id\":\"1119\",\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
-            100 – Piso 15 (Oficina 1519), Las
-            Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2)
-            2219 8406\",\"organization\":\"FEBOS-EXT\",\"move\":\"true\"}");
-
-            Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/users")
-              .put(body)
-              .addHeader("content-type", "application/json")
-              .addHeader("token", "SOME_STRING_VALUE")
-              .build();
-
-            Response response = client.newCall(request).execute();
-        - lang: Csharp + Restsharp
-          source: >-
-            var client = new RestClient("https://e-digital.cl/api/users");
-
-            var request = new RestRequest(Method.PUT);
-
-            request.AddHeader("content-type", "application/json");
-
-            request.AddHeader("token", "SOME_STRING_VALUE");
-
-            request.AddParameter("application/json",
-            "{\"id\":\"1119\",\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
-            100 – Piso 15 (Oficina 1519), Las
-            Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2)
-            2219 8406\",\"organization\":\"FEBOS-EXT\",\"move\":\"true\"}",
-            ParameterType.RequestBody);
-
-            IRestResponse response = client.Execute(request);
-        - lang: Javascript + Jquery
-          source: |-
-            var settings = {
-              "async": true,
-              "crossDomain": true,
-              "url": "https://e-digital.cl/api/users",
-              "method": "PUT",
-              "headers": {
-                "content-type": "application/json",
-                "token": "SOME_STRING_VALUE"
-              },
-              "processData": false,
-              "data": "{\"id\":\"1119\",\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2) 2219 8406\",\"organization\":\"FEBOS-EXT\",\"move\":\"true\"}"
-            }
-
-            $.ajax(settings).done(function (response) {
-              console.log(response);
-            });
-        - lang: Node + Native
-          source: |-
-            var http = require("https");
-
-            var options = {
-              "method": "PUT",
-              "hostname": "e-digital.cl",
-              "port": null,
-              "path": "/api/users",
-              "headers": {
-                "content-type": "application/json",
-                "token": "SOME_STRING_VALUE"
-              }
-            };
-
-            var req = http.request(options, function (res) {
-              var chunks = [];
-
-              res.on("data", function (chunk) {
-                chunks.push(chunk);
-              });
-
-              res.on("end", function () {
-                var body = Buffer.concat(chunks);
-                console.log(body.toString());
-              });
-            });
-
-            req.write(JSON.stringify({
-              id: '1119',
-              name: 'Ramon',
-              surName: 'Montalva',
-              middleName: 'Montoya',
-              email: 'tucorreo@empresa.cl',
-              identityDocument: '12345678-9',
-              typeIdentityDocument: 'CEDULA_EXT',
-              serieIdentityDocument: '123123123',
-              password: 'myS3cretPass',
-              address: 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes',
-              gender: 'male',
-              birth: '1970-12-31',
-              phone: '(2) 2219 8406',
-              organization: 'FEBOS-EXT',
-              move: 'true'
-            }));
-            req.end();
-        - lang: Php + Curl
-          source: |-
-            <?php
-
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/users",
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_ENCODING => "",
-              CURLOPT_MAXREDIRS => 10,
-              CURLOPT_TIMEOUT => 30,
-              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-              CURLOPT_CUSTOMREQUEST => "PUT",
-              CURLOPT_POSTFIELDS => "{\"id\":\"1119\",\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2) 2219 8406\",\"organization\":\"FEBOS-EXT\",\"move\":\"true\"}",
-              CURLOPT_HTTPHEADER => array(
-                "content-type: application/json",
-                "token: SOME_STRING_VALUE"
-              ),
-            ));
-
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-
-            curl_close($curl);
-
-            if ($err) {
-              echo "cURL Error #:" . $err;
-            } else {
-              echo $response;
-            }
-        - lang: Python + Python3
-          source: >-
-            import http.client
-
-
-            conn = http.client.HTTPSConnection("e-digital.cl")
-
-
-            payload =
-            "{\"id\":\"1119\",\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
-            100 – Piso 15 (Oficina 1519), Las
-            Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2)
-            2219 8406\",\"organization\":\"FEBOS-EXT\",\"move\":\"true\"}"
-
-
-            headers = {
-                'content-type': "application/json",
-                'token': "SOME_STRING_VALUE"
-                }
-
-            conn.request("PUT", "/api/users", payload, headers)
-
-
-            res = conn.getresponse()
-
-            data = res.read()
-
-
-            print(data.decode("utf-8"))
   '/users/{userID}':
     get:
       summary: Obtiene información de un usuario
@@ -1174,6 +804,377 @@ paths:
             data = res.read()
 
             print(data.decode("utf-8"))
+    put:
+      summary: Modifica un Usuario
+      operationId: users.change
+      tags:
+        - Users
+      description: >
+        | Información     |               Detalle              |
+
+        |-----------------|------------------------------------|
+
+        |  ID operación   |            users.change            |
+
+
+        Los usuarios finales pueden ser creados en la API [Crear
+        Usuario](#operation/users.create),
+
+        si en algún momento se desea efectuar modificación a los datos de este
+        es posible llamar
+
+        este método y de esta forma efectuar tal acción.
+      parameters:
+        - *ref_0
+        - name: userID
+          in: path
+          description: Identificador del Usuario
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - surName
+                - middleName
+                - email
+                - identityDocument
+                - typeIdentityDocument
+                - serieIdentityDocument
+                - password
+                - address
+                - gender
+                - birth
+                - phone
+                - organization
+                - move
+              properties:
+                name:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `Ramon` <br> Nombre compuesto del usuario a
+                    crear
+                  example: Ramon
+                surName:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `Montalva` <br>  Apellido paterno del usuario
+                    a crear.
+                  example: Montalva
+                middleName:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `Montoya` <br> Apellido materno del usuario a
+                    crear.
+                  example: Montoya
+                email:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `tucorreo@empresa.cl` <br> Corresponde al
+                    email del usuario a crear.
+                  example: tucorreo@empresa.cl
+                identityDocument:
+                  type: string
+                  description: Ejemplo &#58; `12345678-9` <br>  Rut del usuario a crear.
+                  example: 12345678-9
+                typeIdentityDocument:
+                  type: string
+                  enum:
+                    - CEDULA_EXT
+                    - CEDULA
+                  description: |
+                    Ejemplo &#58; `CEDULA`
+                     <br> Corresponde al tipo de cedula del usuario a crear <br>
+
+                    | Valor| Descripción |
+                    |-------|-------------|
+                    |CEDULA_EXT| En el caso de ser una cedula extranjera|
+                    |CEDULA| En el caso de ser una cedula chilena   |
+                  example: CEDULA_EXT
+                serieIdentityDocument:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `123123123` <br> Nro de Serie del documento
+                    del usuario a crear.
+                  example: '123123123'
+                password:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `myS3cretPass` <br> Password del usuario a
+                    crear.
+                  example: myS3cretPass
+                address:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `Badajoz 100 – Piso 15 (Oficina 1519), Las
+                    Condes` <br> Drección del usuario a crear
+                  example: 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes'
+                gender:
+                  type: string
+                  enum:
+                    - male
+                    - female
+                  description: >-
+                    Ejemplo &#58; `male` <br>  Corresponde al genero del usuario
+                    a crear.
+                  example: male
+                birth:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `1970-12-31` <br> Fecha de nacimiento del
+                    usuario a crear `(Format yyyy-MM-dd)`
+                  example: '1970-12-31'
+                phone:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `(2) 2219 8406` <br>  Número de teléfono del
+                    usuario a crear.
+                  example: (2) 2219 8406
+                organization:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `FEBOS-EXT` <br>  La organización a donde
+                    pertenece al usuario a modificar.
+                  example: FEBOS-EXT
+                move:
+                  type: boolean
+                  enum:
+                    - 'true'
+                    - 'false'
+                  description: >-
+                    Ejemplo &#58; `true` <br>  Corresponde a si se quiere mover
+                    de unidad.
+                  example: 'true'
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: >-
+                      Código de resultado de la operación, siendo `0` un
+                      resultado satisfactorio. Cualquier otro código es
+                      indicativo de error.
+                    example: null
+                  message:
+                    type: string
+                    description: >-
+                      Mensaje de respuesta, traducción humana del código de
+                      resultado.
+                  duration:
+                    type: integer
+                    format: int32
+                    description: >-
+                      Tiempo (en milisegundos) que tardó en procesarse la
+                      solicitud.
+                  time:
+                    type: string
+                    description: >-
+                      Hora a la que llego la solicitud a E-Digital, en formato
+                      `yyyy-MM-dd HH:mm:ss.SSS`
+                  trackingId:
+                    type: string
+                    description: >-
+                      Código único de seguimiento. Este código representa al
+                      proceso completo de la solicitud realizada, si tienes
+                      problemas, te pediremos este código.
+              examples:
+                Token Inválido: *ref_1
+                Sin Permiso: *ref_2
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Usuario actualizado de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+        '400': *ref_3
+        '500': *ref_4
+      x-code-samples:
+        - lang: Shell + Curl
+          source: |-
+            curl --request PUT \
+              --url https://e-digital.cl/api/users/%7BuserID%7D \
+              --header 'content-type: application/json' \
+              --header 'token: SOME_STRING_VALUE' \
+              --data '{"name":"Ramon","surName":"Montalva","middleName":"Montoya","email":"tucorreo@empresa.cl","identityDocument":"12345678-9","typeIdentityDocument":"CEDULA_EXT","serieIdentityDocument":"123123123","password":"myS3cretPass","address":"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes","gender":"male","birth":"1970-12-31","phone":"(2) 2219 8406","organization":"FEBOS-EXT","move":"true"}'
+        - lang: Java + Okhttp
+          source: >-
+            OkHttpClient client = new OkHttpClient();
+
+
+            MediaType mediaType = MediaType.parse("application/json");
+
+            RequestBody body = RequestBody.create(mediaType,
+            "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
+            100 – Piso 15 (Oficina 1519), Las
+            Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2)
+            2219 8406\",\"organization\":\"FEBOS-EXT\",\"move\":\"true\"}");
+
+            Request request = new Request.Builder()
+              .url("https://e-digital.cl/api/users/%7BuserID%7D")
+              .put(body)
+              .addHeader("content-type", "application/json")
+              .addHeader("token", "SOME_STRING_VALUE")
+              .build();
+
+            Response response = client.newCall(request).execute();
+        - lang: Csharp + Restsharp
+          source: >-
+            var client = new
+            RestClient("https://e-digital.cl/api/users/%7BuserID%7D");
+
+            var request = new RestRequest(Method.PUT);
+
+            request.AddHeader("content-type", "application/json");
+
+            request.AddHeader("token", "SOME_STRING_VALUE");
+
+            request.AddParameter("application/json",
+            "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
+            100 – Piso 15 (Oficina 1519), Las
+            Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2)
+            2219 8406\",\"organization\":\"FEBOS-EXT\",\"move\":\"true\"}",
+            ParameterType.RequestBody);
+
+            IRestResponse response = client.Execute(request);
+        - lang: Javascript + Jquery
+          source: |-
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "https://e-digital.cl/api/users/%7BuserID%7D",
+              "method": "PUT",
+              "headers": {
+                "content-type": "application/json",
+                "token": "SOME_STRING_VALUE"
+              },
+              "processData": false,
+              "data": "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2) 2219 8406\",\"organization\":\"FEBOS-EXT\",\"move\":\"true\"}"
+            }
+
+            $.ajax(settings).done(function (response) {
+              console.log(response);
+            });
+        - lang: Node + Native
+          source: |-
+            var http = require("https");
+
+            var options = {
+              "method": "PUT",
+              "hostname": "e-digital.cl",
+              "port": null,
+              "path": "/api/users/%7BuserID%7D",
+              "headers": {
+                "content-type": "application/json",
+                "token": "SOME_STRING_VALUE"
+              }
+            };
+
+            var req = http.request(options, function (res) {
+              var chunks = [];
+
+              res.on("data", function (chunk) {
+                chunks.push(chunk);
+              });
+
+              res.on("end", function () {
+                var body = Buffer.concat(chunks);
+                console.log(body.toString());
+              });
+            });
+
+            req.write(JSON.stringify({
+              name: 'Ramon',
+              surName: 'Montalva',
+              middleName: 'Montoya',
+              email: 'tucorreo@empresa.cl',
+              identityDocument: '12345678-9',
+              typeIdentityDocument: 'CEDULA_EXT',
+              serieIdentityDocument: '123123123',
+              password: 'myS3cretPass',
+              address: 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes',
+              gender: 'male',
+              birth: '1970-12-31',
+              phone: '(2) 2219 8406',
+              organization: 'FEBOS-EXT',
+              move: 'true'
+            }));
+            req.end();
+        - lang: Php + Curl
+          source: |-
+            <?php
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D",
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 30,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "PUT",
+              CURLOPT_POSTFIELDS => "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2) 2219 8406\",\"organization\":\"FEBOS-EXT\",\"move\":\"true\"}",
+              CURLOPT_HTTPHEADER => array(
+                "content-type: application/json",
+                "token: SOME_STRING_VALUE"
+              ),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($err) {
+              echo "cURL Error #:" . $err;
+            } else {
+              echo $response;
+            }
+        - lang: Python + Python3
+          source: >-
+            import http.client
+
+
+            conn = http.client.HTTPSConnection("e-digital.cl")
+
+
+            payload =
+            "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
+            100 – Piso 15 (Oficina 1519), Las
+            Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2)
+            2219 8406\",\"organization\":\"FEBOS-EXT\",\"move\":\"true\"}"
+
+
+            headers = {
+                'content-type': "application/json",
+                'token': "SOME_STRING_VALUE"
+                }
+
+            conn.request("PUT", "/api/users/%7BuserID%7D", payload, headers)
+
+
+            res = conn.getresponse()
+
+            data = res.read()
+
+
+            print(data.decode("utf-8"))
   '/users/{userID}/history':
     get:
       summary: Obtiene un historial de un usuario según su ID
@@ -1198,6 +1199,38 @@ paths:
           schema:
             type: integer
             format: int32
+        - name: from
+          in: query
+          description: >-
+            Corresponde a la fecha, desde que fecha quiere el resultado en
+            formato `dd-MM-yyyy`
+          required: false
+          example: 12-03-2020
+          schema:
+            type: string
+        - name: to
+          in: query
+          description: >-
+            Corresponde a la fecha, hasta que fecha quiere el resultado en
+            formato `dd-MM-yyyy`
+          required: false
+          example: 12-05-2020
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Corresponde al número de páginas que se quiere obtener la respuesta.
+          required: false
+          example: 5
+          schema:
+            type: integer
+        - name: records
+          in: query
+          description: Corresponde a la cantidad de registros que se quiere por página.
+          required: false
+          example: 10
+          schema:
+            type: integer
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -1244,6 +1277,9 @@ paths:
                     items:
                       type: string
                     description: Historial obtenido del usuario.
+                  totalRegistros:
+                    type: integer
+                    description: Cantidad de los registros encontrados
               examples:
                 Token Inválido: *ref_1
                 Sin Permiso: *ref_2
@@ -1254,20 +1290,21 @@ paths:
                     time: 2020-08-04T09:44:42.245Z
                     message: Historial obtenido de forma satisfactoria.
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    totalRegistros: 50
         '400': *ref_3
         '500': *ref_4
       x-code-samples:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url https://e-digital.cl/api/users/%7BuserID%7D/history \
+              --url 'https://e-digital.cl/api/users/%7BuserID%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/users/%7BuserID%7D/history")
+              .url("https://e-digital.cl/api/users/%7BuserID%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -1276,7 +1313,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/users/%7BuserID%7D/history");
+            RestClient("https://e-digital.cl/api/users/%7BuserID%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
 
             var request = new RestRequest(Method.GET);
 
@@ -1288,7 +1325,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/users/%7BuserID%7D/history",
+              "url": "https://e-digital.cl/api/users/%7BuserID%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -1306,7 +1343,7 @@ paths:
               "method": "GET",
               "hostname": "e-digital.cl",
               "port": null,
-              "path": "/api/users/%7BuserID%7D/history",
+              "path": "/api/users/%7BuserID%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -1333,7 +1370,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D/history",
+              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -1366,7 +1403,8 @@ paths:
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
-            conn.request("GET", "/api/users/%7BuserID%7D/history",
+            conn.request("GET",
+            "/api/users/%7BuserID%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
             headers=headers)
 
 
@@ -1378,7 +1416,7 @@ paths:
             print(data.decode("utf-8"))
   '/users/{userID}/documents':
     get:
-      summary: Obtiene una lista de documenetos de un usuario según su ID
+      summary: Obtiene una lista de documentos de un usuario según su ID
       operationId: users.documents
       tags:
         - Users
@@ -1654,6 +1692,20 @@ paths:
           schema:
             type: integer
             format: int32
+        - name: page
+          in: query
+          description: Corresponde al número de páginas que se quiere obtener la respuesta.
+          required: false
+          example: 5
+          schema:
+            type: integer
+        - name: records
+          in: query
+          description: Corresponde a la cantidad de registros que se quiere por página.
+          required: false
+          example: 10
+          schema:
+            type: integer
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -1700,6 +1752,9 @@ paths:
                     items:
                       type: string
                     description: Listado de los certificado asociados al usuario indicado
+                  totalRegistros:
+                    type: integer
+                    description: Cantidad de los registros encontrados
               examples:
                 Token Inválido: *ref_1
                 Sin Permiso: *ref_2
@@ -1709,6 +1764,7 @@ paths:
                     duration: 780
                     time: 2020-08-04T09:44:42.245Z
                     message: Listado de certificado obtenido de forma satisfactoria.
+                    totalRegistros: 50
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
         '400': *ref_3
         '500': *ref_4
@@ -1716,14 +1772,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url https://e-digital.cl/api/users/%7BuserID%7D/cetificates \
+              --url 'https://e-digital.cl/api/users/%7BuserID%7D/cetificates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/users/%7BuserID%7D/cetificates")
+              .url("https://e-digital.cl/api/users/%7BuserID%7D/cetificates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -1732,7 +1788,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/users/%7BuserID%7D/cetificates");
+            RestClient("https://e-digital.cl/api/users/%7BuserID%7D/cetificates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
 
             var request = new RestRequest(Method.GET);
 
@@ -1744,7 +1800,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/users/%7BuserID%7D/cetificates",
+              "url": "https://e-digital.cl/api/users/%7BuserID%7D/cetificates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -1762,7 +1818,7 @@ paths:
               "method": "GET",
               "hostname": "e-digital.cl",
               "port": null,
-              "path": "/api/users/%7BuserID%7D/cetificates",
+              "path": "/api/users/%7BuserID%7D/cetificates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -1789,7 +1845,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D/cetificates",
+              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D/cetificates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -1822,7 +1878,8 @@ paths:
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
-            conn.request("GET", "/api/users/%7BuserID%7D/cetificates",
+            conn.request("GET",
+            "/api/users/%7BuserID%7D/cetificates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
             headers=headers)
 
 
@@ -2178,12 +2235,12 @@ paths:
                       Código único de seguimiento. Este código representa al
                       proceso completo de la solicitud realizada, si tienes
                       problemas, te pediremos este código.
-                  vigenciaDesde:
+                  validityFrom:
                     type: string
                     description: >-
                       Es la fecha desde cuando tiene vigencia el certificado, en
                       formato `dd-MM-yyyy`
-                  vigenciaHasta:
+                  validityTo:
                     type: string
                     description: >-
                       Es la fecha hasta cuando tiene vigencia el certificado, en
@@ -2198,8 +2255,8 @@ paths:
                     time: 2020-08-04T09:44:42.245Z
                     message: Certificado obtenido de forma satisfactoria
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                    vigenciaDesde: 14-03-2020
-                    vigenciaHasta: 14-03-2022
+                    validityFrom: 14-03-2020
+                    validityTo: 14-03-2022
         '400': *ref_3
         '500': *ref_4
       x-code-samples:
@@ -2325,9 +2382,9 @@ paths:
             print(data.decode("utf-8"))
     put:
       summary: >-
-        Permite remover un certificado de un usuario según su usuarioId y
+        Permite renovar un certificado de un usuario según su usuarioId y
         certicadoId
-      operationId: users.certificates.remove
+      operationId: users.certificates.renovate
       tags:
         - Users
       description: >
@@ -2335,13 +2392,13 @@ paths:
 
         |-----------------|------------------------------------|
 
-        |  ID operación   |    users.certificates.remove       |
+        |  ID operación   |    users.certificates.renovate     |
 
 
-        Si en algún momento determinado se requiere anular o revocar un
-        certificado,
+        Si en algún momento determinado un certificado va a expirar y se
+        requiere renovar este,
 
-        es posible llamar este método para tal efecto. Al revocar un certificado
+        es posible llamar este método para tal efecto. Al renovar un certificado
         este ya no
 
         puede ser usado nuevamente, sin embargo los documentos que fueron
@@ -3869,6 +3926,38 @@ paths:
           example: 23456
           schema:
             type: integer
+        - name: from
+          in: query
+          description: >-
+            Corresponde a la fecha, desde que fecha quiere el resultado en
+            formato `dd-MM-yyyy`
+          required: false
+          example: 12-03-2020
+          schema:
+            type: string
+        - name: to
+          in: query
+          description: >-
+            Corresponde a la fecha, hasta que fecha quiere el resultado en
+            formato `dd-MM-yyyy`
+          required: false
+          example: 12-05-2020
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Corresponde al número de páginas que se quiere obtener la respuesta.
+          required: false
+          example: 5
+          schema:
+            type: integer
+        - name: records
+          in: query
+          description: Corresponde a la cantidad de registros que se quiere por página.
+          required: false
+          example: 10
+          schema:
+            type: integer
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -3915,6 +4004,9 @@ paths:
                     items:
                       type: object
                     description: Logs de lo que se ha hecho con el documento.
+                  totalRegistros:
+                    type: integer
+                    description: Cantidad de los registros encontrados
               examples:
                 Token Inválido: *ref_1
                 Sin Permiso: *ref_2
@@ -3925,6 +4017,7 @@ paths:
                     time: 2020-08-04T09:44:42.245Z
                     message: Historial obtenido de forma satisfactoria.
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    totalRegistros: 50
                     logs:
                       - documet_id: 23456
                         date: '2020-08-06'
@@ -3942,14 +4035,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url https://e-digital.cl/api/document/%7BdocumentsID%7D/logs \
+              --url 'https://e-digital.cl/api/document/%7BdocumentsID%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/document/%7BdocumentsID%7D/logs")
+              .url("https://e-digital.cl/api/document/%7BdocumentsID%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -3958,7 +4051,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/document/%7BdocumentsID%7D/logs");
+            RestClient("https://e-digital.cl/api/document/%7BdocumentsID%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
 
             var request = new RestRequest(Method.GET);
 
@@ -3970,7 +4063,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/document/%7BdocumentsID%7D/logs",
+              "url": "https://e-digital.cl/api/document/%7BdocumentsID%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -3988,7 +4081,7 @@ paths:
               "method": "GET",
               "hostname": "e-digital.cl",
               "port": null,
-              "path": "/api/document/%7BdocumentsID%7D/logs",
+              "path": "/api/document/%7BdocumentsID%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -4015,7 +4108,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/document/%7BdocumentsID%7D/logs",
+              CURLOPT_URL => "https://e-digital.cl/api/document/%7BdocumentsID%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -4048,7 +4141,8 @@ paths:
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
-            conn.request("GET", "/api/document/%7BdocumentsID%7D/logs",
+            conn.request("GET",
+            "/api/document/%7BdocumentsID%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
             headers=headers)
 
 
@@ -4073,6 +4167,20 @@ paths:
          En esta API es posible obtener un listado de las organizaciones suscritas actualmente.
       parameters:
         - *ref_0
+        - name: page
+          in: query
+          description: Corresponde al número de páginas que se quiere obtener la respuesta.
+          required: false
+          example: 5
+          schema:
+            type: integer
+        - name: records
+          in: query
+          description: Corresponde a la cantidad de registros que se quiere por página.
+          required: false
+          example: 10
+          schema:
+            type: integer
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -4119,6 +4227,9 @@ paths:
                     items:
                       type: string
                     description: Listado de las organizaciones subcritas.
+                  totalRegistros:
+                    type: integer
+                    description: Cantidad de los registros encontrados
               examples:
                 Token Inválido: *ref_1
                 Sin Permiso: *ref_2
@@ -4129,6 +4240,7 @@ paths:
                     time: 2020-08-04T09:44:42.245Z
                     message: Listado de organizaciones obtenido de forma satisfactoria.
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    totalRegistros: 50
                     organizations:
                       - Empresa1
                       - Empresa2
@@ -4138,14 +4250,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url https://e-digital.cl/api/organizations \
+              --url 'https://e-digital.cl/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/organizations")
+              .url("https://e-digital.cl/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -4154,7 +4266,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/organizations");
+            RestClient("https://e-digital.cl/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
 
             var request = new RestRequest(Method.GET);
 
@@ -4166,7 +4278,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/organizations",
+              "url": "https://e-digital.cl/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -4184,7 +4296,7 @@ paths:
               "method": "GET",
               "hostname": "e-digital.cl",
               "port": null,
-              "path": "/api/organizations",
+              "path": "/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -4211,7 +4323,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/organizations",
+              CURLOPT_URL => "https://e-digital.cl/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -4234,17 +4346,25 @@ paths:
               echo $response;
             }
         - lang: Python + Python3
-          source: |-
+          source: >-
             import http.client
+
 
             conn = http.client.HTTPSConnection("e-digital.cl")
 
+
             headers = { 'token': "SOME_STRING_VALUE" }
 
-            conn.request("GET", "/api/organizations", headers=headers)
+
+            conn.request("GET",
+            "/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+            headers=headers)
+
 
             res = conn.getresponse()
+
             data = res.read()
+
 
             print(data.decode("utf-8"))
   '/organizations/{organizationID}':
@@ -4477,6 +4597,20 @@ paths:
           schema:
             type: integer
             format: int32
+        - name: page
+          in: query
+          description: Corresponde al número de páginas que se quiere obtener la respuesta.
+          required: false
+          example: 5
+          schema:
+            type: integer
+        - name: records
+          in: query
+          description: Corresponde a la cantidad de registros que se quiere por página.
+          required: false
+          example: 10
+          schema:
+            type: integer
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -4523,6 +4657,9 @@ paths:
                     items:
                       type: string
                     description: Listado de los templates de la empresas subcritas.
+                  totalRegistros:
+                    type: integer
+                    description: Cantidad de los registros encontrados
               examples:
                 Token Inválido: *ref_1
                 Sin Permiso: *ref_2
@@ -4533,6 +4670,7 @@ paths:
                     time: 2020-08-04T09:44:42.245Z
                     message: Listado de templates obtenido de forma satisfactoria.
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    totalRegistros: 50
                     templates:
                       - Template1
                       - Template2
@@ -4542,14 +4680,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates \
+              --url 'https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates")
+              .url("https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -4558,7 +4696,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates");
+            RestClient("https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
 
             var request = new RestRequest(Method.GET);
 
@@ -4570,7 +4708,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates",
+              "url": "https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -4588,7 +4726,7 @@ paths:
               "method": "GET",
               "hostname": "e-digital.cl",
               "port": null,
-              "path": "/api/organizations/%7BorganizationID%7D/templates",
+              "path": "/api/organizations/%7BorganizationID%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -4615,7 +4753,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates",
+              CURLOPT_URL => "https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -4649,7 +4787,7 @@ paths:
 
 
             conn.request("GET",
-            "/api/organizations/%7BorganizationID%7D/templates",
+            "/api/organizations/%7BorganizationID%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
             headers=headers)
 
 
@@ -5520,6 +5658,20 @@ paths:
           schema:
             type: integer
             format: int32
+        - name: page
+          in: query
+          description: Corresponde al número de páginas que se quiere obtener la respuesta.
+          required: false
+          example: 5
+          schema:
+            type: integer
+        - name: records
+          in: query
+          description: Corresponde a la cantidad de registros que se quiere por página.
+          required: false
+          example: 10
+          schema:
+            type: integer
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -5566,6 +5718,9 @@ paths:
                     items:
                       type: string
                     description: Listado de los usuarios pertenicientes a la organización
+                  totalRegistros:
+                    type: integer
+                    description: Cantidad de los registros encontrados
               examples:
                 Token Inválido: *ref_1
                 Sin Permiso: *ref_2
@@ -5576,6 +5731,7 @@ paths:
                     time: 2020-08-04T09:44:42.245Z
                     message: Listado de los usuarios obtenido de forma satisfactoria.
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    totalRegistros: 50
                     users:
                       - User1
                       - User2
@@ -5585,14 +5741,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users \
+              --url 'https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users")
+              .url("https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -5601,7 +5757,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users");
+            RestClient("https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
 
             var request = new RestRequest(Method.GET);
 
@@ -5613,7 +5769,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users",
+              "url": "https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -5631,7 +5787,7 @@ paths:
               "method": "GET",
               "hostname": "e-digital.cl",
               "port": null,
-              "path": "/api/organizations/%7BorganitzationID%7D/users",
+              "path": "/api/organizations/%7BorganitzationID%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -5658,7 +5814,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users",
+              CURLOPT_URL => "https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -5692,7 +5848,8 @@ paths:
 
 
             conn.request("GET",
-            "/api/organizations/%7BorganitzationID%7D/users", headers=headers)
+            "/api/organizations/%7BorganitzationID%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+            headers=headers)
 
 
             res = conn.getresponse()

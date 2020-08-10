@@ -1,15 +1,15 @@
 operation:
-  summary: Permite remover un certificado de un usuario según su usuarioId y certicadoId
-  operationId: users.certificates.remove
+  summary: Permite renovar un certificado de un usuario según su usuarioId y certicadoId
+  operationId: users.certificates.renovate
   tags:
     - Users
   description: |
     | Información     |               Detalle              |
     |-----------------|------------------------------------|
-    |  ID operación   |    users.certificates.remove       |
+    |  ID operación   |    users.certificates.renovate     |
 
-    Si en algún momento determinado se requiere anular o revocar un certificado,
-    es posible llamar este método para tal efecto. Al revocar un certificado este ya no
+    Si en algún momento determinado un certificado va a expirar y se requiere renovar este,
+    es posible llamar este método para tal efecto. Al renovar un certificado este ya no
     puede ser usado nuevamente, sin embargo los documentos que fueron firmados con él, seguirán siendo validos.
     Si en algún momento se desea volver a crear un certificado se puede realizar en la API [Crear Certificado](#operation/users.certificates.create)
 

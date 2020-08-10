@@ -21,11 +21,11 @@ paths:
   /users:
     post:
       $ref: api/users.create.yaml#/operation
-    put:
-      $ref: api/users.change.yaml#/operation
   /users/{userID}:
     get:
       $ref: api/users.info.yaml#/operation
+    put:
+      $ref: api/users.change.yaml#/operation
   /users/{userID}/history:
     get:
       $ref: api/users.history.yaml#/operation
@@ -41,7 +41,7 @@ paths:
     get:
       $ref: api/users.certificates.info.yaml#/operation
     put:
-      $ref: api/users.certificates.remove.yaml#/operation
+      $ref: api/users.certificates.renovate.yaml#/operation
     delete:
       $ref: api/users.certificates.revoke.yaml#/operation
   /document:

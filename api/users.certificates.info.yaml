@@ -63,10 +63,10 @@ operation:
               trackingId:
                 type: string
                 description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
-              vigenciaDesde:
+              validityFrom:
                 type: string
                 description: Es la fecha desde cuando tiene vigencia el certificado, en formato `dd-MM-yyyy`
-              vigenciaHasta:
+              validityTo:
                 type: string
                 description: Es la fecha hasta cuando tiene vigencia el certificado, en formato `dd-MM-yyyy`
           examples:
@@ -81,5 +81,5 @@ operation:
                   time: 2020-08-04 09:44:42.245
                   message: Certificado obtenido de forma satisfactoria
                   trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                  vigenciaDesde: 14-03-2020
-                  vigenciaHasta: 14-03-2022
+                  validityFrom: 14-03-2020
+                  validityTo: 14-03-2022

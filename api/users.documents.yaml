@@ -1,5 +1,5 @@
 operation:
-  summary: Obtiene una lista de documenetos de un usuario según su ID
+  summary: Obtiene una lista de documentos de un usuario según su ID
   operationId: users.documents
   tags:
     - Users

@@ -14,13 +14,20 @@ operation:
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
+    - name: userID
+      in: path
+      description: Identificador del Usuario
+      required: true
+      example: 1119
+      schema:
+        type: integer
+        format: int32
   requestBody:
     content:
       application/json:
         schema:
           type: object
           required:
-            - id
             - name
             - surName
             - middleName
@@ -36,11 +43,6 @@ operation:
             - organization
             - move
           properties:
-            id:
-              type: integer
-              description: Ejemplo &#58; `1119`
-                <br> Es el id interno del usuario que se quiere modificar.
-              example: '1119'
             name:
               type: string
               description: Ejemplo &#58; `Ramon`

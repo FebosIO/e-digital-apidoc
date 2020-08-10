@@ -61,7 +61,12 @@ paths:
         Cada usuarios puede pertenecer a más de una empresa, esta vinculación se puede hacer con la API
         [Invitar Usuario](#operation/organizations.users.invite)
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - name: token
+          in: header
+          description: 'Token de acceso que permite el consumo de las API''s, el cual se puede obtener en la API [/auth](#operation/auth).'
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -177,9 +182,21 @@ paths:
                     description: Código único de usuario. Este código representa el id que se genero al momento de guardar el usuario.
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  value:
+                    code: 3
+                    duration: 207
+                    time: 2020-08-04T09:44:42.245Z
+                    errors: []
+                    message: Acceso denegado
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  value:
+                    code: 5
+                    duration: 207
+                    time: 2020-08-04T09:44:42.245Z
+                    errors: []
+                    message: Usted no tiene permiso para efectuar esta actividad
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
                 Respuesta OK:
                   value:
                     code: 0
@@ -189,9 +206,151 @@ paths:
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
                     userId: 1119
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          description: Error de solicitud
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                  - errors
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `10` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                  message:
+                    type: string
+                    description: 'mensaje de respuesta, traducción humana del código de resultado.'
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    description: Listado de errores encontrados durante el procesamiento de la solicitud
+              examples:
+                Error:
+                  value:
+                    code: 400
+                    message: Bad Request
+                    errors:
+                      - Verifique el Request Enviado
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          description: Error de servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                  - errors
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo 11` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                  message:
+                    type: string
+                    description: 'Mesage de respuesta, traducción humana del código de resultado.'
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    description: Listado de errores encontrados durante el procesamiento de la solicitud
+              examples:
+                Error:
+                  value:
+                    code: 500
+                    message: Error interno en el servidor.
+                    errors:
+                      - Internal Error Server
+  '/users/{userID}':
+    get:
+      summary: Obtiene información de un usuario
+      operationId: users.info
+      tags:
+        - Users
+      description: |
+        | Información     |               Detalle              |
+        |-----------------|------------------------------------|
+        |  ID operación   |             users.info             |
+
+         Los usuarios finales luego de ser creados en la API [Crear Usuario](#operation/users.create),
+         y asociados a una organización en la API [Invitar Usuario](#operation/organizations.users.invite).
+         Si en algún momento de desea obtener la información de dicho usuario se debe llamar este método
+         indicando el ID de usuario.
+      parameters:
+        - $ref: '#/paths/~1users/post/parameters/0'
+        - name: userID
+          in: path
+          description: Identificador del Usuario
+          required: true
+          example: 1119
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  user:
+                    type: object
+                    description: Es el objeto de la información obtenida del usuario.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Usuario obtenido de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    user:
+                      name: Ramon
+                      surName: Montalva
+                      middleName: Montoya
+                      email: tucorreo@empresa.cl
+                      identityDocument: 12345678-9
+                      typeIdentityDocument: CEDULA
+                      serieIdentityDocument: '123123123'
+                      password: myS3cretPass
+                      address: 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes'
+                      gender: male
+                      birth: 31-12-1970
+                      phone: (2) 2219 8406
+        '400':
+          $ref: '#/paths/~1users/post/responses/400'
+        '500':
+          $ref: '#/paths/~1users/post/responses/500'
     put:
       summary: Modifica un Usuario
       operationId: users.change
@@ -206,19 +365,21 @@ paths:
         si en algún momento se desea efectuar modificación a los datos de este es posible llamar
         este método y de esta forma efectuar tal acción.
       parameters:
-        - name: token
-          in: header
-          description: 'Token de acceso que permite el consumo de las API''s, el cual se puede obtener en la API [/auth](#operation/auth).'
+        - $ref: '#/paths/~1users/post/parameters/0'
+        - name: userID
+          in: path
+          description: Identificador del Usuario
           required: true
+          example: 1119
           schema:
-            type: string
+            type: integer
+            format: int32
       requestBody:
         content:
           application/json:
             schema:
               type: object
               required:
-                - id
                 - name
                 - surName
                 - middleName
@@ -234,10 +395,6 @@ paths:
                 - organization
                 - move
               properties:
-                id:
-                  type: integer
-                  description: Ejemplo &#58; `1119` <br> Es el id interno del usuario que se quiere modificar.
-                  example: '1119'
                 name:
                   type: string
                   description: Ejemplo &#58; `Ramon` <br> Nombre compuesto del usuario a crear
@@ -341,21 +498,9 @@ paths:
                     description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
               examples:
                 Token Inválido:
-                  value:
-                    code: 3
-                    duration: 207
-                    time: 2020-08-04T09:44:42.245Z
-                    errors: []
-                    message: Acceso denegado
-                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  value:
-                    code: 5
-                    duration: 207
-                    time: 2020-08-04T09:44:42.245Z
-                    errors: []
-                    message: Usted no tiene permiso para efectuar esta actividad
-                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -364,151 +509,9 @@ paths:
                     message: Usuario actualizado de forma satisfactoria
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
         '400':
-          description: Error de solicitud
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - code
-                  - message
-                  - errors
-                properties:
-                  code:
-                    type: integer
-                    format: int32
-                    description: 'Código de resultado de la operación, siendo `10` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
-                  message:
-                    type: string
-                    description: 'mensaje de respuesta, traducción humana del código de resultado.'
-                  errors:
-                    type: array
-                    items:
-                      type: string
-                    description: Listado de errores encontrados durante el procesamiento de la solicitud
-              examples:
-                Error:
-                  value:
-                    code: 400
-                    message: Bad Request
-                    errors:
-                      - Verifique el Request Enviado
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          description: Error de servidor
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - code
-                  - message
-                  - errors
-                properties:
-                  code:
-                    type: integer
-                    format: int32
-                    description: 'Código de resultado de la operación, siendo 11` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
-                  message:
-                    type: string
-                    description: 'Mesage de respuesta, traducción humana del código de resultado.'
-                  errors:
-                    type: array
-                    items:
-                      type: string
-                    description: Listado de errores encontrados durante el procesamiento de la solicitud
-              examples:
-                Error:
-                  value:
-                    code: 500
-                    message: Error interno en el servidor.
-                    errors:
-                      - Internal Error Server
-  '/users/{userID}':
-    get:
-      summary: Obtiene información de un usuario
-      operationId: users.info
-      tags:
-        - Users
-      description: |
-        | Información     |               Detalle              |
-        |-----------------|------------------------------------|
-        |  ID operación   |             users.info             |
-
-         Los usuarios finales luego de ser creados en la API [Crear Usuario](#operation/users.create),
-         y asociados a una organización en la API [Invitar Usuario](#operation/organizations.users.invite).
-         Si en algún momento de desea obtener la información de dicho usuario se debe llamar este método
-         indicando el ID de usuario.
-      parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
-        - name: userID
-          in: path
-          description: Identificador del Usuario
-          required: true
-          example: 1119
-          schema:
-            type: integer
-            format: int32
-      responses:
-        '200':
-          description: Operación efectuada de forma satisfactoria
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - codigo
-                  - mensaje
-                properties:
-                  code:
-                    type: integer
-                    format: int32
-                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
-                    example: null
-                  message:
-                    type: string
-                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
-                  duration:
-                    type: integer
-                    format: int32
-                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
-                  time:
-                    type: string
-                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
-                  trackingId:
-                    type: string
-                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
-                  user:
-                    type: object
-                    description: Es el objeto de la información obtenida del usuario.
-              examples:
-                Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
-                Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
-                Respuesta OK:
-                  value:
-                    code: 0
-                    duration: 780
-                    time: 2020-08-04T09:44:42.245Z
-                    message: Usuario obtenido de forma satisfactoria
-                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                    user:
-                      name: Ramon
-                      surName: Montalva
-                      middleName: Montoya
-                      email: tucorreo@empresa.cl
-                      identityDocument: 12345678-9
-                      typeIdentityDocument: CEDULA
-                      serieIdentityDocument: '123123123'
-                      password: myS3cretPass
-                      address: 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes'
-                      gender: male
-                      birth: 31-12-1970
-                      phone: (2) 2219 8406
-        '400':
-          $ref: '#/paths/~1users/put/responses/400'
-        '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
   '/users/{userID}/history':
     get:
       summary: Obtiene un historial de un usuario según su ID
@@ -524,7 +527,7 @@ paths:
          Si en algún momento se desea verificar la historia de un usuario en específico se puede llamar este
          método y así obtener el total de estos registros.
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: userID
           in: path
           description: Identificador del Usuario
@@ -533,6 +536,34 @@ paths:
           schema:
             type: integer
             format: int32
+        - name: from
+          in: query
+          description: 'Corresponde a la fecha, desde que fecha quiere el resultado en formato `dd-MM-yyyy`'
+          required: false
+          example: 12-03-2020
+          schema:
+            type: string
+        - name: to
+          in: query
+          description: 'Corresponde a la fecha, hasta que fecha quiere el resultado en formato `dd-MM-yyyy`'
+          required: false
+          example: 12-05-2020
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Corresponde al número de páginas que se quiere obtener la respuesta.
+          required: false
+          example: 5
+          schema:
+            type: integer
+        - name: records
+          in: query
+          description: Corresponde a la cantidad de registros que se quiere por página.
+          required: false
+          example: 10
+          schema:
+            type: integer
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -567,11 +598,14 @@ paths:
                     items:
                       type: string
                     description: Historial obtenido del usuario.
+                  totalRegistros:
+                    type: integer
+                    description: Cantidad de los registros encontrados
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -579,13 +613,14 @@ paths:
                     time: 2020-08-04T09:44:42.245Z
                     message: Historial obtenido de forma satisfactoria.
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    totalRegistros: 50
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
   '/users/{userID}/documents':
     get:
-      summary: Obtiene una lista de documenetos de un usuario según su ID
+      summary: Obtiene una lista de documentos de un usuario según su ID
       operationId: users.documents
       tags:
         - Users
@@ -615,7 +650,7 @@ paths:
 
          </details>
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: userID
           in: path
           description: Identificador del Usuario
@@ -667,9 +702,9 @@ paths:
                     description: Lista de documentos obtenidos para el usario y filtro solicitado.
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -678,9 +713,9 @@ paths:
                     message: Listado de documentos obtenido de forma satisfactoria.
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
   '/users/{userID}/cetificates':
     get:
       summary: Obtiene un listado de los certificados de un usuario según su ID
@@ -697,7 +732,7 @@ paths:
          Cada usuario debe tener al menos un certificado para poder firmar documentos.
          La creación y vinculación ha un usuario se pueden efectuar con la API [Crear Certificado Usuario](#operation/users.certificates.create)
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: userID
           in: path
           description: Identificador del Usuario
@@ -706,6 +741,20 @@ paths:
           schema:
             type: integer
             format: int32
+        - name: page
+          in: query
+          description: Corresponde al número de páginas que se quiere obtener la respuesta.
+          required: false
+          example: 5
+          schema:
+            type: integer
+        - name: records
+          in: query
+          description: Corresponde a la cantidad de registros que se quiere por página.
+          required: false
+          example: 10
+          schema:
+            type: integer
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -740,22 +789,26 @@ paths:
                     items:
                       type: string
                     description: Listado de los certificado asociados al usuario indicado
+                  totalRegistros:
+                    type: integer
+                    description: Cantidad de los registros encontrados
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
                     duration: 780
                     time: 2020-08-04T09:44:42.245Z
                     message: Listado de certificado obtenido de forma satisfactoria.
+                    totalRegistros: 50
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
     post:
       summary: Carga un certificado para un usuario existente.
       operationId: users.certificates.create
@@ -770,7 +823,7 @@ paths:
         en esta API es posible crear un certificado para un usuario que pertenezca al sistema.
         Los usuarios pueden ser creado en la API [Crear Usuario](https://e-digital.cl/api/users)
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: userID
           in: path
           description: Identificador del Usuario
@@ -836,9 +889,9 @@ paths:
                     description: Código único de usuario. Este código representa el id que se genero al momento de guardar el usuario.
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -848,9 +901,9 @@ paths:
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
                     certificateId: 1119
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
   '/users/{userID}/cetificates/{certificateID}':
     get:
       summary: Obtiene informacion de un certificado según su usuarioId y certificadoId
@@ -866,7 +919,7 @@ paths:
          Los cuales pueden ser creados y vinculados en la API [Crear Certificado](#operation/users.certificates.create)
          En esta API es posible obtener la información de dicho certificado indicando su fecha de vigencia.
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: userID
           in: path
           description: Identificador del Usuario
@@ -912,17 +965,17 @@ paths:
                   trackingId:
                     type: string
                     description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
-                  vigenciaDesde:
+                  validityFrom:
                     type: string
                     description: 'Es la fecha desde cuando tiene vigencia el certificado, en formato `dd-MM-yyyy`'
-                  vigenciaHasta:
+                  validityTo:
                     type: string
                     description: 'Es la fecha hasta cuando tiene vigencia el certificado, en formato `dd-MM-yyyy`'
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -930,28 +983,28 @@ paths:
                     time: 2020-08-04T09:44:42.245Z
                     message: Certificado obtenido de forma satisfactoria
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                    vigenciaDesde: 14-03-2020
-                    vigenciaHasta: 14-03-2022
+                    validityFrom: 14-03-2020
+                    validityTo: 14-03-2022
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
     put:
-      summary: Permite remover un certificado de un usuario según su usuarioId y certicadoId
-      operationId: users.certificates.remove
+      summary: Permite renovar un certificado de un usuario según su usuarioId y certicadoId
+      operationId: users.certificates.renovate
       tags:
         - Users
       description: |
         | Información     |               Detalle              |
         |-----------------|------------------------------------|
-        |  ID operación   |    users.certificates.remove       |
+        |  ID operación   |    users.certificates.renovate     |
 
-        Si en algún momento determinado se requiere anular o revocar un certificado,
-        es posible llamar este método para tal efecto. Al revocar un certificado este ya no
+        Si en algún momento determinado un certificado va a expirar y se requiere renovar este,
+        es posible llamar este método para tal efecto. Al renovar un certificado este ya no
         puede ser usado nuevamente, sin embargo los documentos que fueron firmados con él, seguirán siendo validos.
         Si en algún momento se desea volver a crear un certificado se puede realizar en la API [Crear Certificado](#operation/users.certificates.create)
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: userID
           in: path
           description: Identificador del Usuario
@@ -999,9 +1052,9 @@ paths:
                     description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -1010,9 +1063,9 @@ paths:
                     message: Certificado removido forma satisfactoria
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
     delete:
       summary: Permite revocar un certificado
       operationId: users.certificates.revoke
@@ -1028,7 +1081,7 @@ paths:
          puede ser usado nuevamente, sin embargo los documentos que fueron firmados con él, seguirán siendo validos.
          Si en algún momento se desea volver a crear un certificado se puede realizar en la API [Crear Certificado](#operation/users.certificates.create)
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: userID
           in: path
           description: Identificador del Usuario
@@ -1076,9 +1129,9 @@ paths:
                     description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -1087,9 +1140,9 @@ paths:
                     message: Certificado revocado forma satisfactoria
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
   /document:
     post:
       summary: Crea un Documento
@@ -1104,7 +1157,7 @@ paths:
         En esta API es posible crear documentos en el sistema para que puedan ser verificado, firmado
         , aprobado, rechazado por un usuario final dentro del sistema.
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
       requestBody:
         content:
           application/json:
@@ -1238,9 +1291,9 @@ paths:
                     description: Código único de documento. Este código representa el id que se genero al momento de crear el documento.
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -1250,9 +1303,9 @@ paths:
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
                     documentoId: 23456
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
   '/document/{documentsID}':
     get:
       summary: Obtiene un documento según su ID
@@ -1267,7 +1320,7 @@ paths:
          Los documentos se crean para que los usuarios finales puedan verificar, firmar, aprobar, rechazar.
          En esta API es posible obtener un documento por su ID generado en la API [Crear Documento](#operation/documents.create).
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: documentsID
           in: path
           description: Identificador del Documentos
@@ -1309,9 +1362,9 @@ paths:
                     description: La url generada para poder ver/descargar el documento.
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -1321,9 +1374,9 @@ paths:
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
                     urlDocument: 'https://urlDocumento'
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
     put:
       summary: Modifica el estado de un documento
       operationId: document.change
@@ -1349,7 +1402,7 @@ paths:
 
         s</details>
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: documentsID
           in: path
           description: Identificador del Documentos
@@ -1407,9 +1460,9 @@ paths:
                     description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -1418,9 +1471,9 @@ paths:
                     message: Documento actualizado de forma satisfactoria
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
     delete:
       summary: Remueve un documento del flujo
       operationId: document.remove
@@ -1435,7 +1488,7 @@ paths:
         En esta API es posible remover un documento del flujo.
         Para que de esta forma no sé considerado como documento pendiente dentro de este.
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: documentsID
           in: path
           description: Identificador del Documentos
@@ -1486,9 +1539,9 @@ paths:
                     description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -1497,9 +1550,9 @@ paths:
                     message: Documento removido de forma satisfactoria
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
   '/document/{documentsID}/logs':
     get:
       summary: Obtiene Logs de un documento según su ID
@@ -1515,12 +1568,40 @@ paths:
         registrando un logs(registros de actividades), cuando se quiera obtener el historial de
         un documento en específico se puede llamar este método para poder visualizarlos según su ID.
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: documentsID
           in: path
           description: Identificador del Documentos
           required: true
           example: 23456
+          schema:
+            type: integer
+        - name: from
+          in: query
+          description: 'Corresponde a la fecha, desde que fecha quiere el resultado en formato `dd-MM-yyyy`'
+          required: false
+          example: 12-03-2020
+          schema:
+            type: string
+        - name: to
+          in: query
+          description: 'Corresponde a la fecha, hasta que fecha quiere el resultado en formato `dd-MM-yyyy`'
+          required: false
+          example: 12-05-2020
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Corresponde al número de páginas que se quiere obtener la respuesta.
+          required: false
+          example: 5
+          schema:
+            type: integer
+        - name: records
+          in: query
+          description: Corresponde a la cantidad de registros que se quiere por página.
+          required: false
+          example: 10
           schema:
             type: integer
       responses:
@@ -1557,11 +1638,14 @@ paths:
                     items:
                       type: object
                     description: Logs de lo que se ha hecho con el documento.
+                  totalRegistros:
+                    type: integer
+                    description: Cantidad de los registros encontrados
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -1569,6 +1653,7 @@ paths:
                     time: 2020-08-04T09:44:42.245Z
                     message: Historial obtenido de forma satisfactoria.
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    totalRegistros: 50
                     logs:
                       - documet_id: 23456
                         date: '2020-08-06'
@@ -1581,9 +1666,9 @@ paths:
                         action: to_sign
                         text: ''
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
   /organizations:
     get:
       summary: Obtiene el listado de las organizaciones
@@ -1598,7 +1683,21 @@ paths:
          Las organizaciones representan a las empresas creadas dentro del sistema.
          En esta API es posible obtener un listado de las organizaciones suscritas actualmente.
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
+        - name: page
+          in: query
+          description: Corresponde al número de páginas que se quiere obtener la respuesta.
+          required: false
+          example: 5
+          schema:
+            type: integer
+        - name: records
+          in: query
+          description: Corresponde a la cantidad de registros que se quiere por página.
+          required: false
+          example: 10
+          schema:
+            type: integer
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -1633,11 +1732,14 @@ paths:
                     items:
                       type: string
                     description: Listado de las organizaciones subcritas.
+                  totalRegistros:
+                    type: integer
+                    description: Cantidad de los registros encontrados
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -1645,13 +1747,14 @@ paths:
                     time: 2020-08-04T09:44:42.245Z
                     message: Listado de organizaciones obtenido de forma satisfactoria.
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    totalRegistros: 50
                     organizations:
                       - Empresa1
                       - Empresa2
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
   '/organizations/{organizationID}':
     get:
       summary: Obtiene informacion de una organización según su ID
@@ -1668,7 +1771,7 @@ paths:
          y asociados a un organización en el API [Invitar Usuario](#operation/organizations.users.invite)
          En esta API es posible obtener la información de una organización en específica.
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: organizationID
           in: path
           description: Identificador de la organización
@@ -1711,9 +1814,9 @@ paths:
                     description: Es el objeto de la información obtenida de la organización.
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -1725,9 +1828,9 @@ paths:
                       nombreOrganizacion: EmpresaUno
                       rutOrganizacion: 55.893.293.K
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
   '/organizations/{organizationID}/templates':
     get:
       summary: Obtiene el listado de los template de las organizaciones
@@ -1743,7 +1846,7 @@ paths:
          API [Crear Template](#operation/organizations.templates.create).
          En esta API es posible obtener un listado de todos los template de las organizaciones suscritas actualmente.
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: organizationID
           in: path
           description: Identificador de la organización que se quiere listar sus template.
@@ -1752,6 +1855,20 @@ paths:
           schema:
             type: integer
             format: int32
+        - name: page
+          in: query
+          description: Corresponde al número de páginas que se quiere obtener la respuesta.
+          required: false
+          example: 5
+          schema:
+            type: integer
+        - name: records
+          in: query
+          description: Corresponde a la cantidad de registros que se quiere por página.
+          required: false
+          example: 10
+          schema:
+            type: integer
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -1786,11 +1903,14 @@ paths:
                     items:
                       type: string
                     description: Listado de los templates de la empresas subcritas.
+                  totalRegistros:
+                    type: integer
+                    description: Cantidad de los registros encontrados
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -1798,13 +1918,14 @@ paths:
                     time: 2020-08-04T09:44:42.245Z
                     message: Listado de templates obtenido de forma satisfactoria.
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    totalRegistros: 50
                     templates:
                       - Template1
                       - Template2
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
     post:
       summary: Crea un template para una organización suscrita.
       operationId: organizations.templates.create
@@ -1819,7 +1940,7 @@ paths:
          Cada organización debe tener al menos un template y podría llegar a tener "n" template, para poder firmar los documentos.
          En esta API es posible crear un template para una organización en específico.
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: organizationID
           in: path
           description: Identificador de la organización que se quiere crear su template
@@ -1863,9 +1984,9 @@ paths:
                     description: Corresponde el ID del template creado.
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -1875,9 +1996,9 @@ paths:
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
                     templateId: 1131
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
   '/organizations/{organizationID}/templates{templateID}':
     delete:
       summary: Permite eliminar un template
@@ -1894,7 +2015,7 @@ paths:
         que ya se encuentran firmados perderán su vigencia, los documentos que ya se encuentran firmados con
         este template se mantendrán de igual forma.
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: organizationID
           in: path
           description: Identificador de la organización.
@@ -1942,9 +2063,9 @@ paths:
                     description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -1953,9 +2074,9 @@ paths:
                     message: Template eliminado de forma satisfactoria
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
     get:
       summary: Obtiene informacion de un template según su templateID
       operationId: organizations.templates
@@ -1969,7 +2090,7 @@ paths:
          En esta API es posible obtener la información de un template de una organización según su ID
          el cual mostrara la ubicación donde se fija la firma según lo indica este.
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: organizationID
           in: path
           description: Identificador de la organización
@@ -2020,9 +2141,9 @@ paths:
                     description: Es el templates obtenido.
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -2032,9 +2153,9 @@ paths:
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
                     templates: template1
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
     put:
       summary: Modifica un template para una organización suscrita.
       operationId: organizations.templates.change
@@ -2048,7 +2169,7 @@ paths:
          En el caso de haber creado un template en el API [Crear Template](#operation/organizations.templates.create)
          En esta API es posible modificar un template para una organización suscrita.
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: organizationID
           in: path
           description: Identificador de la organización
@@ -2102,9 +2223,9 @@ paths:
                     description: Corresponde a si se pudo modificar de forma satisfactoria.
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -2114,9 +2235,9 @@ paths:
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
                     modificado: true
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
   '/organizations/{organitzationID}/users':
     get:
       summary: Obtiene el listado de las usuarios de una organización
@@ -2132,7 +2253,7 @@ paths:
          una organización en el API [Invitar Usuario](#operation/organizations.users.invite).
          En esta API es posible obtener un listado de todos los usuarios pertenecientes a la organización según su ID.
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: organizationID
           in: path
           description: Identificador de la organización
@@ -2141,6 +2262,20 @@ paths:
           schema:
             type: integer
             format: int32
+        - name: page
+          in: query
+          description: Corresponde al número de páginas que se quiere obtener la respuesta.
+          required: false
+          example: 5
+          schema:
+            type: integer
+        - name: records
+          in: query
+          description: Corresponde a la cantidad de registros que se quiere por página.
+          required: false
+          example: 10
+          schema:
+            type: integer
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -2175,11 +2310,14 @@ paths:
                     items:
                       type: string
                     description: Listado de los usuarios pertenicientes a la organización
+                  totalRegistros:
+                    type: integer
+                    description: Cantidad de los registros encontrados
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -2187,13 +2325,14 @@ paths:
                     time: 2020-08-04T09:44:42.245Z
                     message: Listado de los usuarios obtenido de forma satisfactoria.
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    totalRegistros: 50
                     users:
                       - User1
                       - User2
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
   '/organizations/{organitzationID}/users/{userID}':
     delete:
       summary: Permite desvincular un usario de una organización
@@ -2209,7 +2348,7 @@ paths:
          participar dentro del flujo de un documento en esta API es posible desvincular un usuario
          de una organización indicando el ID del usuario que de desea desvincular.
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: organizationID
           in: path
           description: Identificador de la organización
@@ -2257,9 +2396,9 @@ paths:
                     description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -2268,9 +2407,9 @@ paths:
                     message: Usuario desvinculado de forma satisfactoria
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
     post:
       summary: Invita a un usario a una organización.
       operationId: organizations.users.invite
@@ -2285,7 +2424,7 @@ paths:
          en el flujo de los documentos en esta API es posible enviar una invitación a un usuario
          para que se vincule a una organización.
       parameters:
-        - $ref: '#/paths/~1users/put/parameters/0'
+        - $ref: '#/paths/~1users/post/parameters/0'
         - name: organizationID
           in: path
           description: Identificador de la organización que se quiere crear su template
@@ -2339,9 +2478,9 @@ paths:
                     description: Corresponde a si se envio o no el correo.
               examples:
                 Token Inválido:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
                 Sin Permiso:
-                  $ref: '#/paths/~1users/put/responses/200/content/application~1json/examples/Sin%20Permiso'
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
                 Respuesta OK:
                   value:
                     code: 0
@@ -2351,9 +2490,9 @@ paths:
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
                     enviado: true
         '400':
-          $ref: '#/paths/~1users/put/responses/400'
+          $ref: '#/paths/~1users/post/responses/400'
         '500':
-          $ref: '#/paths/~1users/put/responses/500'
+          $ref: '#/paths/~1users/post/responses/500'
 tags:
   - name: Security
     description: Mecanismos de seguridad
