@@ -18,10 +18,9 @@ operation:
     |-------------|---------------------------------------------------------------------------------|
     |    anula    | Se utiliza cuando el documento se quiere anular.                                |
     |   rechaza   | Se utiliza cuando el documento se quiere rechazar.                              |
-    |    firma    | Se utiliza cuando se quiere firmar el documento.                                |
     |   aprueba   | Se utiliza cuando se quiere aprobar el documento.                               |
 
-    s</details>
+    </details>
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'

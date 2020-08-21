@@ -1418,10 +1418,9 @@ paths:
         |-------------|---------------------------------------------------------------------------------|
         |    anula    | Se utiliza cuando el documento se quiere anular.                                |
         |   rechaza   | Se utiliza cuando el documento se quiere rechazar.                              |
-        |    firma    | Se utiliza cuando se quiere firmar el documento.                                |
         |   aprueba   | Se utiliza cuando se quiere aprobar el documento.                               |
 
-        s</details>
+        </details>
       parameters:
         - $ref: '#/paths/~1users/post/parameters/0'
         - name: documentsID
@@ -1576,17 +1575,19 @@ paths:
           $ref: '#/paths/~1users/post/responses/500'
     post:
       summary: Firmar un Documento (No Implementado)
-      operationId: document.firma
+      operationId: document.firm
       tags:
         - Documents
       description: |
         | Información     |         Detalle          |
         |-----------------|--------------------------|
-        |ID operación     |     document.firma       |
+        |ID operación     |     document.firm       |
 
 
         Luego de crear un documento en el API [Crear Documento](#operation/documents.create), este pasa por un flujo
-        de firmas para esta acción se debe ejecutar este método indicando la posición que se quiere la firma.
+        de firmas para esta acción se debe ejecutar este método indicando qué template se ocupara para efectuar la
+        firma. El template se puede crear en el API [Crear Template](#organizations.templates.create).
+        O bien si no se desea ocupar un template se pueden indicar el eje X y el eje Y.
       parameters:
         - $ref: '#/paths/~1users/post/parameters/0'
         - name: documentsID
@@ -1604,9 +1605,7 @@ paths:
               required:
                 - userID
                 - certificateID
-                - x
-                - 'y'
-                - pagina
+                - page
               properties:
                 userID:
                   type: integer
@@ -1624,10 +1623,14 @@ paths:
                   type: integer
                   description: Ejemplo &#58; `700` <br> Posición de la firma en pixeles para el eje Y (vertical) con respecto a la páginas XX.
                   example: '700'
-                pagina:
+                templateId:
                   type: integer
-                  description: 'Ejemplo &#58; `-1` <br> Número de página en donde se pondrá la estampa visual (la primera página es la nº 1) , la última página (sin importar cuantas tenga) se especifica con el valor -1.'
-                  example: '-1'
+                  description: Ejemplo &#58; `12` <br> Corresponde a la posición donde ira la firma según su template.
+                  example: '12'
+                page:
+                  type: string
+                  description: 'Ejemplo &#58; `1` <br> Número de página en donde se pondrá la estampa visual (la primera página es la nº 1) , la última página (sin importar cuantas tenga) se especifica con el valor `ultima`.'
+                  example: '1'
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
