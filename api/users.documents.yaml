@@ -1,5 +1,5 @@
 operation:
-  summary: Obtiene una lista de documentos de un usuario según su ID
+  summary: Obtiene una lista de documentos de un usuario según su ID  (No Implementado)
   operationId: users.documents
   tags:
     - Users
@@ -46,6 +46,20 @@ operation:
         type: string
       required: true
       example: todos
+    - name: from
+      in: query
+      description: Corresponde a la fecha, desde que fecha quiere el resultado en formato `dd-MM-yyyy`
+      required: true
+      example: 12-03-2020
+      schema:
+        type: string
+    - name: to
+      in: query
+      description: Corresponde a la fecha, hasta que fecha quiere el resultado en formato `dd-MM-yyyy`
+      required: true
+      example: 12-05-2020
+      schema:
+        type: string
   responses:
     '400':
       $ref: '../api/components/responses/response.400.yaml#/response'

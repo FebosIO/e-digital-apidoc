@@ -1,5 +1,5 @@
 operation:
-  summary: Obtiene el listado de las usuarios de una organización
+  summary: Obtiene el listado de las usuarios de una organización  (No Implementado)
   operationId: organizations.users.list
   tags:
     - Organization

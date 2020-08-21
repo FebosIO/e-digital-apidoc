@@ -1,5 +1,5 @@
 operation:
-  summary: Carga un certificado para un usuario existente.
+  summary: Carga un certificado para un usuario existente.  (No Implementado)
   operationId: users.certificates.create
   tags:
     - Users

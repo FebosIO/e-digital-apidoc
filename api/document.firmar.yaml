@@ -1,16 +1,16 @@
 operation:
-  summary: Remueve un documento del flujo  (No Implementado)
-  operationId: document.remove
+  summary: Firmar un Documento (No Implementado)
+  operationId: document.firma
   tags:
     - Documents
   description: |
     | Información     |         Detalle          |
     |-----------------|--------------------------|
-    |  ID operación   |     document.remove      |
+    |ID operación     |     document.firma       |
 
-    Cada documento creado en el API [Crear Documento](#operation/documents.create), pasa por un flujo de aprobaciones.
-    En esta API es posible remover un documento del flujo.
-    Para que de esta forma no sé considerado como documento pendiente dentro de este.
+
+    Luego de crear un documento en el API [Crear Documento](#operation/documents.create), este pasa por un flujo
+    de firmas para esta acción se debe ejecutar este método indicando la posición que se quiere la firma.
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
@@ -18,22 +18,47 @@ operation:
       in: path
       description: Identificador del Documentos
       required: true
-      example: c60974ea92b8ef69ed552b5f7f173063
+      example: 23456
       schema:
-        type: string
+        type: integer
   requestBody:
     content:
       application/json:
         schema:
           type: object
           required:
-            - comment
+            - userID
+            - certificateID
+            - x
+            - y
+            - pagina
           properties:
-            comment:
-              type: string
-              description: Ejemplo &#58; `Documento Sacado del Flujo`
-                <br> Es el comentario de por que se le esta sacando del flujo el documento
-              example: 'Documento Sacado del Flujo'
+            userID:
+                type: integer
+                description: Ejemplo &#58; `1234`
+                  <br> Id unico de usuario que desea firmar documento.
+                example: '1234'
+            certificateID:
+                type: integer
+                description: Ejemplo &#58; `9834`
+                  <br> Id unico del certificado asociado al usuario que desea firmar.
+                example: '9834'
+            x:
+              type: integer
+              description: Ejemplo &#58; `300`
+                <br> Posición de la firma en pixeles para el eje X (horizontal) con respecto a la página.
+              example: '300'
+            y:
+                type: integer
+                description:  Ejemplo &#58; `700`
+                  <br> Posición de la firma en pixeles para el eje Y (vertical) con respecto a la páginas XX.
+                example: '700'
+            pagina:
+                type: integer
+                description: Ejemplo &#58; `-1`
+                  <br> Número de página en donde se pondrá la estampa visual (la primera página es la nº 1)
+                  , la última página (sin importar cuantas tenga) se especifica con el valor -1.
+                example: '-1'
   responses:
     '400':
       $ref: '../api/components/responses/response.400.yaml#/response'
@@ -67,6 +92,10 @@ operation:
               trackingId:
                 type: string
                 description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
+              urlDocumento:
+                type: integer
+                format: int32
+                description: Código único de documento. Este código representa el id que se genero al momento de crear el documento.
           examples:
             Token Inválido:
               $ref: '../api/components/responses/token.invalido.yaml#/example'
@@ -77,5 +106,6 @@ operation:
                 code: 0
                 duration: 780
                 time: 2020-08-04 09:44:42.245
-                message: Documento removido de forma satisfactoria
+                message: Documento firmado de forma satisfactoria
                 trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                urlDocumento: https://urlDocumento

@@ -1,5 +1,5 @@
 operation:
-  summary: Obtiene informacion de una organización según su ID
+  summary: Obtiene informacion de una organización según su ID  (No Implementado)
   operationId: organizations.info
   tags:
     - Organization

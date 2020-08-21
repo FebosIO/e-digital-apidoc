@@ -1,5 +1,5 @@
 operation:
-  summary: Obtiene un historial de un usuario según su ID
+  summary: Obtiene un historial de un usuario según su ID  (No Implementado)
   operationId: users.history
   tags:
     - Users
@@ -86,7 +86,7 @@ operation:
               history:
                 type: array
                 items:
-                  type: string
+                  type: object
                 description: Historial obtenido del usuario.
               totalRegistros:
                 type: integer
@@ -104,3 +104,13 @@ operation:
                   message: Historial obtenido de forma satisfactoria.
                   trackingId: eaa362909975204aa43bd28-ba9e4503db58
                   totalRegistros: 50
+                  history: [
+                  {
+                    date: '2020-08-06',
+                    message_event: 'to_create',
+                    result: 'OK'},
+                  {
+                    date: '2020-08-07',
+                    message_event: 'to_update',
+                    result: 'OK'
+                  }]

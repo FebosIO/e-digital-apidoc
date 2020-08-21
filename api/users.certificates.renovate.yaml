@@ -1,5 +1,5 @@
 operation:
-  summary: Permite renovar un certificado de un usuario según su usuarioId y certicadoId
+  summary: Permite renovar un certificado de un usuario según su usuarioId y certicadoId  (No Implementado)
   operationId: users.certificates.renovate
   tags:
     - Users

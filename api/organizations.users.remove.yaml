@@ -1,5 +1,5 @@
 operation:
-  summary: Permite desvincular un usario de una organización
+  summary: Permite desvincular un usario de una organización  (No Implementado)
   operationId: organizations.users.remove
   tags:
     - Organization

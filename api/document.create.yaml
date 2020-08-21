@@ -1,5 +1,5 @@
 operation:
-  summary: Crea un Documento
+  summary: Crea un Documento (No Implementado)
   operationId: document.create
   tags:
     - Documents

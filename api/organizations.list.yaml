@@ -1,5 +1,5 @@
 operation:
-  summary: Obtiene el listado de las organizaciones
+  summary: Obtiene el listado de las organizaciones  (No Implementado)
   operationId: organizations.list
   tags:
     - Organization

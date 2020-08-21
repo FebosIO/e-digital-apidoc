@@ -1,5 +1,5 @@
 operation:
-  summary: Modifica un template para una organización suscrita.
+  summary: Modifica un template para una organización suscrita.  (No Implementado)
   operationId: organizations.templates.change
   tags:
     - Organization

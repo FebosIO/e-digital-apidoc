@@ -1,5 +1,5 @@
 operation:
-  summary: Obtiene un listado de los certificados de un usuario según su ID
+  summary: Obtiene un listado de los certificados de un usuario según su ID  (No Implementado)
   operationId: users.certificates.list
   tags:
     - Users

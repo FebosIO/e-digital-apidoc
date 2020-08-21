@@ -24,12 +24,12 @@ operation:
           type: object
           required:
             - name
-            - surName
-            - middleName
+            - sur_name
+            - middle_name
             - email
-            - identityDocument
-            - typeIdentityDocument
-            - serieIdentityDocument
+            - identity_document
+            - type_identity_document
+            - serie_identity_document
             - password
             - address
             - gender
@@ -41,12 +41,12 @@ operation:
                 description: Ejemplo &#58; `Ramon`
                   <br> Nombre compuesto del usuario a crear
                 example: 'Ramon'
-            surName:
+            sur_name:
                 type: string
                 description: Ejemplo &#58; `Montalva`
                   <br>  Apellido paterno del usuario a crear.
                 example: 'Montalva'
-            middleName:
+            middle_name:
               type: string
               description: Ejemplo &#58; `Montoya`
                 <br> Apellido materno del usuario a crear.
@@ -56,12 +56,12 @@ operation:
                 description:  Ejemplo &#58; `tucorreo@empresa.cl`
                   <br> Corresponde al email del usuario a crear.
                 example: 'tucorreo@empresa.cl'
-            identityDocument:
+            identity_document:
                 type: string
                 description: Ejemplo &#58; `12345678-9`
                   <br>  Rut del usuario a crear.
                 example: '12345678-9'
-            typeIdentityDocument:
+            type_identity_document:
                 type: string
                 enum:
                   - "CEDULA_EXT"
@@ -75,7 +75,7 @@ operation:
                   |CEDULA_EXT| En el caso de ser una cedula extranjera|
                   |CEDULA| En el caso de ser una cedula chilena   |
                 example: 'CEDULA_EXT'
-            serieIdentityDocument:
+            serie_identity_document:
                 type: string
                 description: Ejemplo &#58; `123123123`
                   <br> Nro de Serie del documento del usuario a crear.
@@ -141,7 +141,7 @@ operation:
               trackingId:
                 type: string
                 description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
-              userId:
+              user_id:
                 type: integer
                 format: int32
                 description: Código único de usuario. Este código representa el id que se genero al momento de guardar el usuario.
@@ -157,4 +157,4 @@ operation:
                 time: 2020-08-04 09:44:42.245
                 message: Usuario registrado de forma satisfactoria
                 trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                userId: 1119
+                user_id: 1119

@@ -1,5 +1,5 @@
 operation:
-  summary: Obtiene Logs de un documento según su ID
+  summary: Obtiene Logs de un documento según su ID  (No Implementado)
   operationId: document.logs
   tags:
     - Documents

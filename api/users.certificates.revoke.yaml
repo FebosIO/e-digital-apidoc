@@ -1,5 +1,5 @@
 operation:
-  summary: Permite revocar un certificado
+  summary: Permite revocar un certificado  (No Implementado)
   operationId: users.certificates.revoke
   tags:
     - Users

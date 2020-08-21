@@ -1,5 +1,5 @@
 operation:
-  summary: Obtiene informacion de un certificado según su usuarioId y certificadoId
+  summary: Obtiene informacion de un certificado según su usuarioId y certificadoId  (No Implementado)
   operationId: users.certificates.info
   tags:
     - Users

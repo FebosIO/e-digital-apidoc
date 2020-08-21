@@ -54,6 +54,8 @@ paths:
       $ref: api/document.change.yaml#/operation
     delete:
       $ref: api/document.remove.yaml#/operation
+    post:
+      $ref: api/document.firmar.yaml#/operation
   /document/{documentsID}/logs:
     get:
       $ref: api/document.logs.yaml#/operation

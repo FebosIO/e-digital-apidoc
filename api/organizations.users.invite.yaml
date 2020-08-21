@@ -1,5 +1,5 @@
 operation:
-  summary: Invita a un usario a una organización.
+  summary: Invita a un usario a una organización.  (No Implementado)
   operationId: organizations.users.invite
   tags:
     - Organization

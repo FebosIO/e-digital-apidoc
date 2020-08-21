@@ -1,5 +1,5 @@
 operation:
-  summary: Permite eliminar un template
+  summary: Permite eliminar un template  (No Implementado)
   operationId: organizations.templates.remove
   tags:
     - Organization

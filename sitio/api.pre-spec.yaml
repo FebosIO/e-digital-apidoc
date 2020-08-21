@@ -74,12 +74,12 @@ paths:
               type: object
               required:
                 - name
-                - surName
-                - middleName
+                - sur_name
+                - middle_name
                 - email
-                - identityDocument
-                - typeIdentityDocument
-                - serieIdentityDocument
+                - identity_document
+                - type_identity_document
+                - serie_identity_document
                 - password
                 - address
                 - gender
@@ -90,11 +90,11 @@ paths:
                   type: string
                   description: Ejemplo &#58; `Ramon` <br> Nombre compuesto del usuario a crear
                   example: Ramon
-                surName:
+                sur_name:
                   type: string
                   description: Ejemplo &#58; `Montalva` <br>  Apellido paterno del usuario a crear.
                   example: Montalva
-                middleName:
+                middle_name:
                   type: string
                   description: Ejemplo &#58; `Montoya` <br> Apellido materno del usuario a crear.
                   example: Montoya
@@ -102,11 +102,11 @@ paths:
                   type: string
                   description: Ejemplo &#58; `tucorreo@empresa.cl` <br> Corresponde al email del usuario a crear.
                   example: tucorreo@empresa.cl
-                identityDocument:
+                identity_document:
                   type: string
                   description: Ejemplo &#58; `12345678-9` <br>  Rut del usuario a crear.
                   example: 12345678-9
-                typeIdentityDocument:
+                type_identity_document:
                   type: string
                   enum:
                     - CEDULA_EXT
@@ -120,7 +120,7 @@ paths:
                     |CEDULA_EXT| En el caso de ser una cedula extranjera|
                     |CEDULA| En el caso de ser una cedula chilena   |
                   example: CEDULA_EXT
-                serieIdentityDocument:
+                serie_identity_document:
                   type: string
                   description: Ejemplo &#58; `123123123` <br> Nro de Serie del documento del usuario a crear.
                   example: '123123123'
@@ -176,7 +176,7 @@ paths:
                   trackingId:
                     type: string
                     description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
-                  userId:
+                  user_id:
                     type: integer
                     format: int32
                     description: Código único de usuario. Este código representa el id que se genero al momento de guardar el usuario.
@@ -204,7 +204,7 @@ paths:
                     time: 2020-08-04T09:44:42.245Z
                     message: Usuario registrado de forma satisfactoria
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                    userId: 1119
+                    user_id: 1119
         '400':
           description: Error de solicitud
           content:
@@ -514,7 +514,7 @@ paths:
           $ref: '#/paths/~1users/post/responses/500'
   '/users/{userID}/history':
     get:
-      summary: Obtiene un historial de un usuario según su ID
+      summary: Obtiene un historial de un usuario según su ID  (No Implementado)
       operationId: users.history
       tags:
         - Users
@@ -596,7 +596,7 @@ paths:
                   history:
                     type: array
                     items:
-                      type: string
+                      type: object
                     description: Historial obtenido del usuario.
                   totalRegistros:
                     type: integer
@@ -614,13 +614,20 @@ paths:
                     message: Historial obtenido de forma satisfactoria.
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
                     totalRegistros: 50
+                    history:
+                      - date: '2020-08-06'
+                        message_event: to_create
+                        result: OK
+                      - date: '2020-08-07'
+                        message_event: to_update
+                        result: OK
         '400':
           $ref: '#/paths/~1users/post/responses/400'
         '500':
           $ref: '#/paths/~1users/post/responses/500'
   '/users/{userID}/documents':
     get:
-      summary: Obtiene una lista de documentos de un usuario según su ID
+      summary: Obtiene una lista de documentos de un usuario según su ID  (No Implementado)
       operationId: users.documents
       tags:
         - Users
@@ -666,6 +673,20 @@ paths:
             type: string
           required: true
           example: todos
+        - name: from
+          in: query
+          description: 'Corresponde a la fecha, desde que fecha quiere el resultado en formato `dd-MM-yyyy`'
+          required: true
+          example: 12-03-2020
+          schema:
+            type: string
+        - name: to
+          in: query
+          description: 'Corresponde a la fecha, hasta que fecha quiere el resultado en formato `dd-MM-yyyy`'
+          required: true
+          example: 12-05-2020
+          schema:
+            type: string
       responses:
         '200':
           description: Respuesta a todo evento
@@ -718,7 +739,7 @@ paths:
           $ref: '#/paths/~1users/post/responses/500'
   '/users/{userID}/cetificates':
     get:
-      summary: Obtiene un listado de los certificados de un usuario según su ID
+      summary: Obtiene un listado de los certificados de un usuario según su ID  (No Implementado)
       operationId: users.certificates.list
       tags:
         - Users
@@ -810,7 +831,7 @@ paths:
         '500':
           $ref: '#/paths/~1users/post/responses/500'
     post:
-      summary: Carga un certificado para un usuario existente.
+      summary: Carga un certificado para un usuario existente.  (No Implementado)
       operationId: users.certificates.create
       tags:
         - Users
@@ -906,7 +927,7 @@ paths:
           $ref: '#/paths/~1users/post/responses/500'
   '/users/{userID}/cetificates/{certificateID}':
     get:
-      summary: Obtiene informacion de un certificado según su usuarioId y certificadoId
+      summary: Obtiene informacion de un certificado según su usuarioId y certificadoId  (No Implementado)
       operationId: users.certificates.info
       tags:
         - Users
@@ -990,7 +1011,7 @@ paths:
         '500':
           $ref: '#/paths/~1users/post/responses/500'
     put:
-      summary: Permite renovar un certificado de un usuario según su usuarioId y certicadoId
+      summary: Permite renovar un certificado de un usuario según su usuarioId y certicadoId  (No Implementado)
       operationId: users.certificates.renovate
       tags:
         - Users
@@ -1067,7 +1088,7 @@ paths:
         '500':
           $ref: '#/paths/~1users/post/responses/500'
     delete:
-      summary: Permite revocar un certificado
+      summary: Permite revocar un certificado  (No Implementado)
       operationId: users.certificates.revoke
       tags:
         - Users
@@ -1145,7 +1166,7 @@ paths:
           $ref: '#/paths/~1users/post/responses/500'
   /document:
     post:
-      summary: Crea un Documento
+      summary: Crea un Documento (No Implementado)
       operationId: document.create
       tags:
         - Documents
@@ -1475,7 +1496,7 @@ paths:
         '500':
           $ref: '#/paths/~1users/post/responses/500'
     delete:
-      summary: Remueve un documento del flujo
+      summary: Remueve un documento del flujo  (No Implementado)
       operationId: document.remove
       tags:
         - Documents
@@ -1553,9 +1574,113 @@ paths:
           $ref: '#/paths/~1users/post/responses/400'
         '500':
           $ref: '#/paths/~1users/post/responses/500'
+    post:
+      summary: Firmar un Documento (No Implementado)
+      operationId: document.firma
+      tags:
+        - Documents
+      description: |
+        | Información     |         Detalle          |
+        |-----------------|--------------------------|
+        |ID operación     |     document.firma       |
+
+
+        Luego de crear un documento en el API [Crear Documento](#operation/documents.create), este pasa por un flujo
+        de firmas para esta acción se debe ejecutar este método indicando la posición que se quiere la firma.
+      parameters:
+        - $ref: '#/paths/~1users/post/parameters/0'
+        - name: documentsID
+          in: path
+          description: Identificador del Documentos
+          required: true
+          example: 23456
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userID
+                - certificateID
+                - x
+                - 'y'
+                - pagina
+              properties:
+                userID:
+                  type: integer
+                  description: Ejemplo &#58; `1234` <br> Id unico de usuario que desea firmar documento.
+                  example: '1234'
+                certificateID:
+                  type: integer
+                  description: Ejemplo &#58; `9834` <br> Id unico del certificado asociado al usuario que desea firmar.
+                  example: '9834'
+                x:
+                  type: integer
+                  description: Ejemplo &#58; `300` <br> Posición de la firma en pixeles para el eje X (horizontal) con respecto a la página.
+                  example: '300'
+                'y':
+                  type: integer
+                  description: Ejemplo &#58; `700` <br> Posición de la firma en pixeles para el eje Y (vertical) con respecto a la páginas XX.
+                  example: '700'
+                pagina:
+                  type: integer
+                  description: 'Ejemplo &#58; `-1` <br> Número de página en donde se pondrá la estampa visual (la primera página es la nº 1) , la última página (sin importar cuantas tenga) se especifica con el valor -1.'
+                  example: '-1'
+      responses:
+        '200':
+          description: Operación efectuada de forma satisfactoria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - codigo
+                  - mensaje
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: 'Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.'
+                    example: null
+                  message:
+                    type: string
+                    description: 'Mensaje de respuesta, traducción humana del código de resultado.'
+                  duration:
+                    type: integer
+                    format: int32
+                    description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+                  time:
+                    type: string
+                    description: 'Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`'
+                  trackingId:
+                    type: string
+                    description: 'Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.'
+                  urlDocumento:
+                    type: integer
+                    format: int32
+                    description: Código único de documento. Este código representa el id que se genero al momento de crear el documento.
+              examples:
+                Token Inválido:
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Token%20Inv%C3%A1lido'
+                Sin Permiso:
+                  $ref: '#/paths/~1users/post/responses/200/content/application~1json/examples/Sin%20Permiso'
+                Respuesta OK:
+                  value:
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Documento firmado de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    urlDocumento: 'https://urlDocumento'
+        '400':
+          $ref: '#/paths/~1users/post/responses/400'
+        '500':
+          $ref: '#/paths/~1users/post/responses/500'
   '/document/{documentsID}/logs':
     get:
-      summary: Obtiene Logs de un documento según su ID
+      summary: Obtiene Logs de un documento según su ID  (No Implementado)
       operationId: document.logs
       tags:
         - Documents
@@ -1671,7 +1796,7 @@ paths:
           $ref: '#/paths/~1users/post/responses/500'
   /organizations:
     get:
-      summary: Obtiene el listado de las organizaciones
+      summary: Obtiene el listado de las organizaciones  (No Implementado)
       operationId: organizations.list
       tags:
         - Organization
@@ -1757,7 +1882,7 @@ paths:
           $ref: '#/paths/~1users/post/responses/500'
   '/organizations/{organizationID}':
     get:
-      summary: Obtiene informacion de una organización según su ID
+      summary: Obtiene informacion de una organización según su ID  (No Implementado)
       operationId: organizations.info
       tags:
         - Organization
@@ -1833,7 +1958,7 @@ paths:
           $ref: '#/paths/~1users/post/responses/500'
   '/organizations/{organizationID}/templates':
     get:
-      summary: Obtiene el listado de los template de las organizaciones
+      summary: Obtiene el listado de los template de las organizaciones  (No Implementado)
       operationId: organizations.templates.list
       tags:
         - Organization
@@ -1927,7 +2052,7 @@ paths:
         '500':
           $ref: '#/paths/~1users/post/responses/500'
     post:
-      summary: Crea un template para una organización suscrita.
+      summary: Crea un template para una organización suscrita.  (No Implementado)
       operationId: organizations.templates.create
       tags:
         - Organization
@@ -2001,7 +2126,7 @@ paths:
           $ref: '#/paths/~1users/post/responses/500'
   '/organizations/{organizationID}/templates{templateID}':
     delete:
-      summary: Permite eliminar un template
+      summary: Permite eliminar un template  (No Implementado)
       operationId: organizations.templates.remove
       tags:
         - Organization
@@ -2078,7 +2203,7 @@ paths:
         '500':
           $ref: '#/paths/~1users/post/responses/500'
     get:
-      summary: Obtiene informacion de un template según su templateID
+      summary: Obtiene informacion de un template según su templateID  (No Implementado)
       operationId: organizations.templates
       tags:
         - Organization
@@ -2157,7 +2282,7 @@ paths:
         '500':
           $ref: '#/paths/~1users/post/responses/500'
     put:
-      summary: Modifica un template para una organización suscrita.
+      summary: Modifica un template para una organización suscrita.  (No Implementado)
       operationId: organizations.templates.change
       tags:
         - Organization
@@ -2240,7 +2365,7 @@ paths:
           $ref: '#/paths/~1users/post/responses/500'
   '/organizations/{organitzationID}/users':
     get:
-      summary: Obtiene el listado de las usuarios de una organización
+      summary: Obtiene el listado de las usuarios de una organización  (No Implementado)
       operationId: organizations.users.list
       tags:
         - Organization
@@ -2335,7 +2460,7 @@ paths:
           $ref: '#/paths/~1users/post/responses/500'
   '/organizations/{organitzationID}/users/{userID}':
     delete:
-      summary: Permite desvincular un usario de una organización
+      summary: Permite desvincular un usario de una organización  (No Implementado)
       operationId: organizations.users.remove
       tags:
         - Organization
@@ -2411,7 +2536,7 @@ paths:
         '500':
           $ref: '#/paths/~1users/post/responses/500'
     post:
-      summary: Invita a un usario a una organización.
+      summary: Invita a un usario a una organización.  (No Implementado)
       operationId: organizations.users.invite
       tags:
         - Organization
