@@ -4087,6 +4087,7 @@ paths:
 
 
             print(data.decode("utf-8"))
+  '/document/firm/{documentsID}':
     post:
       summary: Firmar un Documento (No Implementado)
       operationId: document.firm
@@ -4097,7 +4098,7 @@ paths:
 
         |-----------------|--------------------------|
 
-        |ID operación     |     document.firm       |
+        |  ID operación   |     document.firm        |
 
 
 
@@ -4169,6 +4170,20 @@ paths:
                     página (sin importar cuantas tenga) se especifica con el
                     valor `ultima`.
                   example: '1'
+                imageFirm:
+                  type: string
+                  description: >-
+                    Ejemplo &#58;
+                    `PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==`
+                    <br> Es la imagen de la firma en base64 con encode
+                    iso-8859-1 en caso de que lleve imagen.
+                  example: PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==
+                textFirm:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `Firma Representante` <br> Corresponde al
+                    texto de la firma en caso de que lleve texto.
+                  example: Firma Representante
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -4233,10 +4248,10 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request POST \
-              --url https://e-digital.cl/api/document/%7BdocumentsID%7D \
+              --url https://e-digital.cl/api/document/firm/%7BdocumentsID%7D \
               --header 'content-type: application/json' \
               --header 'token: SOME_STRING_VALUE' \
-              --data '{"userID":"1234","certificateID":"9834","x":"300","y":"700","templateId":"12","page":"1"}'
+              --data '{"userID":"1234","certificateID":"9834","x":"300","y":"700","templateId":"12","page":"1","imageFirm":"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==","textFirm":"Firma Representante"}'
         - lang: Java + Okhttp
           source: >-
             OkHttpClient client = new OkHttpClient();
@@ -4245,10 +4260,11 @@ paths:
             MediaType mediaType = MediaType.parse("application/json");
 
             RequestBody body = RequestBody.create(mediaType,
-            "{\"userID\":\"1234\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\"}");
+            "{\"userID\":\"1234\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\",\"imageFirm\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==\",\"textFirm\":\"Firma
+            Representante\"}");
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/document/%7BdocumentsID%7D")
+              .url("https://e-digital.cl/api/document/firm/%7BdocumentsID%7D")
               .post(body)
               .addHeader("content-type", "application/json")
               .addHeader("token", "SOME_STRING_VALUE")
@@ -4258,7 +4274,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/document/%7BdocumentsID%7D");
+            RestClient("https://e-digital.cl/api/document/firm/%7BdocumentsID%7D");
 
             var request = new RestRequest(Method.POST);
 
@@ -4267,8 +4283,8 @@ paths:
             request.AddHeader("token", "SOME_STRING_VALUE");
 
             request.AddParameter("application/json",
-            "{\"userID\":\"1234\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\"}",
-            ParameterType.RequestBody);
+            "{\"userID\":\"1234\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\",\"imageFirm\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==\",\"textFirm\":\"Firma
+            Representante\"}", ParameterType.RequestBody);
 
             IRestResponse response = client.Execute(request);
         - lang: Javascript + Jquery
@@ -4276,14 +4292,14 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/document/%7BdocumentsID%7D",
+              "url": "https://e-digital.cl/api/document/firm/%7BdocumentsID%7D",
               "method": "POST",
               "headers": {
                 "content-type": "application/json",
                 "token": "SOME_STRING_VALUE"
               },
               "processData": false,
-              "data": "{\"userID\":\"1234\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\"}"
+              "data": "{\"userID\":\"1234\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\",\"imageFirm\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==\",\"textFirm\":\"Firma Representante\"}"
             }
 
             $.ajax(settings).done(function (response) {
@@ -4297,7 +4313,7 @@ paths:
               "method": "POST",
               "hostname": "e-digital.cl",
               "port": null,
-              "path": "/api/document/%7BdocumentsID%7D",
+              "path": "/api/document/firm/%7BdocumentsID%7D",
               "headers": {
                 "content-type": "application/json",
                 "token": "SOME_STRING_VALUE"
@@ -4323,7 +4339,9 @@ paths:
               x: '300',
               y: '700',
               templateId: '12',
-              page: '1'
+              page: '1',
+              imageFirm: 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==',
+              textFirm: 'Firma Representante'
             }));
             req.end();
         - lang: Php + Curl
@@ -4333,14 +4351,14 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/document/%7BdocumentsID%7D",
+              CURLOPT_URL => "https://e-digital.cl/api/document/firm/%7BdocumentsID%7D",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
               CURLOPT_TIMEOUT => 30,
               CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
               CURLOPT_CUSTOMREQUEST => "POST",
-              CURLOPT_POSTFIELDS => "{\"userID\":\"1234\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\"}",
+              CURLOPT_POSTFIELDS => "{\"userID\":\"1234\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\",\"imageFirm\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==\",\"textFirm\":\"Firma Representante\"}",
               CURLOPT_HTTPHEADER => array(
                 "content-type: application/json",
                 "token: SOME_STRING_VALUE"
@@ -4366,7 +4384,8 @@ paths:
 
 
             payload =
-            "{\"userID\":\"1234\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\"}"
+            "{\"userID\":\"1234\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\",\"imageFirm\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==\",\"textFirm\":\"Firma
+            Representante\"}"
 
 
             headers = {
@@ -4374,8 +4393,8 @@ paths:
                 'token': "SOME_STRING_VALUE"
                 }
 
-            conn.request("POST", "/api/document/%7BdocumentsID%7D", payload,
-            headers)
+            conn.request("POST", "/api/document/firm/%7BdocumentsID%7D",
+            payload, headers)
 
 
             res = conn.getresponse()

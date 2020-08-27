@@ -1660,6 +1660,7 @@ paths:
           $ref: '#/paths/~1users/post/responses/400'
         '500':
           $ref: '#/paths/~1users/post/responses/500'
+  '/document/firm/{documentsID}':
     post:
       summary: Firmar un Documento (No Implementado)
       operationId: document.firm
@@ -1668,7 +1669,7 @@ paths:
       description: |
         | Información     |         Detalle          |
         |-----------------|--------------------------|
-        |ID operación     |     document.firm       |
+        |  ID operación   |     document.firm        |
 
 
         Luego de crear un documento en el API [Crear Documento](#operation/documents.create), este pasa por un flujo
@@ -1718,6 +1719,14 @@ paths:
                   type: string
                   description: 'Ejemplo &#58; `1` <br> Número de página en donde se pondrá la estampa visual (la primera página es la nº 1) , la última página (sin importar cuantas tenga) se especifica con el valor `ultima`.'
                   example: '1'
+                imageFirm:
+                  type: string
+                  description: Ejemplo &#58; `PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==` <br> Es la imagen de la firma en base64 con encode iso-8859-1 en caso de que lleve imagen.
+                  example: PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==
+                textFirm:
+                  type: string
+                  description: Ejemplo &#58; `Firma Representante` <br> Corresponde al texto de la firma en caso de que lleve texto.
+                  example: Firma Representante
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
