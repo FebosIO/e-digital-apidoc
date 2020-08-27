@@ -29,44 +29,181 @@ paths:
         |  ID operación   |            auth          |
 
 
-        Retorna un token de autenticación para consumir el resto de los
-        endpoint.
+        En este endpoint mediante la combinación de username, password y grant
+        type es posible obtener un token
+
+        el cual es obligatorio para poder realizar el llamado en cualquiera de
+        nuestras api disponibles.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - grant_type
+                - username
+                - password
+              properties:
+                grant_type:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `password` <br> Corresponde al grant type que
+                    se ocupara para la validación de combinación username
+                    ,password.
+                  example: password
+                username:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `test@alexlancer.com` <br> Es el mail del
+                    usuario que se quiere hacer la validación.
+                  example: test@alexlancer.com
+                password:
+                  type: array
+                  description: >-
+                    Ejemplo &#58; `Mi$3cr3tPa$$` <br> Es el password del usuario
+                    que se quiere hacer la validación.
+                  example: Mi$3cr3tPa$$
       responses:
         '200':
-          description: Respuesta a todo evento
+          description: Operación efectuada de forma satisfactoria
           content:
             application/json:
               schema:
                 type: object
                 required:
-                  - token
+                  - codigo
+                  - mensaje
                 properties:
-                  token:
+                  code:
+                    type: integer
+                    format: int32
+                    description: >-
+                      Código de resultado de la operación, siendo `0` un
+                      resultado satisfactorio. Cualquier otro código es
+                      indicativo de error.
+                    example: null
+                  message:
                     type: string
-                    description: Token de autenticación
+                    description: >-
+                      Mensaje de respuesta, traducción humana del código de
+                      resultado.
+                  duration:
+                    type: integer
+                    format: int32
+                    description: >-
+                      Tiempo (en milisegundos) que tardó en procesarse la
+                      solicitud.
+                  time:
+                    type: string
+                    description: >-
+                      Hora a la que llego la solicitud a E-Digital, en formato
+                      `yyyy-MM-dd HH:mm:ss.SSS`
+                  trackingId:
+                    type: string
+                    description: >-
+                      Código único de seguimiento. Este código representa al
+                      proceso completo de la solicitud realizada, si tienes
+                      problemas, te pediremos este código.
+                  token:
+                    type: object
+                    description: Es el objecto del token obtenido
               examples:
                 Respuesta OK:
                   value:
-                    token: ASDFGHJKLQWERTYUIO
+                    code: 0
+                    duration: 780
+                    time: 2020-08-04T09:44:42.245Z
+                    message: Documento creado de forma satisfactoria
+                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
+                    user:
+                      access_token: 863f61bada5b8ff4bae813d59144b83049242cd3
+                      expires_in: 3600
+                      token_type: Bearer
+                      scope: app
+                      refresh_token: 0ae9b3643d4c9b6541661f13a9736490c21171b2
+        '401':
+          description: Error de solicitud
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: >-
+                      Código de resultado de la operación, siendo `0` un
+                      resultado satisfactorio. Cualquier otro código es
+                      indicativo de error.
+                  duration:
+                    type: integer
+                    format: int32
+                    description: >-
+                      Tiempo (en milisegundos) que tardó en procesarse la
+                      solicitud.
+                  time:
+                    type: string
+                    description: >-
+                      Hora a la que llego la solicitud a E-Digital, en formato
+                      `yyyy-MM-dd HH:mm:ss.SSS`
+                  message:
+                    type: string
+                    description: >-
+                      mensaje de respuesta, traducción humana del código de
+                      resultado.
+                  trackingId:
+                    type: string
+                    description: >-
+                      Código único de seguimiento. Este código representa al
+                      proceso completo de la solicitud realizada, si tienes
+                      problemas, te pediremos este código.
+              examples:
+                Error:
+                  value:
+                    code: 401
+                    duration: 12
+                    time: 2020-08-27T15:25:25.000Z
+                    message: Combinación de nombre de usuario y contraseña no válida
+                    trackingId: 60f7812e-58d1-4cca-b1a9-60e0a3c32e43
       x-code-samples:
         - lang: Shell + Curl
           source: |-
             curl --request POST \
-              --url https://e-digital.cl/api/auth
+              --url https://e-digital.cl/api/auth \
+              --header 'content-type: application/json' \
+              --data '{"grant_type":"password","username":"test@alexlancer.com","password":"Mi$3cr3tPa$$"}'
         - lang: Java + Okhttp
-          source: |-
+          source: >-
             OkHttpClient client = new OkHttpClient();
+
+
+            MediaType mediaType = MediaType.parse("application/json");
+
+            RequestBody body = RequestBody.create(mediaType,
+            "{\"grant_type\":\"password\",\"username\":\"test@alexlancer.com\",\"password\":\"Mi$3cr3tPa$$\"}");
 
             Request request = new Request.Builder()
               .url("https://e-digital.cl/api/auth")
-              .post(null)
+              .post(body)
+              .addHeader("content-type", "application/json")
               .build();
 
             Response response = client.newCall(request).execute();
         - lang: Csharp + Restsharp
-          source: |-
+          source: >-
             var client = new RestClient("https://e-digital.cl/api/auth");
+
             var request = new RestRequest(Method.POST);
+
+            request.AddHeader("content-type", "application/json");
+
+            request.AddParameter("application/json",
+            "{\"grant_type\":\"password\",\"username\":\"test@alexlancer.com\",\"password\":\"Mi$3cr3tPa$$\"}",
+            ParameterType.RequestBody);
+
             IRestResponse response = client.Execute(request);
         - lang: Javascript + Jquery
           source: |-
@@ -75,7 +212,11 @@ paths:
               "crossDomain": true,
               "url": "https://e-digital.cl/api/auth",
               "method": "POST",
-              "headers": {}
+              "headers": {
+                "content-type": "application/json"
+              },
+              "processData": false,
+              "data": "{\"grant_type\":\"password\",\"username\":\"test@alexlancer.com\",\"password\":\"Mi$3cr3tPa$$\"}"
             }
 
             $.ajax(settings).done(function (response) {
@@ -90,7 +231,9 @@ paths:
               "hostname": "e-digital.cl",
               "port": null,
               "path": "/api/auth",
-              "headers": {}
+              "headers": {
+                "content-type": "application/json"
+              }
             };
 
             var req = http.request(options, function (res) {
@@ -106,6 +249,11 @@ paths:
               });
             });
 
+            req.write(JSON.stringify({
+              grant_type: 'password',
+              username: 'test@alexlancer.com',
+              password: 'Mi$3cr3tPa$$'
+            }));
             req.end();
         - lang: Php + Curl
           source: |-
@@ -121,6 +269,10 @@ paths:
               CURLOPT_TIMEOUT => 30,
               CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
               CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => "{\"grant_type\":\"password\",\"username\":\"test@alexlancer.com\",\"password\":\"Mi$3cr3tPa$$\"}",
+              CURLOPT_HTTPHEADER => array(
+                "content-type: application/json"
+              ),
             ));
 
             $response = curl_exec($curl);
@@ -134,15 +286,27 @@ paths:
               echo $response;
             }
         - lang: Python + Python3
-          source: |-
+          source: >-
             import http.client
+
 
             conn = http.client.HTTPSConnection("e-digital.cl")
 
-            conn.request("POST", "/api/auth")
+
+            payload =
+            "{\"grant_type\":\"password\",\"username\":\"test@alexlancer.com\",\"password\":\"Mi$3cr3tPa$$\"}"
+
+
+            headers = { 'content-type': "application/json" }
+
+
+            conn.request("POST", "/api/auth", payload, headers)
+
 
             res = conn.getresponse()
+
             data = res.read()
+
 
             print(data.decode("utf-8"))
   /users:
@@ -371,7 +535,7 @@ paths:
                     type: integer
                     format: int32
                     description: >-
-                      Código de resultado de la operación, siendo `10` un
+                      Código de resultado de la operación, siendo `0` un
                       resultado satisfactorio. Cualquier otro código es
                       indicativo de error.
                   message:
@@ -408,7 +572,7 @@ paths:
                     type: integer
                     format: int32
                     description: >-
-                      Código de resultado de la operación, siendo 11` un
+                      Código de resultado de la operación, siendo `0` un
                       resultado satisfactorio. Cualquier otro código es
                       indicativo de error.
                   message:

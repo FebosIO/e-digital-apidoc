@@ -1,0 +1,36 @@
+response:
+  description: Error de solicitud
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - code
+          - message
+        properties:
+          code:
+              type: integer
+              format: int32
+              description: Código de resultado de la operación, siendo `0` un resultado satisfactorio. Cualquier otro código es indicativo de error.
+          duration:
+              type: integer
+              format: int32
+              description: Tiempo (en milisegundos) que tardó en procesarse la solicitud.
+          time:
+              type: string
+              description: Hora a la que llego la solicitud a E-Digital, en formato `yyyy-MM-dd HH:mm:ss.SSS`
+          message:
+              type: string
+              description: mensaje de respuesta, traducción humana del código de resultado.
+          trackingId:
+            type: string
+            description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
+      examples:
+        Error:
+          value:
+            code: 401
+            duration: 12
+            time: 2020-08-27T11:25:25-04:00
+            message: Combinación de nombre de usuario y contraseña no válida
+            trackingId: 60f7812e-58d1-4cca-b1a9-60e0a3c32e43
+
