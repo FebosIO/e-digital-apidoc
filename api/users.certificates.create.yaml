@@ -14,39 +14,21 @@ operation:
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: userID
-      in: path
-      description: Identificador del Usuario
-      required: true
-      example: 1119
-      schema:
-        type: integer
-        format: int32
+    - $ref: '../api/components/parameters/user.cod_user.yaml#/parameter'
   requestBody:
     content:
       application/json:
         schema:
           type: object
           required:
-            - nameCertificate
             - password
-            - base64
           properties:
-            nameCertificate:
-                type: string
-                description: Ejemplo &#58; `certificadoPrueba.pfx`
-                  <br> Nombre del certificado
-                example: 'certificadoPrueba.pfx'
             password:
                 type: string
                 description: Ejemplo &#58; `MiS3cretP4as$word`
                   <br>  Password del certificado para poder abrirlo.
+                  <br> ***(CREO QUE AQUI FALTA EL BASE 64 DEL DOCUMENTO)***
                 example: 'MiS3cretP4as$word'
-            base64:
-              type: string
-              description: Ejemplo &#58; `PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==`
-                <br>Documento codificado en Base64 con encode UTF-8 que contiene la estructura del certificado.
-              example: 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg=='
   responses:
     '400':
       $ref: '../api/components/responses/response.400.yaml#/response'
@@ -94,6 +76,6 @@ operation:
                 code: 0
                 duration: 780
                 time: 2020-08-04 09:44:42.245
-                message: Usuario registrado de forma satisfactoria
+                message: Certificado registrado de forma satisfactoria
                 trackingId: eaa362909975204aa43bd28-ba9e4503db58
                 certificateId: 1119

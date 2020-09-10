@@ -15,14 +15,7 @@ operation:
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: organizationID
-      in: path
-      description: Identificador de la organización
-      required: true
-      example: 1119
-      schema:
-       type: integer
-       format: int32
+    - $ref: '../api/components/parameters/organization.cod_organization.yaml#/parameter'
   responses:
     '400':
       $ref: '../api/components/responses/response.400.yaml#/response'
@@ -35,8 +28,8 @@ operation:
           schema:
             type: object
             required:
-              - codigo
-              - mensaje
+              - code
+              - message
             properties:
               code:
                 type: integer
@@ -72,6 +65,8 @@ operation:
                   message: Listado de organizaciones obtenido de forma satisfactoria
                   trackingId: eaa362909975204aa43bd28-ba9e4503db58
                   organizations: {
-                   nombreOrganizacion: 'EmpresaUno',
-                   rutOrganizacion: '55.893.293.K'
+                    cod_organization: 'cod_1',
+                    nombreOrganizacion: 'Empresa 1',
+                    cod_project: 'EMPRESA',
+                    parent: null
                   }

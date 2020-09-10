@@ -24,13 +24,7 @@ operation:
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: documentsID
-      in: path
-      description: Identificador del Documentos
-      required: true
-      example: 23456
-      schema:
-        type: integer
+    - $ref: '../api/components/parameters/document.hash.yaml#/parameter'
     - name: estado
       in: query
       description: Corresponde al estado que se le quiere dar al documento.
@@ -63,8 +57,8 @@ operation:
           schema:
             type: object
             required:
-              - codigo
-              - mensaje
+              - code
+              - message
             properties:
               code:
                 type: integer

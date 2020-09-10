@@ -16,28 +16,20 @@ operation:
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: documentsID
-      in: path
-      description: Identificador del Documentos
-      required: true
-      example: 23456
-      schema:
-        type: integer
+    - $ref: '../api/components/parameters/document.hash.yaml#/parameter'
   requestBody:
     content:
       application/json:
         schema:
           type: object
           required:
-            - userID
-            - certificateID
-            - page
+            - certificate_pass
           properties:
-            userID:
+            certificate_pass:
                 type: integer
-                description: Ejemplo &#58; `1234`
-                  <br> Id unico de usuario que desea firmar documento.
-                example: '1234'
+                description: Ejemplo &#58; `Mi$3cr3tPa$$`
+                  <br> Password usado por el certificado.
+                example: Mi$3cr3tPa$$
             certificateID:
                 type: integer
                 description: Ejemplo &#58; `9834`
@@ -64,16 +56,6 @@ operation:
                   <br> Número de página en donde se pondrá la estampa visual (la primera página es la nº 1)
                   , la última página (sin importar cuantas tenga) se especifica con el valor `ultima`.
                 example: '1'
-            imageFirm:
-              type: string
-              description: Ejemplo &#58; `PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==`
-                <br> Es la imagen de la firma en base64 con encode iso-8859-1 en caso de que lleve imagen.
-              example: 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg=='
-            textFirm:
-              type: string
-              description: Ejemplo &#58; `Firma Representante`
-                <br> Corresponde al texto de la firma en caso de que lleve texto.
-              example: 'Firma Representante'
   responses:
     '400':
       $ref: '../api/components/responses/response.400.yaml#/response'
@@ -86,8 +68,8 @@ operation:
           schema:
             type: object
             required:
-              - codigo
-              - mensaje
+              - code
+              - message
             properties:
               code:
                 type: integer

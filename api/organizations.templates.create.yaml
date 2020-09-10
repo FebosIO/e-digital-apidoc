@@ -14,14 +14,7 @@ operation:
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: organizationID
-      in: path
-      description: Identificador de la organización que se quiere crear su template
-      required: true
-      example: 1119
-      schema:
-        type: integer
-        format: int32
+    - $ref: '../api/components/parameters/organization.cod_organization.yaml#/parameter'
   responses:
     '400':
       $ref: '../api/components/responses/response.400.yaml#/response'
@@ -34,8 +27,8 @@ operation:
           schema:
             type: object
             required:
-              - codigo
-              - mensaje
+              - code
+              - message
             properties:
               code:
                 type: integer
@@ -55,7 +48,7 @@ operation:
               trackingId:
                 type: string
                 description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
-              templateId:
+              template_id:
                 type: integer
                 format: int32
                 description: Corresponde el ID del template creado.
@@ -71,4 +64,4 @@ operation:
                   time: 2020-08-04 09:44:42.245
                   message: Template ingresado de forma satisfactoria.
                   trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                  templateId: 1131
+                  template_id: 1131

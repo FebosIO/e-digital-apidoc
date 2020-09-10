@@ -1,18 +1,19 @@
 openapi: 3.0.0
 info:
-  title: "API E-Digital"
+  title: "API PÚBLICA e-Digital"
   description: |
-   API de firmado para E-Digital
+    API PÚBLICA de servicios e-Gestión :<br>
+    Esta documentación está diseñana para catalogar sus servicios para integraciones RESTFUL.
   version: v1.2
   contact:
     name: Carlos Garcia
     email: carlos.garcia@e-digital.cl
-    url: www.e-digital.cl
+    url: https://e-digital.global
   x-logo:
-    url: 'https://e-digital.cl/wp-content/uploads/2016/11/logo_final_2_slogan_menor2.png'
+    url: 'https://e-digital.global/media/logo-edigital.png'
     altText: E-Digital
 servers:
-  - url: https://e-digital.cl/api
+  - url: https://apipub.e-digital.global/api
 
 paths:
   /auth:
@@ -21,23 +22,25 @@ paths:
   /users:
     post:
       $ref: api/users.create.yaml#/operation
-  /users/{userID}:
+  /users/{cod_user}:
     get:
       $ref: api/users.info.yaml#/operation
     put:
       $ref: api/users.change.yaml#/operation
-  /users/{userID}/history:
+  /users/{cod_user}/history:
     get:
       $ref: api/users.history.yaml#/operation
-  /users/{userID}/documents:
+  /users/{cod_user}/documents:
     get:
       $ref: api/users.documents.yaml#/operation
-  /users/{userID}/cetificates:
-    get:
-      $ref: api/users.certificates.list.yaml#/operation
+  /users/{cod_user}/cetificates:
+    # get:
+    #   $ref: api/users.certificates.list.yaml#/operation
     post:
       $ref: api/users.certificates.create.yaml#/operation
-  /users/{userID}/cetificates/{certificateID}:
+    # put:
+    #   $ref: api/users.certificates.load.yaml#/operation
+  /users/{cod_user}/cetificates/{certificate_id}:
     get:
       $ref: api/users.certificates.info.yaml#/operation
     put:
@@ -47,51 +50,50 @@ paths:
   /document:
     post:
       $ref: api/document.create.yaml#/operation
-  /document/{documentsID}:
+  /document/{document_hash}:
     get:
       $ref: api/document.info.yaml#/operation
-    put:
-      $ref: api/document.change.yaml#/operation
+    # put:
+    #   $ref: api/document.change.yaml#/operation
     delete:
       $ref: api/document.remove.yaml#/operation
-  /document/firm/{documentsID}:
     post:
       $ref: api/document.firm.yaml#/operation
-  /document/{documentsID}/logs:
+  /document/{document_hash}/logs:
     get:
       $ref: api/document.logs.yaml#/operation
   /organizations:
     get:
       $ref: api/organizations.list.yaml#/operation
-  /organizations/{organizationID}:
+  /organizations/{cod_organization}:
     get:
       $ref: api/organizations.info.yaml#/operation
-  /organizations/{organizationID}/templates:
+  /organizations/{cod_organization}/templates:
     get:
       $ref: api/organizations.templates.list.yaml#/operation
-    post:
-      $ref: api/organizations.templates.create.yaml#/operation
-  /organizations/{organizationID}/templates{templateID}:
-    delete:
-      $ref: api/organizations.templates.remove.yaml#/operation
+    # post:
+    #   $ref: api/organizations.templates.create.yaml#/operation
+  /organizations/{cod_organization}/templates/{template_id}:
+    # delete:
+    #   $ref: api/organizations.templates.remove.yaml#/operation
     get:
       $ref: api/organizations.templates.yaml#/operation
-    put:
-      $ref: api/organizations.templates.change.yaml#/operation
-  /organizations/{organitzationID}/users:
+    # put:
+    #   $ref: api/organizations.templates.change.yaml#/operation
+  /organizations/{cod_organization}/users:
     get:
       $ref: api/organizations.users.list.yaml#/operation
-  /organizations/{organitzationID}/users/{userID}:
+  /organizations/{cod_organization}/users/{cod_user}:
     delete:
       $ref: api/organizations.users.remove.yaml#/operation
     post:
       $ref: api/organizations.users.invite.yaml#/operation
 tags:
- - name: Security
-   description: Mecanismos de seguridad
- - name: Users
-   description: Conjunto de API's que permiten la administración de los usuarios.
- - name: Organization
-   description: Conjunto de API's que permiten la administración de los organizaciones.
- - name: Documents
-   description: Conjunto de API's que permiten la administración de los documentos.
+  - name: Security
+    description: Mecanismos de seguridad
+  - name: Users
+    description: Conjunto de API's que permiten la administración de los usuarios.
+  - name: Organization
+    description: Conjunto de API's que permiten la administración de las organizaciones.
+  - name: Documents
+    description: Conjunto de API's que permiten la administración de los documentos.

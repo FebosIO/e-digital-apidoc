@@ -14,14 +14,7 @@ operation:
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: organizationID
-      in: path
-      description: Identificador de la organización que se quiere listar sus template.
-      required: true
-      example: 1119
-      schema:
-        type: integer
-        format: int32
+    - $ref: '../api/components/parameters/organization.cod_organization.yaml#/parameter'
     - name: page
       in: query
       description: Corresponde al número de páginas que se quiere obtener la respuesta.
@@ -48,8 +41,8 @@ operation:
           schema:
             type: object
             required:
-              - codigo
-              - mensaje
+              - code
+              - message
             properties:
               code:
                 type: integer

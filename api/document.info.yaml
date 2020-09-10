@@ -13,13 +13,22 @@ operation:
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: documentsID
-      in: path
-      description: Identificador del Documentos
-      required: true
-      example: 23456
+    - $ref: '../api/components/parameters/document.hash.yaml#/parameter'
+    - name: format_output
+      in: query
+      description: |
+          Corresponde al tipo de salida que requiere<br>
+
+          | format_output | Descripción                                                 |
+          |---------------|-------------------------------------------------------------|
+          | url_edigital  | Link dentro de e-Gestión                                    |
+          | url_S3        | Link de repositorio para su descarga inmediata              |
+          | base64        | COntenido del archivo en base64                             |
+          | info          | Información del document dendtro de la plataforma (default) |
+      required: false
+      example: url_edigital
       schema:
-       type: integer
+        type: string
   responses:
     '400':
       $ref: '../api/components/responses/response.400.yaml#/response'
@@ -32,8 +41,8 @@ operation:
           schema:
             type: object
             required:
-              - codigo
-              - mensaje
+              - code
+              - message
             properties:
               code:
                 type: integer

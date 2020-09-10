@@ -14,22 +14,8 @@ operation:
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: organizationID
-      in: path
-      description: Identificador de la organización
-      required: true
-      example: 1120
-      schema:
-       type: integer
-       format: int32
-    - name: userID
-      in: path
-      description: Identificador del usuario
-      required: true
-      example: 1119
-      schema:
-        type: integer
-        format: int32
+    - $ref: '../api/components/parameters/organization.cod_organization.yaml#/parameter'
+    - $ref: '../api/components/parameters/user.cod_user.yaml#/parameter'
   responses:
     '400':
       $ref: '../api/components/responses/response.400.yaml#/response'
@@ -42,8 +28,8 @@ operation:
           schema:
             type: object
             required:
-              - codigo
-              - mensaje
+              - code
+              - message
             properties:
               code:
                 type: integer

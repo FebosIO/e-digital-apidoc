@@ -1,21 +1,39 @@
 operation:
-  summary: Obtiene información de un usuario
-  operationId: users.info
+  summary: Carga un certificado para un usuario existente.  (No Implementado)
+  operationId: users.certificates.load
   tags:
     - Users
   description: |
-    | Información  | Detalle    |
-    |--------------|------------|
-    | ID operación | users.info |
+    | Información     |               Detalle              |
+    |-----------------|------------------------------------|
+    |  ID operación   |    users.certificates.load         |
 
-    Los usuarios finales luego de ser creados en la API [Crear Usuario](#operation/users.create),
-    y asociados a una organización en la API [Invitar Usuario](#operation/organizations.users.invite).
-    Si en algún momento de desea obtener la información de dicho usuario se debe llamar este método
-    indicando el tipo documento de identidad más su número de identidad .
+    Cada usuario final debe de tener un certificado asociado para poder firmar documentos
+    en esta API es posible cargar un certificado para un usuario que pertenezca al sistema.
+    Los usuarios pueden ser creado en la API [Crear Usuario](https://e-digital.cl/api/users)
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
     - $ref: '../api/components/parameters/user.cod_user.yaml#/parameter'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name_certificate
+            - base64
+          properties:
+            name_certificate:
+                type: string
+                description: Ejemplo &#58; `certificadoPrueba.pfx`
+                  <br> Nombre del certificado
+                example: 'certificadoPrueba.pfx'
+            base64:
+              type: string
+              description: Ejemplo &#58; `PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==`
+                <br>Documento codificado en Base64 con encode UTF-8 que contiene la estructura del certificado.
+              example: 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg=='
   responses:
     '400':
       $ref: '../api/components/responses/response.400.yaml#/response'
@@ -49,9 +67,10 @@ operation:
               trackingId:
                 type: string
                 description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
-              user:
-                type: object
-                description: Es el objeto de la información obtenida del usuario.
+              certificate_id:
+                type: integer
+                format: int32
+                description: ~Código único de usuario. Este código representa el id que se genero al momento de guardar el usuario.~
           examples:
             Token Inválido:
               $ref: '../api/components/responses/token.invalido.yaml#/example'
@@ -62,20 +81,6 @@ operation:
                 code: 0
                 duration: 780
                 time: 2020-08-04 09:44:42.245
-                message: Usuario obtenido de forma satisfactoria
+                message: Usuario registrado de forma satisfactoria
                 trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                user: {
-                  name : 'Ramon' ,
-                  surname : 'Montalva Montoya' ,
-                  email : 'tucorreo@empresa.cl' ,
-                  identity_document : '12345678-9' ,
-                  type_identity_document : 'CEDULA' ,
-                  serie_identity_document : '123123123' ,
-                  password : 'myS3cretPass' ,
-                  address : 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes' ,
-                  gender : 'male' ,
-                  birth : '1970-12-31' ,
-                  phone: '222198406',
-                  certificate: 'OK',
-                  type: 'internal'
-                }
+                certificate_id: 1119

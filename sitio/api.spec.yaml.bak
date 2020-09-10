@@ -1,19 +1,21 @@
 openapi: 3.0.0
 info:
-  title: API E-Digital
-  description: |
-    API de firmado para E-Digital
+  title: API PÚBLICA e-Digital
+  description: >
+    API PÚBLICA de servicios e-Gestión :<br>
+
+    Esta documentación está diseñana para catalogar sus servicios para
+    integraciones RESTFUL.
   version: v1.2
   contact:
     name: Carlos Garcia
     email: carlos.garcia@e-digital.cl
-    url: www.e-digital.cl
+    url: 'https://e-digital.global'
   x-logo:
-    url: >-
-      https://e-digital.cl/wp-content/uploads/2016/11/logo_final_2_slogan_menor2.png
+    url: 'https://e-digital.global/media/logo-edigital.png'
     altText: E-Digital
 servers:
-  - url: 'https://e-digital.cl/api'
+  - url: 'https://apipub.e-digital.global/api'
 paths:
   /auth:
     post:
@@ -34,6 +36,16 @@ paths:
 
         el cual es obligatorio para poder realizar el llamado en cualquiera de
         nuestras api disponibles.
+      parameters:
+        - name: autorization
+          in: header
+          description: >-
+            Acceso asignado a la organización que permite el consumo de las
+            API's, el cual es entregado al cliente por contrato.
+          required: true
+          example: 11111111-1111-11111-1111-111111111111
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -71,8 +83,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -172,7 +184,8 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request POST \
-              --url https://e-digital.cl/api/auth \
+              --url https://apipub.e-digital.global/api/auth \
+              --header 'autorization: SOME_STRING_VALUE' \
               --header 'content-type: application/json' \
               --data '{"grant_type":"password","username":"test@alexlancer.com","password":"Mi$3cr3tPa$$"}'
         - lang: Java + Okhttp
@@ -186,19 +199,23 @@ paths:
             "{\"grant_type\":\"password\",\"username\":\"test@alexlancer.com\",\"password\":\"Mi$3cr3tPa$$\"}");
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/auth")
+              .url("https://apipub.e-digital.global/api/auth")
               .post(body)
               .addHeader("content-type", "application/json")
+              .addHeader("autorization", "SOME_STRING_VALUE")
               .build();
 
             Response response = client.newCall(request).execute();
         - lang: Csharp + Restsharp
           source: >-
-            var client = new RestClient("https://e-digital.cl/api/auth");
+            var client = new
+            RestClient("https://apipub.e-digital.global/api/auth");
 
             var request = new RestRequest(Method.POST);
 
             request.AddHeader("content-type", "application/json");
+
+            request.AddHeader("autorization", "SOME_STRING_VALUE");
 
             request.AddParameter("application/json",
             "{\"grant_type\":\"password\",\"username\":\"test@alexlancer.com\",\"password\":\"Mi$3cr3tPa$$\"}",
@@ -210,10 +227,11 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/auth",
+              "url": "https://apipub.e-digital.global/api/auth",
               "method": "POST",
               "headers": {
-                "content-type": "application/json"
+                "content-type": "application/json",
+                "autorization": "SOME_STRING_VALUE"
               },
               "processData": false,
               "data": "{\"grant_type\":\"password\",\"username\":\"test@alexlancer.com\",\"password\":\"Mi$3cr3tPa$$\"}"
@@ -228,11 +246,12 @@ paths:
 
             var options = {
               "method": "POST",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
               "path": "/api/auth",
               "headers": {
-                "content-type": "application/json"
+                "content-type": "application/json",
+                "autorization": "SOME_STRING_VALUE"
               }
             };
 
@@ -262,7 +281,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/auth",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/auth",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -271,6 +290,7 @@ paths:
               CURLOPT_CUSTOMREQUEST => "POST",
               CURLOPT_POSTFIELDS => "{\"grant_type\":\"password\",\"username\":\"test@alexlancer.com\",\"password\":\"Mi$3cr3tPa$$\"}",
               CURLOPT_HTTPHEADER => array(
+                "autorization: SOME_STRING_VALUE",
                 "content-type: application/json"
               ),
             ));
@@ -290,15 +310,17 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             payload =
             "{\"grant_type\":\"password\",\"username\":\"test@alexlancer.com\",\"password\":\"Mi$3cr3tPa$$\"}"
 
 
-            headers = { 'content-type': "application/json" }
-
+            headers = {
+                'content-type': "application/json",
+                'autorization': "SOME_STRING_VALUE"
+                }
 
             conn.request("POST", "/api/auth", payload, headers)
 
@@ -316,11 +338,11 @@ paths:
       tags:
         - Users
       description: >
-        | Información     |               Detalle              |
+        | Información  | Detalle      |
 
-        |-----------------|------------------------------------|
+        |--------------|--------------|
 
-        |  ID operación   |            users.create            |
+        | ID operación | users.create |
 
 
         Cada usuario final es representado por un usuario único de sistema.
@@ -355,42 +377,26 @@ paths:
               type: object
               required:
                 - name
-                - sur_name
-                - middle_name
-                - email
+                - surname
                 - identity_document
                 - type_identity_document
-                - serie_identity_document
-                - password
-                - address
-                - gender
                 - birth
-                - phone
+                - gender
+                - email
+                - type
               properties:
                 name:
                   type: string
                   description: >-
-                    Ejemplo &#58; `Ramon` <br> Nombre compuesto del usuario a
+                    Ejemplo &#58; `Ramón` <br> Nombre compuesto del usuario a
                     crear
-                  example: Ramon
-                sur_name:
+                  example: Ramón
+                surname:
                   type: string
                   description: >-
-                    Ejemplo &#58; `Montalva` <br>  Apellido paterno del usuario
+                    Ejemplo &#58; `Montalva Montoya` <br>  Apellidos del usuario
                     a crear.
-                  example: Montalva
-                middle_name:
-                  type: string
-                  description: >-
-                    Ejemplo &#58; `Montoya` <br> Apellido materno del usuario a
-                    crear.
-                  example: Montoya
-                email:
-                  type: string
-                  description: >-
-                    Ejemplo &#58; `tucorreo@empresa.cl` <br> Corresponde al
-                    email del usuario a crear.
-                  example: tucorreo@empresa.cl
+                  example: Montalva Montoya
                 identity_document:
                   type: string
                   description: Ejemplo &#58; `12345678-9` <br>  Rut del usuario a crear.
@@ -400,21 +406,57 @@ paths:
                   enum:
                     - CEDULA_EXT
                     - CEDULA
-                  description: |
+                  description: >
                     Ejemplo &#58; `CEDULA`
-                     <br> Corresponde al tipo de cedula del usuario a crear <br>
+                     <br> Corresponde al tipo de documento del usuario a crear <br>
 
-                    | Valor| Descripción |
-                    |-------|-------------|
-                    |CEDULA_EXT| En el caso de ser una cedula extranjera|
-                    |CEDULA| En el caso de ser una cedula chilena   |
+                    | Valor      |
+                    Descripción                                                 
+                    |PAIS |
+
+                    |------------|--------------------------------------------------------------|-----|
+
+                    | CEDULA_EXT | En el caso de ser una cédula
+                    extranjera                      |CL   |
+
+                    | CEDULA     | En el caso de ser una cédula
+                    chilena                         |CL   |
+
+                    | DNI        | En el caso de ser un documento de identidad
+                    peruano          |PE   |
+
+                    | CE         | En el caso de ser Canet de extranjero
+                    peruano                |PE   |
+
+                    | PTP        | En el caso de ser una Tarjeta de permiso de
+                    trabaajo peruano |PE   |
+
+                    | PASAPORTE  | En el caso de ser un
+                    Pasaporte                               |PE   |
+
+                    | CFP        | En el caso de ser un documento de identidad
+                    brasilero        |BR   |
                   example: CEDULA_EXT
                 serie_identity_document:
                   type: string
                   description: >-
-                    Ejemplo &#58; `123123123` <br> Nro de Serie del documento
-                    del usuario a crear.
+                    Ejemplo &#58; `A123123123` <br> Nro de Serie del documento
+                    del usuario a crear. 10 ó 9 caracteres , según el tipo de
+                    carnet (Sólo CHILE)
                   example: '123123123'
+                email:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `tucorreo@empresa.cl` <br> Corresponde al
+                    email del usuario a crear.
+                  example: tucorreo@empresa.cl
+                email2:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `tucorreo2@empresa.cl` <br> Corresponde al
+                    email secundario del usuario a crear. Puede ser el email
+                    corporativo
+                  example: tucorreo@empresa.cl
                 password:
                   type: string
                   description: >-
@@ -440,14 +482,37 @@ paths:
                   type: string
                   description: >-
                     Ejemplo &#58; `1970-12-31` <br> Fecha de nacimiento del
-                    usuario a crear `(Format yyyy-MM-dd)`
+                    usuario a crear `(YYYY-MM-DD)`
                   example: '1970-12-31'
                 phone:
                   type: string
                   description: >-
-                    Ejemplo &#58; `(2) 2219 8406` <br>  Número de teléfono del
-                    usuario a crear.
-                  example: (2) 2219 8406
+                    Ejemplo &#58; `222198406` <br>  Número de teléfono del
+                    usuario a crear. (sólo números)
+                  example: '222198406'
+                type:
+                  type: string
+                  enum:
+                    - internal
+                    - external
+                  description: >
+                    Ejemplo &#58; `external`
+
+                    Corresponde al tipo de usuario a crear <br>
+
+
+                    | Valor    |
+                    Descripción                                                              
+                    |
+
+                    |----------|--------------------------------------------------------------------------|
+
+                    | internal | Usuarios que son parte de la organización
+                    (empleados, socios, etc)       |
+
+                    | external | Usuarios que no son parte de la organización
+                    como proveedores o clientes |
+                  example: internal
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -456,7 +521,7 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
+                  - código
                   - mensaje
                 properties:
                   code:
@@ -489,12 +554,17 @@ paths:
                       Código único de seguimiento. Este código representa al
                       proceso completo de la solicitud realizada, si tienes
                       problemas, te pediremos este código.
-                  user_id:
-                    type: integer
-                    format: int32
+                  cod_user:
+                    type: string
+                    format: '{type_identity_document}-{identity_document}'
                     description: >-
-                      Código único de usuario. Este código representa el id que
-                      se genero al momento de guardar el usuario.
+                      Identificador del Usuario (cod_user) es un código
+                      compuesto por el tipo documento de identidad más su número
+                      de identidad; dado a que existe un registro único de
+                      usuario en el sitema. En caso de exitir el usuario
+                      registrado por alguna otra organización sería imposible
+                      saber su ID que lo identifica en el sistema para poder
+                      consultar su existencia antes de crearlo.
               examples:
                 Token Inválido: &ref_1
                   value:
@@ -519,7 +589,7 @@ paths:
                     time: 2020-08-04T09:44:42.245Z
                     message: Usuario registrado de forma satisfactoria
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                    user_id: 1119
+                    cod_user: CEDULA_EXT-12345678-9
         '400': &ref_3
           description: Error de solicitud
           content:
@@ -598,10 +668,10 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request POST \
-              --url https://e-digital.cl/api/users \
+              --url https://apipub.e-digital.global/api/users \
               --header 'content-type: application/json' \
               --header 'token: SOME_STRING_VALUE' \
-              --data '{"name":"Ramon","sur_name":"Montalva","middle_name":"Montoya","email":"tucorreo@empresa.cl","identity_document":"12345678-9","type_identity_document":"CEDULA_EXT","serie_identity_document":"123123123","password":"myS3cretPass","address":"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes","gender":"male","birth":"1970-12-31","phone":"(2) 2219 8406"}'
+              --data '{"name":"Ramón","surname":"Montalva Montoya","identity_document":"12345678-9","type_identity_document":"CEDULA_EXT","serie_identity_document":"123123123","email":"tucorreo@empresa.cl","email2":"tucorreo@empresa.cl","password":"myS3cretPass","address":"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes","gender":"male","birth":"1970-12-31","phone":"222198406","type":"internal"}'
         - lang: Java + Okhttp
           source: >-
             OkHttpClient client = new OkHttpClient();
@@ -610,13 +680,13 @@ paths:
             MediaType mediaType = MediaType.parse("application/json");
 
             RequestBody body = RequestBody.create(mediaType,
-            "{\"name\":\"Ramon\",\"sur_name\":\"Montalva\",\"middle_name\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
+            "{\"name\":\"Ramón\",\"surname\":\"Montalva
+            Montoya\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"123123123\",\"email\":\"tucorreo@empresa.cl\",\"email2\":\"tucorreo@empresa.cl\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
             100 – Piso 15 (Oficina 1519), Las
-            Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2)
-            2219 8406\"}");
+            Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"222198406\",\"type\":\"internal\"}");
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/users")
+              .url("https://apipub.e-digital.global/api/users")
               .post(body)
               .addHeader("content-type", "application/json")
               .addHeader("token", "SOME_STRING_VALUE")
@@ -625,7 +695,8 @@ paths:
             Response response = client.newCall(request).execute();
         - lang: Csharp + Restsharp
           source: >-
-            var client = new RestClient("https://e-digital.cl/api/users");
+            var client = new
+            RestClient("https://apipub.e-digital.global/api/users");
 
             var request = new RestRequest(Method.POST);
 
@@ -634,10 +705,11 @@ paths:
             request.AddHeader("token", "SOME_STRING_VALUE");
 
             request.AddParameter("application/json",
-            "{\"name\":\"Ramon\",\"sur_name\":\"Montalva\",\"middle_name\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
+            "{\"name\":\"Ramón\",\"surname\":\"Montalva
+            Montoya\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"123123123\",\"email\":\"tucorreo@empresa.cl\",\"email2\":\"tucorreo@empresa.cl\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
             100 – Piso 15 (Oficina 1519), Las
-            Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2)
-            2219 8406\"}", ParameterType.RequestBody);
+            Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"222198406\",\"type\":\"internal\"}",
+            ParameterType.RequestBody);
 
             IRestResponse response = client.Execute(request);
         - lang: Javascript + Jquery
@@ -645,14 +717,14 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/users",
+              "url": "https://apipub.e-digital.global/api/users",
               "method": "POST",
               "headers": {
                 "content-type": "application/json",
                 "token": "SOME_STRING_VALUE"
               },
               "processData": false,
-              "data": "{\"name\":\"Ramon\",\"sur_name\":\"Montalva\",\"middle_name\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2) 2219 8406\"}"
+              "data": "{\"name\":\"Ramón\",\"surname\":\"Montalva Montoya\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"123123123\",\"email\":\"tucorreo@empresa.cl\",\"email2\":\"tucorreo@empresa.cl\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"222198406\",\"type\":\"internal\"}"
             }
 
             $.ajax(settings).done(function (response) {
@@ -664,7 +736,7 @@ paths:
 
             var options = {
               "method": "POST",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
               "path": "/api/users",
               "headers": {
@@ -687,18 +759,19 @@ paths:
             });
 
             req.write(JSON.stringify({
-              name: 'Ramon',
-              sur_name: 'Montalva',
-              middle_name: 'Montoya',
-              email: 'tucorreo@empresa.cl',
+              name: 'Ramón',
+              surname: 'Montalva Montoya',
               identity_document: '12345678-9',
               type_identity_document: 'CEDULA_EXT',
               serie_identity_document: '123123123',
+              email: 'tucorreo@empresa.cl',
+              email2: 'tucorreo@empresa.cl',
               password: 'myS3cretPass',
               address: 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes',
               gender: 'male',
               birth: '1970-12-31',
-              phone: '(2) 2219 8406'
+              phone: '222198406',
+              type: 'internal'
             }));
             req.end();
         - lang: Php + Curl
@@ -708,14 +781,14 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/users",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/users",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
               CURLOPT_TIMEOUT => 30,
               CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
               CURLOPT_CUSTOMREQUEST => "POST",
-              CURLOPT_POSTFIELDS => "{\"name\":\"Ramon\",\"sur_name\":\"Montalva\",\"middle_name\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2) 2219 8406\"}",
+              CURLOPT_POSTFIELDS => "{\"name\":\"Ramón\",\"surname\":\"Montalva Montoya\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"123123123\",\"email\":\"tucorreo@empresa.cl\",\"email2\":\"tucorreo@empresa.cl\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"222198406\",\"type\":\"internal\"}",
               CURLOPT_HTTPHEADER => array(
                 "content-type: application/json",
                 "token: SOME_STRING_VALUE"
@@ -737,14 +810,13 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
-            payload =
-            "{\"name\":\"Ramon\",\"sur_name\":\"Montalva\",\"middle_name\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
+            payload = "{\"name\":\"Ramón\",\"surname\":\"Montalva
+            Montoya\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"123123123\",\"email\":\"tucorreo@empresa.cl\",\"email2\":\"tucorreo@empresa.cl\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
             100 – Piso 15 (Oficina 1519), Las
-            Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2)
-            2219 8406\"}"
+            Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"222198406\",\"type\":\"internal\"}"
 
 
             headers = {
@@ -761,31 +833,47 @@ paths:
 
 
             print(data.decode("utf-8"))
-  '/users/{userID}':
+  '/users/{cod_user}':
     get:
       summary: Obtiene información de un usuario
       operationId: users.info
       tags:
         - Users
-      description: |
-        | Información     |               Detalle              |
-        |-----------------|------------------------------------|
-        |  ID operación   |             users.info             |
+      description: >
+        | Información  | Detalle    |
 
-         Los usuarios finales luego de ser creados en la API [Crear Usuario](#operation/users.create),
-         y asociados a una organización en la API [Invitar Usuario](#operation/organizations.users.invite).
-         Si en algún momento de desea obtener la información de dicho usuario se debe llamar este método
-         indicando el ID de usuario.
+        |--------------|------------|
+
+        | ID operación | users.info |
+
+
+        Los usuarios finales luego de ser creados en la API [Crear
+        Usuario](#operation/users.create),
+
+        y asociados a una organización en la API [Invitar
+        Usuario](#operation/organizations.users.invite).
+
+        Si en algún momento de desea obtener la información de dicho usuario se
+        debe llamar este método
+
+        indicando el tipo documento de identidad más su número de identidad .
       parameters:
         - *ref_0
-        - name: userID
+        - &ref_5
+          name: cod_user
           in: path
-          description: Identificador del Usuario
+          description: >-
+            Identificador del Usuario (cod_user) es un código compuesto por el
+            tipo documento de identidad más su número de identidad; dado a que
+            existe un registro único de usuario en el sitema. En caso de exitir
+            el usuario registrado por alguna otra organización sería imposible
+            saber su ID que lo identifica en el sistema para poder consultar su
+            existencia antes de crearlo.
           required: true
-          example: 1119
+          example: CEDULA-12345678-9
           schema:
-            type: integer
-            format: int32
+            type: string
+            format: '{type_identity_document}-{identity_document}'
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -794,8 +882,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -842,31 +930,32 @@ paths:
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
                     user:
                       name: Ramon
-                      surName: Montalva
-                      middleName: Montoya
+                      surname: Montalva Montoya
                       email: tucorreo@empresa.cl
-                      identityDocument: 12345678-9
-                      typeIdentityDocument: CEDULA
-                      serieIdentityDocument: '123123123'
+                      identity_document: 12345678-9
+                      type_identity_document: CEDULA
+                      serie_identity_document: '123123123'
                       password: myS3cretPass
                       address: 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes'
                       gender: male
-                      birth: 31-12-1970
-                      phone: (2) 2219 8406
+                      birth: '1970-12-31'
+                      phone: '222198406'
+                      certificate: OK
+                      type: internal
         '400': *ref_3
         '500': *ref_4
       x-codeSamples:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url https://e-digital.cl/api/users/%7BuserID%7D \
+              --url https://apipub.e-digital.global/api/users/%7Bcod_user%7D \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/users/%7BuserID%7D")
+              .url("https://apipub.e-digital.global/api/users/%7Bcod_user%7D")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -875,7 +964,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/users/%7BuserID%7D");
+            RestClient("https://apipub.e-digital.global/api/users/%7Bcod_user%7D");
 
             var request = new RestRequest(Method.GET);
 
@@ -887,7 +976,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/users/%7BuserID%7D",
+              "url": "https://apipub.e-digital.global/api/users/%7Bcod_user%7D",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -903,9 +992,9 @@ paths:
 
             var options = {
               "method": "GET",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/users/%7BuserID%7D",
+              "path": "/api/users/%7Bcod_user%7D",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -932,7 +1021,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/users/%7Bcod_user%7D",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -958,11 +1047,11 @@ paths:
           source: |-
             import http.client
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
             headers = { 'token': "SOME_STRING_VALUE" }
 
-            conn.request("GET", "/api/users/%7BuserID%7D", headers=headers)
+            conn.request("GET", "/api/users/%7Bcod_user%7D", headers=headers)
 
             res = conn.getresponse()
             data = res.read()
@@ -990,34 +1079,12 @@ paths:
         este método y de esta forma efectuar tal acción.
       parameters:
         - *ref_0
-        - name: userID
-          in: path
-          description: Identificador del Usuario
-          required: true
-          example: 1119
-          schema:
-            type: integer
-            format: int32
+        - *ref_5
       requestBody:
         content:
           application/json:
             schema:
               type: object
-              required:
-                - name
-                - surName
-                - middleName
-                - email
-                - identityDocument
-                - typeIdentityDocument
-                - serieIdentityDocument
-                - password
-                - address
-                - gender
-                - birth
-                - phone
-                - organization
-                - move
               properties:
                 name:
                   type: string
@@ -1035,38 +1102,67 @@ paths:
                   type: string
                   description: >-
                     Ejemplo &#58; `Montoya` <br> Apellido materno del usuario a
-                    crear.
+                    crear. <br> ***(EN LO QUE NOS PIDIERON INDICABAN QUE FALTABA
+                    ESTO APELLIDO MATERNO)***
                   example: Montoya
-                email:
-                  type: string
-                  description: >-
-                    Ejemplo &#58; `tucorreo@empresa.cl` <br> Corresponde al
-                    email del usuario a crear.
-                  example: tucorreo@empresa.cl
-                identityDocument:
+                identity_document:
                   type: string
                   description: Ejemplo &#58; `12345678-9` <br>  Rut del usuario a crear.
                   example: 12345678-9
-                typeIdentityDocument:
+                type_identity_document:
                   type: string
                   enum:
                     - CEDULA_EXT
                     - CEDULA
-                  description: |
+                  description: >
                     Ejemplo &#58; `CEDULA`
                      <br> Corresponde al tipo de cedula del usuario a crear <br>
 
-                    | Valor| Descripción |
-                    |-------|-------------|
-                    |CEDULA_EXT| En el caso de ser una cedula extranjera|
-                    |CEDULA| En el caso de ser una cedula chilena   |
+                    |    Valor   |                          
+                    Descripción                        |PAIS |
+
+                    |------------|--------------------------------------------------------------|-----|
+
+                    |CEDULA_EXT  | En el caso de ser una cedula
+                    extranjera                      |CL   |
+
+                    |CEDULA      | En el caso de ser una cedula
+                    chilena                         |CL   |
+
+                    | DNI        | En el caso de ser un documento de identidad
+                    peruano          |PE   |
+
+                    | CE         | En el caso de ser Canet de extranjero
+                    peruano                |PE   |
+
+                    | PTP        | En el caso de ser una Tarjeta de permiso de
+                    trabaajo peruano |PE   |
+
+                    | PASAPORTE  | En el caso de ser un
+                    Pasaporte                               |PE   |
+
+                    | CFP        | En el caso de ser un documento de identidad
+                    brasilero        |BR   |
                   example: CEDULA_EXT
-                serieIdentityDocument:
+                serie_identity_document:
                   type: string
                   description: >-
                     Ejemplo &#58; `123123123` <br> Nro de Serie del documento
                     del usuario a crear.
                   example: '123123123'
+                email:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `tucorreo2@empresa.cl` <br> Corresponde al
+                    email del usuario a modificar.
+                  example: tucorreo2@empresa.cl
+                email2:
+                  type: string
+                  description: >-
+                    Ejemplo &#58; `tucorreo@empresa.cl` <br> Corresponde al
+                    email secundario del usuario a crear. Puede ser el email
+                    corporativo
+                  example: tucorreo@empresa.cl
                 password:
                   type: string
                   description: >-
@@ -1100,21 +1196,27 @@ paths:
                     Ejemplo &#58; `(2) 2219 8406` <br>  Número de teléfono del
                     usuario a crear.
                   example: (2) 2219 8406
-                organization:
+                type:
                   type: string
-                  description: >-
-                    Ejemplo &#58; `FEBOS-EXT` <br>  La organización a donde
-                    pertenece al usuario a modificar.
-                  example: FEBOS-EXT
-                move:
-                  type: boolean
                   enum:
-                    - 'true'
-                    - 'false'
-                  description: >-
-                    Ejemplo &#58; `true` <br>  Corresponde a si se quiere mover
-                    de unidad.
-                  example: 'true'
+                    - internal
+                    - external
+                  description: >
+                    Ejemplo &#58; `external` Corresponde al tipo de usuario a
+                    crear <br>
+
+                    | Valor    |
+                    Descripción                                                              
+                    |
+
+                    |----------|---------------------------------------------------------------------------|
+
+                    | internal | Usuarios que son parte de la organización
+                    (empleados, socios, etc)        |
+
+                    | external | Usuarios que no son parte de la organización
+                    como proveedores o clientes  |
+                  example: internal
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -1123,8 +1225,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -1172,10 +1274,10 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request PUT \
-              --url https://e-digital.cl/api/users/%7BuserID%7D \
+              --url https://apipub.e-digital.global/api/users/%7Bcod_user%7D \
               --header 'content-type: application/json' \
               --header 'token: SOME_STRING_VALUE' \
-              --data '{"name":"Ramon","surName":"Montalva","middleName":"Montoya","email":"tucorreo@empresa.cl","identityDocument":"12345678-9","typeIdentityDocument":"CEDULA_EXT","serieIdentityDocument":"123123123","password":"myS3cretPass","address":"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes","gender":"male","birth":"1970-12-31","phone":"(2) 2219 8406","organization":"FEBOS-EXT","move":"true"}'
+              --data '{"name":"Ramon","surName":"Montalva","middleName":"Montoya","identity_document":"12345678-9","type_identity_document":"CEDULA_EXT","serie_identity_document":"123123123","email":"tucorreo2@empresa.cl","email2":"tucorreo@empresa.cl","password":"myS3cretPass","address":"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes","gender":"male","birth":"1970-12-31","phone":"(2) 2219 8406","type":"internal"}'
         - lang: Java + Okhttp
           source: >-
             OkHttpClient client = new OkHttpClient();
@@ -1184,13 +1286,13 @@ paths:
             MediaType mediaType = MediaType.parse("application/json");
 
             RequestBody body = RequestBody.create(mediaType,
-            "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
+            "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"123123123\",\"email\":\"tucorreo2@empresa.cl\",\"email2\":\"tucorreo@empresa.cl\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
             100 – Piso 15 (Oficina 1519), Las
             Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2)
-            2219 8406\",\"organization\":\"FEBOS-EXT\",\"move\":\"true\"}");
+            2219 8406\",\"type\":\"internal\"}");
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/users/%7BuserID%7D")
+              .url("https://apipub.e-digital.global/api/users/%7Bcod_user%7D")
               .put(body)
               .addHeader("content-type", "application/json")
               .addHeader("token", "SOME_STRING_VALUE")
@@ -1200,7 +1302,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/users/%7BuserID%7D");
+            RestClient("https://apipub.e-digital.global/api/users/%7Bcod_user%7D");
 
             var request = new RestRequest(Method.PUT);
 
@@ -1209,11 +1311,10 @@ paths:
             request.AddHeader("token", "SOME_STRING_VALUE");
 
             request.AddParameter("application/json",
-            "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
+            "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"123123123\",\"email\":\"tucorreo2@empresa.cl\",\"email2\":\"tucorreo@empresa.cl\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
             100 – Piso 15 (Oficina 1519), Las
             Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2)
-            2219 8406\",\"organization\":\"FEBOS-EXT\",\"move\":\"true\"}",
-            ParameterType.RequestBody);
+            2219 8406\",\"type\":\"internal\"}", ParameterType.RequestBody);
 
             IRestResponse response = client.Execute(request);
         - lang: Javascript + Jquery
@@ -1221,14 +1322,14 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/users/%7BuserID%7D",
+              "url": "https://apipub.e-digital.global/api/users/%7Bcod_user%7D",
               "method": "PUT",
               "headers": {
                 "content-type": "application/json",
                 "token": "SOME_STRING_VALUE"
               },
               "processData": false,
-              "data": "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2) 2219 8406\",\"organization\":\"FEBOS-EXT\",\"move\":\"true\"}"
+              "data": "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"123123123\",\"email\":\"tucorreo2@empresa.cl\",\"email2\":\"tucorreo@empresa.cl\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2) 2219 8406\",\"type\":\"internal\"}"
             }
 
             $.ajax(settings).done(function (response) {
@@ -1240,9 +1341,9 @@ paths:
 
             var options = {
               "method": "PUT",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/users/%7BuserID%7D",
+              "path": "/api/users/%7Bcod_user%7D",
               "headers": {
                 "content-type": "application/json",
                 "token": "SOME_STRING_VALUE"
@@ -1266,17 +1367,17 @@ paths:
               name: 'Ramon',
               surName: 'Montalva',
               middleName: 'Montoya',
-              email: 'tucorreo@empresa.cl',
-              identityDocument: '12345678-9',
-              typeIdentityDocument: 'CEDULA_EXT',
-              serieIdentityDocument: '123123123',
+              identity_document: '12345678-9',
+              type_identity_document: 'CEDULA_EXT',
+              serie_identity_document: '123123123',
+              email: 'tucorreo2@empresa.cl',
+              email2: 'tucorreo@empresa.cl',
               password: 'myS3cretPass',
               address: 'Badajoz 100 – Piso 15 (Oficina 1519), Las Condes',
               gender: 'male',
               birth: '1970-12-31',
               phone: '(2) 2219 8406',
-              organization: 'FEBOS-EXT',
-              move: 'true'
+              type: 'internal'
             }));
             req.end();
         - lang: Php + Curl
@@ -1286,14 +1387,14 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/users/%7Bcod_user%7D",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
               CURLOPT_TIMEOUT => 30,
               CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
               CURLOPT_CUSTOMREQUEST => "PUT",
-              CURLOPT_POSTFIELDS => "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2) 2219 8406\",\"organization\":\"FEBOS-EXT\",\"move\":\"true\"}",
+              CURLOPT_POSTFIELDS => "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"123123123\",\"email\":\"tucorreo2@empresa.cl\",\"email2\":\"tucorreo@empresa.cl\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz 100 – Piso 15 (Oficina 1519), Las Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2) 2219 8406\",\"type\":\"internal\"}",
               CURLOPT_HTTPHEADER => array(
                 "content-type: application/json",
                 "token: SOME_STRING_VALUE"
@@ -1315,14 +1416,14 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             payload =
-            "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"email\":\"tucorreo@empresa.cl\",\"identityDocument\":\"12345678-9\",\"typeIdentityDocument\":\"CEDULA_EXT\",\"serieIdentityDocument\":\"123123123\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
+            "{\"name\":\"Ramon\",\"surName\":\"Montalva\",\"middleName\":\"Montoya\",\"identity_document\":\"12345678-9\",\"type_identity_document\":\"CEDULA_EXT\",\"serie_identity_document\":\"123123123\",\"email\":\"tucorreo2@empresa.cl\",\"email2\":\"tucorreo@empresa.cl\",\"password\":\"myS3cretPass\",\"address\":\"Badajoz
             100 – Piso 15 (Oficina 1519), Las
             Condes\",\"gender\":\"male\",\"birth\":\"1970-12-31\",\"phone\":\"(2)
-            2219 8406\",\"organization\":\"FEBOS-EXT\",\"move\":\"true\"}"
+            2219 8406\",\"type\":\"internal\"}"
 
 
             headers = {
@@ -1330,7 +1431,7 @@ paths:
                 'token': "SOME_STRING_VALUE"
                 }
 
-            conn.request("PUT", "/api/users/%7BuserID%7D", payload, headers)
+            conn.request("PUT", "/api/users/%7Bcod_user%7D", payload, headers)
 
 
             res = conn.getresponse()
@@ -1339,7 +1440,7 @@ paths:
 
 
             print(data.decode("utf-8"))
-  '/users/{userID}/history':
+  '/users/{cod_user}/history':
     get:
       summary: Obtiene un historial de un usuario según su ID  (No Implementado)
       operationId: users.history
@@ -1355,14 +1456,7 @@ paths:
          método y así obtener el total de estos registros.
       parameters:
         - *ref_0
-        - name: userID
-          in: path
-          description: Identificador del Usuario
-          required: true
-          example: 1119
-          schema:
-            type: integer
-            format: int32
+        - *ref_5
         - name: from
           in: query
           description: >-
@@ -1390,7 +1484,9 @@ paths:
             type: integer
         - name: records
           in: query
-          description: Corresponde a la cantidad de registros que se quiere por página.
+          description: >-
+            Corresponde a la cantidad de registros que se quiere por página.
+            Máximo `100`
           required: false
           example: 10
           schema:
@@ -1403,8 +1499,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -1468,14 +1564,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url 'https://e-digital.cl/api/users/%7BuserID%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
+              --url 'https://apipub.e-digital.global/api/users/%7Bcod_user%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/users/%7BuserID%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
+              .url("https://apipub.e-digital.global/api/users/%7Bcod_user%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -1484,7 +1580,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/users/%7BuserID%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
+            RestClient("https://apipub.e-digital.global/api/users/%7Bcod_user%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
 
             var request = new RestRequest(Method.GET);
 
@@ -1496,7 +1592,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/users/%7BuserID%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+              "url": "https://apipub.e-digital.global/api/users/%7Bcod_user%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -1512,9 +1608,9 @@ paths:
 
             var options = {
               "method": "GET",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/users/%7BuserID%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+              "path": "/api/users/%7Bcod_user%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -1541,7 +1637,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/users/%7Bcod_user%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -1568,14 +1664,14 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
             conn.request("GET",
-            "/api/users/%7BuserID%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+            "/api/users/%7Bcod_user%7D/history?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
             headers=headers)
 
 
@@ -1585,7 +1681,7 @@ paths:
 
 
             print(data.decode("utf-8"))
-  '/users/{userID}/documents':
+  '/users/{cod_user}/documents':
     get:
       summary: >-
         Obtiene una lista de documentos de un usuario según su ID  (No
@@ -1629,36 +1725,31 @@ paths:
 
         |-------------|---------------------------------------------------------------------------------|
 
-        |    todos    | Se obtiene el listado completo de los documentos del
+        | all         | Se obtiene el listado completo de los documentos del
         usuario.                   |
 
-        | pendiente   | Se obtienen solo los documentos pendietes del
+        | open        | Se obtienen solo los documentos pendietes del
         usuario.                          |
 
-        | finalizados | Se obtienen solo los documentos finalizados del
+        | signed      | Se obtienen solo los documentos finalizados del
         usuario.                        |
 
-        | rechazados  | Se obtiene solo los documentos rechazados del
+        | rejected    | Se obtiene solo los documentos rechazados del
         usuario.                          |
 
          </details>
+        - ESTE ENDOINT TAMBIÉN DEBE SER TRATADO CON UNA PÁGINACIÓN COMO EL
+        HISTORIAL DEL LOG
       parameters:
         - *ref_0
-        - name: userID
-          in: path
-          description: Identificador del Usuario
-          required: true
-          example: 1119
-          schema:
-            type: integer
-            format: int32
-        - name: tipoDocumento
+        - *ref_5
+        - name: state_document
           description: Corresponde al filtro que se quiere aplicar a la lista obtenida.
           in: query
           schema:
             type: string
           required: true
-          example: todos
+          example: all
         - name: from
           in: query
           description: >-
@@ -1685,8 +1776,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -1741,14 +1832,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url 'https://e-digital.cl/api/users/%7BuserID%7D/documents?tipoDocumento=SOME_STRING_VALUE&from=SOME_STRING_VALUE&to=SOME_STRING_VALUE' \
+              --url 'https://apipub.e-digital.global/api/users/%7Bcod_user%7D/documents?state_document=SOME_STRING_VALUE&from=SOME_STRING_VALUE&to=SOME_STRING_VALUE' \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/users/%7BuserID%7D/documents?tipoDocumento=SOME_STRING_VALUE&from=SOME_STRING_VALUE&to=SOME_STRING_VALUE")
+              .url("https://apipub.e-digital.global/api/users/%7Bcod_user%7D/documents?state_document=SOME_STRING_VALUE&from=SOME_STRING_VALUE&to=SOME_STRING_VALUE")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -1757,7 +1848,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/users/%7BuserID%7D/documents?tipoDocumento=SOME_STRING_VALUE&from=SOME_STRING_VALUE&to=SOME_STRING_VALUE");
+            RestClient("https://apipub.e-digital.global/api/users/%7Bcod_user%7D/documents?state_document=SOME_STRING_VALUE&from=SOME_STRING_VALUE&to=SOME_STRING_VALUE");
 
             var request = new RestRequest(Method.GET);
 
@@ -1769,7 +1860,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/users/%7BuserID%7D/documents?tipoDocumento=SOME_STRING_VALUE&from=SOME_STRING_VALUE&to=SOME_STRING_VALUE",
+              "url": "https://apipub.e-digital.global/api/users/%7Bcod_user%7D/documents?state_document=SOME_STRING_VALUE&from=SOME_STRING_VALUE&to=SOME_STRING_VALUE",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -1785,9 +1876,9 @@ paths:
 
             var options = {
               "method": "GET",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/users/%7BuserID%7D/documents?tipoDocumento=SOME_STRING_VALUE&from=SOME_STRING_VALUE&to=SOME_STRING_VALUE",
+              "path": "/api/users/%7Bcod_user%7D/documents?state_document=SOME_STRING_VALUE&from=SOME_STRING_VALUE&to=SOME_STRING_VALUE",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -1814,7 +1905,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D/documents?tipoDocumento=SOME_STRING_VALUE&from=SOME_STRING_VALUE&to=SOME_STRING_VALUE",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/users/%7Bcod_user%7D/documents?state_document=SOME_STRING_VALUE&from=SOME_STRING_VALUE&to=SOME_STRING_VALUE",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -1841,14 +1932,14 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
             conn.request("GET",
-            "/api/users/%7BuserID%7D/documents?tipoDocumento=SOME_STRING_VALUE&from=SOME_STRING_VALUE&to=SOME_STRING_VALUE",
+            "/api/users/%7Bcod_user%7D/documents?state_document=SOME_STRING_VALUE&from=SOME_STRING_VALUE&to=SOME_STRING_VALUE",
             headers=headers)
 
 
@@ -1858,230 +1949,7 @@ paths:
 
 
             print(data.decode("utf-8"))
-  '/users/{userID}/cetificates':
-    get:
-      summary: >-
-        Obtiene un listado de los certificados de un usuario según su ID  (No
-        Implementado)
-      operationId: users.certificates.list
-      tags:
-        - Users
-      description: |
-        | Información     |               Detalle              |
-        |-----------------|------------------------------------|
-        |  ID operación   |      users.certificates.list       |
-
-         Un certificado es la identificación virtual de cada persona.
-         En esta API es posible listar dichos certificado que pertenezcan a un usuario previamente indicado.
-         Cada usuario debe tener al menos un certificado para poder firmar documentos.
-         La creación y vinculación ha un usuario se pueden efectuar con la API [Crear Certificado Usuario](#operation/users.certificates.create)
-      parameters:
-        - *ref_0
-        - name: userID
-          in: path
-          description: Identificador del Usuario
-          required: true
-          example: 1119
-          schema:
-            type: integer
-            format: int32
-        - name: page
-          in: query
-          description: Corresponde al número de páginas que se quiere obtener la respuesta.
-          required: false
-          example: 5
-          schema:
-            type: integer
-        - name: records
-          in: query
-          description: Corresponde a la cantidad de registros que se quiere por página.
-          required: false
-          example: 10
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Operación efectuada de forma satisfactoria
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - codigo
-                  - mensaje
-                properties:
-                  code:
-                    type: integer
-                    format: int32
-                    description: >-
-                      Código de resultado de la operación, siendo `0` un
-                      resultado satisfactorio. Cualquier otro código es
-                      indicativo de error.
-                    example: null
-                  message:
-                    type: string
-                    description: >-
-                      Mensaje de respuesta, traducción humana del código de
-                      resultado.
-                  duration:
-                    type: integer
-                    format: int32
-                    description: >-
-                      Tiempo (en milisegundos) que tardó en procesarse la
-                      solicitud.
-                  time:
-                    type: string
-                    description: >-
-                      Hora a la que llego la solicitud a E-Digital, en formato
-                      `yyyy-MM-dd HH:mm:ss.SSS`
-                  trackingId:
-                    type: string
-                    description: >-
-                      Código único de seguimiento. Este código representa al
-                      proceso completo de la solicitud realizada, si tienes
-                      problemas, te pediremos este código.
-                  certificates:
-                    type: array
-                    items:
-                      type: string
-                    description: Listado de los certificado asociados al usuario indicado
-                  totalRegistros:
-                    type: integer
-                    description: Cantidad de los registros encontrados
-              examples:
-                Token Inválido: *ref_1
-                Sin Permiso: *ref_2
-                Respuesta OK:
-                  value:
-                    code: 0
-                    duration: 780
-                    time: 2020-08-04T09:44:42.245Z
-                    message: Listado de certificado obtenido de forma satisfactoria.
-                    totalRegistros: 50
-                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
-        '400': *ref_3
-        '500': *ref_4
-      x-codeSamples:
-        - lang: Shell + Curl
-          source: |-
-            curl --request GET \
-              --url 'https://e-digital.cl/api/users/%7BuserID%7D/cetificates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
-              --header 'token: SOME_STRING_VALUE'
-        - lang: Java + Okhttp
-          source: |-
-            OkHttpClient client = new OkHttpClient();
-
-            Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/users/%7BuserID%7D/cetificates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
-              .get()
-              .addHeader("token", "SOME_STRING_VALUE")
-              .build();
-
-            Response response = client.newCall(request).execute();
-        - lang: Csharp + Restsharp
-          source: >-
-            var client = new
-            RestClient("https://e-digital.cl/api/users/%7BuserID%7D/cetificates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
-
-            var request = new RestRequest(Method.GET);
-
-            request.AddHeader("token", "SOME_STRING_VALUE");
-
-            IRestResponse response = client.Execute(request);
-        - lang: Javascript + Jquery
-          source: |-
-            var settings = {
-              "async": true,
-              "crossDomain": true,
-              "url": "https://e-digital.cl/api/users/%7BuserID%7D/cetificates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
-              "method": "GET",
-              "headers": {
-                "token": "SOME_STRING_VALUE"
-              }
-            }
-
-            $.ajax(settings).done(function (response) {
-              console.log(response);
-            });
-        - lang: Node + Native
-          source: |-
-            var http = require("https");
-
-            var options = {
-              "method": "GET",
-              "hostname": "e-digital.cl",
-              "port": null,
-              "path": "/api/users/%7BuserID%7D/cetificates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
-              "headers": {
-                "token": "SOME_STRING_VALUE"
-              }
-            };
-
-            var req = http.request(options, function (res) {
-              var chunks = [];
-
-              res.on("data", function (chunk) {
-                chunks.push(chunk);
-              });
-
-              res.on("end", function () {
-                var body = Buffer.concat(chunks);
-                console.log(body.toString());
-              });
-            });
-
-            req.end();
-        - lang: Php + Curl
-          source: |-
-            <?php
-
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D/cetificates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_ENCODING => "",
-              CURLOPT_MAXREDIRS => 10,
-              CURLOPT_TIMEOUT => 30,
-              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-              CURLOPT_CUSTOMREQUEST => "GET",
-              CURLOPT_HTTPHEADER => array(
-                "token: SOME_STRING_VALUE"
-              ),
-            ));
-
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-
-            curl_close($curl);
-
-            if ($err) {
-              echo "cURL Error #:" . $err;
-            } else {
-              echo $response;
-            }
-        - lang: Python + Python3
-          source: >-
-            import http.client
-
-
-            conn = http.client.HTTPSConnection("e-digital.cl")
-
-
-            headers = { 'token': "SOME_STRING_VALUE" }
-
-
-            conn.request("GET",
-            "/api/users/%7BuserID%7D/cetificates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
-            headers=headers)
-
-
-            res = conn.getresponse()
-
-            data = res.read()
-
-
-            print(data.decode("utf-8"))
+  '/users/{cod_user}/cetificates':
     post:
       summary: Carga un certificado para un usuario existente.  (No Implementado)
       operationId: users.certificates.create
@@ -2105,44 +1973,22 @@ paths:
         Usuario](https://e-digital.cl/api/users)
       parameters:
         - *ref_0
-        - name: userID
-          in: path
-          description: Identificador del Usuario
-          required: true
-          example: 1119
-          schema:
-            type: integer
-            format: int32
+        - *ref_5
       requestBody:
         content:
           application/json:
             schema:
               type: object
               required:
-                - nameCertificate
                 - password
-                - base64
               properties:
-                nameCertificate:
-                  type: string
-                  description: >-
-                    Ejemplo &#58; `certificadoPrueba.pfx` <br> Nombre del
-                    certificado
-                  example: certificadoPrueba.pfx
                 password:
                   type: string
                   description: >-
                     Ejemplo &#58; `MiS3cretP4as$word` <br>  Password del
-                    certificado para poder abrirlo.
+                    certificado para poder abrirlo. <br> ***(CREO QUE AQUI FALTA
+                    EL BASE 64 DEL DOCUMENTO)***
                   example: MiS3cretP4as$word
-                base64:
-                  type: string
-                  description: >-
-                    Ejemplo &#58;
-                    `PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==`
-                    <br>Documento codificado en Base64 con encode UTF-8 que
-                    contiene la estructura del certificado.
-                  example: PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -2198,7 +2044,7 @@ paths:
                     code: 0
                     duration: 780
                     time: 2020-08-04T09:44:42.245Z
-                    message: Usuario registrado de forma satisfactoria
+                    message: Certificado registrado de forma satisfactoria
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
                     certificateId: 1119
         '400': *ref_3
@@ -2207,10 +2053,10 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request POST \
-              --url https://e-digital.cl/api/users/%7BuserID%7D/cetificates \
+              --url https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates \
               --header 'content-type: application/json' \
               --header 'token: SOME_STRING_VALUE' \
-              --data '{"nameCertificate":"certificadoPrueba.pfx","password":"MiS3cretP4as$word","base64":"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg=="}'
+              --data '{"password":"MiS3cretP4as$word"}'
         - lang: Java + Okhttp
           source: >-
             OkHttpClient client = new OkHttpClient();
@@ -2219,10 +2065,10 @@ paths:
             MediaType mediaType = MediaType.parse("application/json");
 
             RequestBody body = RequestBody.create(mediaType,
-            "{\"nameCertificate\":\"certificadoPrueba.pfx\",\"password\":\"MiS3cretP4as$word\",\"base64\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==\"}");
+            "{\"password\":\"MiS3cretP4as$word\"}");
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/users/%7BuserID%7D/cetificates")
+              .url("https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates")
               .post(body)
               .addHeader("content-type", "application/json")
               .addHeader("token", "SOME_STRING_VALUE")
@@ -2232,7 +2078,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/users/%7BuserID%7D/cetificates");
+            RestClient("https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates");
 
             var request = new RestRequest(Method.POST);
 
@@ -2241,8 +2087,7 @@ paths:
             request.AddHeader("token", "SOME_STRING_VALUE");
 
             request.AddParameter("application/json",
-            "{\"nameCertificate\":\"certificadoPrueba.pfx\",\"password\":\"MiS3cretP4as$word\",\"base64\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==\"}",
-            ParameterType.RequestBody);
+            "{\"password\":\"MiS3cretP4as$word\"}", ParameterType.RequestBody);
 
             IRestResponse response = client.Execute(request);
         - lang: Javascript + Jquery
@@ -2250,14 +2095,14 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/users/%7BuserID%7D/cetificates",
+              "url": "https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates",
               "method": "POST",
               "headers": {
                 "content-type": "application/json",
                 "token": "SOME_STRING_VALUE"
               },
               "processData": false,
-              "data": "{\"nameCertificate\":\"certificadoPrueba.pfx\",\"password\":\"MiS3cretP4as$word\",\"base64\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==\"}"
+              "data": "{\"password\":\"MiS3cretP4as$word\"}"
             }
 
             $.ajax(settings).done(function (response) {
@@ -2269,9 +2114,9 @@ paths:
 
             var options = {
               "method": "POST",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/users/%7BuserID%7D/cetificates",
+              "path": "/api/users/%7Bcod_user%7D/cetificates",
               "headers": {
                 "content-type": "application/json",
                 "token": "SOME_STRING_VALUE"
@@ -2291,11 +2136,7 @@ paths:
               });
             });
 
-            req.write(JSON.stringify({
-              nameCertificate: 'certificadoPrueba.pfx',
-              password: 'MiS3cretP4as$word',
-              base64: 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg=='
-            }));
+            req.write(JSON.stringify({password: 'MiS3cretP4as$word'}));
             req.end();
         - lang: Php + Curl
           source: |-
@@ -2304,14 +2145,14 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D/cetificates",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
               CURLOPT_TIMEOUT => 30,
               CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
               CURLOPT_CUSTOMREQUEST => "POST",
-              CURLOPT_POSTFIELDS => "{\"nameCertificate\":\"certificadoPrueba.pfx\",\"password\":\"MiS3cretP4as$word\",\"base64\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==\"}",
+              CURLOPT_POSTFIELDS => "{\"password\":\"MiS3cretP4as$word\"}",
               CURLOPT_HTTPHEADER => array(
                 "content-type: application/json",
                 "token: SOME_STRING_VALUE"
@@ -2333,11 +2174,10 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
-            payload =
-            "{\"nameCertificate\":\"certificadoPrueba.pfx\",\"password\":\"MiS3cretP4as$word\",\"base64\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==\"}"
+            payload = "{\"password\":\"MiS3cretP4as$word\"}"
 
 
             headers = {
@@ -2345,8 +2185,8 @@ paths:
                 'token': "SOME_STRING_VALUE"
                 }
 
-            conn.request("POST", "/api/users/%7BuserID%7D/cetificates", payload,
-            headers)
+            conn.request("POST", "/api/users/%7Bcod_user%7D/cetificates",
+            payload, headers)
 
 
             res = conn.getresponse()
@@ -2355,7 +2195,7 @@ paths:
 
 
             print(data.decode("utf-8"))
-  '/users/{userID}/cetificates/{certificateID}':
+  '/users/{cod_user}/cetificates/{certificate_id}':
     get:
       summary: >-
         Obtiene informacion de un certificado según su usuarioId y
@@ -2373,15 +2213,8 @@ paths:
          En esta API es posible obtener la información de dicho certificado indicando su fecha de vigencia.
       parameters:
         - *ref_0
-        - name: userID
-          in: path
-          description: Identificador del Usuario
-          required: true
-          example: 1119
-          schema:
-            type: integer
-            format: int32
-        - name: certificateID
+        - *ref_5
+        - name: certificate_id
           in: path
           description: Identificador del Certificado
           required: true
@@ -2397,8 +2230,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -2458,14 +2291,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url https://e-digital.cl/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D \
+              --url https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D")
+              .url("https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -2474,7 +2307,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D");
+            RestClient("https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D");
 
             var request = new RestRequest(Method.GET);
 
@@ -2486,7 +2319,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D",
+              "url": "https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -2502,9 +2335,9 @@ paths:
 
             var options = {
               "method": "GET",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D",
+              "path": "/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -2531,7 +2364,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -2558,14 +2391,14 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
             conn.request("GET",
-            "/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D",
+            "/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D",
             headers=headers)
 
 
@@ -2604,15 +2437,8 @@ paths:
         Certificado](#operation/users.certificates.create)
       parameters:
         - *ref_0
-        - name: userID
-          in: path
-          description: Identificador del Usuario
-          required: true
-          example: 1119
-          schema:
-            type: integer
-            format: int32
-        - name: certificateID
+        - *ref_5
+        - name: certificate_id
           in: path
           description: Identificador del Certificado
           required: true
@@ -2628,8 +2454,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -2677,14 +2503,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request PUT \
-              --url https://e-digital.cl/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D \
+              --url https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D")
+              .url("https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D")
               .put(null)
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -2693,7 +2519,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D");
+            RestClient("https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D");
 
             var request = new RestRequest(Method.PUT);
 
@@ -2705,7 +2531,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D",
+              "url": "https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D",
               "method": "PUT",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -2721,9 +2547,9 @@ paths:
 
             var options = {
               "method": "PUT",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D",
+              "path": "/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -2750,7 +2576,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -2777,14 +2603,14 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
             conn.request("PUT",
-            "/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D",
+            "/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D",
             headers=headers)
 
 
@@ -2810,15 +2636,8 @@ paths:
          Si en algún momento se desea volver a crear un certificado se puede realizar en la API [Crear Certificado](#operation/users.certificates.create)
       parameters:
         - *ref_0
-        - name: userID
-          in: path
-          description: Identificador del Usuario
-          required: true
-          example: 1119
-          schema:
-            type: integer
-            format: int32
-        - name: certificateID
+        - *ref_5
+        - name: certificate_id
           in: path
           description: Identificador del Certificado
           required: true
@@ -2834,8 +2653,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -2883,14 +2702,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request DELETE \
-              --url https://e-digital.cl/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D \
+              --url https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D")
+              .url("https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D")
               .delete(null)
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -2899,7 +2718,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D");
+            RestClient("https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D");
 
             var request = new RestRequest(Method.DELETE);
 
@@ -2911,7 +2730,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D",
+              "url": "https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D",
               "method": "DELETE",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -2927,9 +2746,9 @@ paths:
 
             var options = {
               "method": "DELETE",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D",
+              "path": "/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -2956,7 +2775,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -2983,14 +2802,14 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
             conn.request("DELETE",
-            "/api/users/%7BuserID%7D/cetificates/%7BcertificateID%7D",
+            "/api/users/%7Bcod_user%7D/cetificates/%7Bcertificate_id%7D",
             headers=headers)
 
 
@@ -3027,117 +2846,77 @@ paths:
               type: object
               required:
                 - signers
-                - userRole
-                - approvers
-                - finalRecipients
-                - templateId
+                - final_recipients
+                - template_id
                 - description
-                - afterExpire
-                - flowType
-                - notificationFrecuency
-                - signRequirement
-                - vigency
-                - vigencyType
-                - isPublic
-                - document
-                - signPositionX
-                - signPositionY
-                - signaturePage
               properties:
-                signers:
-                  type: array
-                  description: >-
-                    Ejemplo &#58; `["nuermorut1", "numerorut2"]` <br> Cantidad
-                    de firmantes según posición del arreglo
-                  example: '["nuermorut1", "numerorut2"]'
-                userRole:
-                  type: string
-                  enum:
-                    - viewer
-                    - signer
-                    - approver
-                  description: Ejemplo &#58; `viewer` <br> Tipo de persona que firmara
-                  example: viewer
-                approvers:
-                  type: array
-                  description: 'Ejemplo &#58; `["130410847"]` <br> Rut de los aprobadores'
-                  example: '["130410847"]'
-                finalRecipients:
-                  type: array
-                  description: >-
-                    Ejemplo &#58; `["signer-2"]` <br> Destinatarios finales del
-                    documento.
-                  example: '["signer-2"]'
-                templateId:
-                  type: integer
-                  description: >-
-                    Ejemplo &#58; `1047` <br>  Es template de firma documento
-                    que se ocupara.
-                  example: '1047'
                 description:
                   type: string
                   description: |
                     Ejemplo &#58; `prueba jonner11 2020-01-03T13:47:31.635Z`
                     <br>  Es la descripción al momento de guardar el documento.
                   example: 'prueba jonner11 2020-01-03T13:47:31.635Z'
-                afterExpire:
-                  type: string
+                template_id:
+                  type: integer
                   description: >-
-                    Ejemplo &#58; `close` <br> Que pasara una vez expirado el
+                    Ejemplo &#58; `1047` <br>  Es template de firma documento
+                    que se ocupará.
+                  example: '1047'
+                approvers:
+                  type: array
+                  description: >-
+                    Ejemplo &#58; `["130410847", "33333333-3"]` <br> Rut de los
+                    aprobadores
+                  example:
+                    - '130410847'
+                    - 33333333-3
+                signers:
+                  type: array
+                  description: >-
+                    Ejemplo &#58; `["11111111-1", "22222222-2"]` <br> Cantidad
+                    de firmantes según posición del arreglo
+                  example:
+                    - 11111111-1
+                    - 22222222-2
+                finalRecipients:
+                  type: array
+                  description: >-
+                    Ejemplo &#58; `["signer-2"]` <br> Destinatarios finales del
                     documento.
-                  example: close
-                flowType:
-                  type: string
-                  description: Ejemplo &#58; `individual` <br> Tipo de flujo
-                  example: individual
-                notificationFrecuency:
-                  type: integer
-                  description: Ejemplo &#58; `1` <br> Frecuencia de notificaciones
-                  example: '1'
-                signRequirement:
-                  type: string
-                  description: Ejemplo &#58; `not_required` <br>  ???
-                  example: not_required
-                vigency:
-                  type: integer
+                  example:
+                    - signer-2
+                settings:
                   description: >-
-                    Ejemplo &#58; `5` <br> Corresponde a la vigencia que se le
-                    dara al documento.
-                  example: '5'
-                vigencyType:
-                  type: string
+                    JSON con parametros extra para modificar los asignados en
+                    las plantillas
+                  type: object
+                  example:
+                    is_public: 'true'
+                    vigency: '5'
+                metadata:
                   description: >-
-                    Ejemplo &#58; `working_days` <br>  Es el tipo de vigencia
-                    que se le dara al documento.
-                  example: working_days
-                isPublic:
-                  type: integer
-                  description: >-
-                    Ejemplo &#58; `0` <br>  Es si el documento sera publico o
-                    no.
-                  example: '0'
+                    Ejemplo &#58; `{"documento":"2312", "tipo":"anexo",
+                    "cod_sap":"3453"}` <br>JSON con información extra asociada
+                    al documento
+                  type: object
+                  example:
+                    documento: '2312'
+                    tipo: anexo
+                    cod_sap: '3453'
                 document:
                   type: string
-                  description: Ejemplo &#58; `????` <br>  ???
-                  example: '????'
-                signPositionX:
-                  type: integer
-                  description: >-
-                    Ejemplo &#58; `22` <br>  Coordenadas para posicionar la
-                    firma.
-                  example: '22'
-                signPositionY:
-                  type: integer
-                  description: >-
-                    Ejemplo &#58; `25` <br>  Coordenadas para posicionar la
-                    firma.
-                  example: '25'
-                signaturePage:
-                  type: integer
-                  description: >-
-                    Ejemplo &#58; `99` <br>  Página donde se debe colocar la
-                    firma.
-                  example: '99'
+                  description: >
+                    Ruta del documento a subir. Es campo requerido y se alterna
+                    con document_b64 <br>
+
+                    <br>***(HAY QUE VERIFICAR COMO SE REPESENTA ESTO EN LA
+                    DOCUMENTACIÓN)***
+                  example: '@/ruta/del/archivo.pdf'
+                document_b64:
+                  type: string
+                  description: >
+                    Contenido del archivo pdf en base64. Es campo requerido y se
+                    alterna con document_b64 <br>q
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -3146,8 +2925,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -3179,12 +2958,11 @@ paths:
                       Código único de seguimiento. Este código representa al
                       proceso completo de la solicitud realizada, si tienes
                       problemas, te pediremos este código.
-                  documentoId:
-                    type: integer
-                    format: int32
+                  document_hash:
+                    type: string
                     description: >-
                       Código único de documento. Este código representa el id
-                      que se genero al momento de crear el documento.
+                      que se generó al momento de crear el documento.
               examples:
                 Token Inválido: *ref_1
                 Sin Permiso: *ref_2
@@ -3195,17 +2973,17 @@ paths:
                     time: 2020-08-04T09:44:42.245Z
                     message: Documento creado de forma satisfactoria
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                    documentoId: 23456
+                    document_hash: 7fef0af4f81641885aeff9f1e9b76bd0
         '400': *ref_3
         '500': *ref_4
       x-codeSamples:
         - lang: Shell + Curl
           source: |-
             curl --request POST \
-              --url https://e-digital.cl/api/document \
+              --url https://apipub.e-digital.global/api/document \
               --header 'content-type: application/json' \
               --header 'token: SOME_STRING_VALUE' \
-              --data '{"signers":"[\"nuermorut1\", \"numerorut2\"]","userRole":"viewer","approvers":"[\"130410847\"]","finalRecipients":"[\"signer-2\"]","templateId":"1047","description":"prueba jonner11 2020-01-03T13:47:31.635Z","afterExpire":"close","flowType":"individual","notificationFrecuency":"1","signRequirement":"not_required","vigency":"5","vigencyType":"working_days","isPublic":"0","document":"????","signPositionX":"22","signPositionY":"25","signaturePage":"99"}'
+              --data '{"description":"prueba jonner11 2020-01-03T13:47:31.635Z","template_id":"1047","approvers":["130410847","33333333-3"],"signers":["11111111-1","22222222-2"],"finalRecipients":["signer-2"],"settings":{"is_public":"true","vigency":"5"},"metadata":{"documento":"2312","tipo":"anexo","cod_sap":"3453"},"document":"@/ruta/del/archivo.pdf","document_b64":"string"}'
         - lang: Java + Okhttp
           source: >-
             OkHttpClient client = new OkHttpClient();
@@ -3214,13 +2992,11 @@ paths:
             MediaType mediaType = MediaType.parse("application/json");
 
             RequestBody body = RequestBody.create(mediaType,
-            "{\"signers\":\"[\\\"nuermorut1\\\",
-            \\\"numerorut2\\\"]\",\"userRole\":\"viewer\",\"approvers\":\"[\\\"130410847\\\"]\",\"finalRecipients\":\"[\\\"signer-2\\\"]\",\"templateId\":\"1047\",\"description\":\"prueba
-            jonner11
-            2020-01-03T13:47:31.635Z\",\"afterExpire\":\"close\",\"flowType\":\"individual\",\"notificationFrecuency\":\"1\",\"signRequirement\":\"not_required\",\"vigency\":\"5\",\"vigencyType\":\"working_days\",\"isPublic\":\"0\",\"document\":\"????\",\"signPositionX\":\"22\",\"signPositionY\":\"25\",\"signaturePage\":\"99\"}");
+            "{\"description\":\"prueba jonner11
+            2020-01-03T13:47:31.635Z\",\"template_id\":\"1047\",\"approvers\":[\"130410847\",\"33333333-3\"],\"signers\":[\"11111111-1\",\"22222222-2\"],\"finalRecipients\":[\"signer-2\"],\"settings\":{\"is_public\":\"true\",\"vigency\":\"5\"},\"metadata\":{\"documento\":\"2312\",\"tipo\":\"anexo\",\"cod_sap\":\"3453\"},\"document\":\"@/ruta/del/archivo.pdf\",\"document_b64\":\"string\"}");
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/document")
+              .url("https://apipub.e-digital.global/api/document")
               .post(body)
               .addHeader("content-type", "application/json")
               .addHeader("token", "SOME_STRING_VALUE")
@@ -3229,7 +3005,8 @@ paths:
             Response response = client.newCall(request).execute();
         - lang: Csharp + Restsharp
           source: >-
-            var client = new RestClient("https://e-digital.cl/api/document");
+            var client = new
+            RestClient("https://apipub.e-digital.global/api/document");
 
             var request = new RestRequest(Method.POST);
 
@@ -3237,11 +3014,9 @@ paths:
 
             request.AddHeader("token", "SOME_STRING_VALUE");
 
-            request.AddParameter("application/json",
-            "{\"signers\":\"[\\\"nuermorut1\\\",
-            \\\"numerorut2\\\"]\",\"userRole\":\"viewer\",\"approvers\":\"[\\\"130410847\\\"]\",\"finalRecipients\":\"[\\\"signer-2\\\"]\",\"templateId\":\"1047\",\"description\":\"prueba
+            request.AddParameter("application/json", "{\"description\":\"prueba
             jonner11
-            2020-01-03T13:47:31.635Z\",\"afterExpire\":\"close\",\"flowType\":\"individual\",\"notificationFrecuency\":\"1\",\"signRequirement\":\"not_required\",\"vigency\":\"5\",\"vigencyType\":\"working_days\",\"isPublic\":\"0\",\"document\":\"????\",\"signPositionX\":\"22\",\"signPositionY\":\"25\",\"signaturePage\":\"99\"}",
+            2020-01-03T13:47:31.635Z\",\"template_id\":\"1047\",\"approvers\":[\"130410847\",\"33333333-3\"],\"signers\":[\"11111111-1\",\"22222222-2\"],\"finalRecipients\":[\"signer-2\"],\"settings\":{\"is_public\":\"true\",\"vigency\":\"5\"},\"metadata\":{\"documento\":\"2312\",\"tipo\":\"anexo\",\"cod_sap\":\"3453\"},\"document\":\"@/ruta/del/archivo.pdf\",\"document_b64\":\"string\"}",
             ParameterType.RequestBody);
 
             IRestResponse response = client.Execute(request);
@@ -3250,14 +3025,14 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/document",
+              "url": "https://apipub.e-digital.global/api/document",
               "method": "POST",
               "headers": {
                 "content-type": "application/json",
                 "token": "SOME_STRING_VALUE"
               },
               "processData": false,
-              "data": "{\"signers\":\"[\\\"nuermorut1\\\", \\\"numerorut2\\\"]\",\"userRole\":\"viewer\",\"approvers\":\"[\\\"130410847\\\"]\",\"finalRecipients\":\"[\\\"signer-2\\\"]\",\"templateId\":\"1047\",\"description\":\"prueba jonner11 2020-01-03T13:47:31.635Z\",\"afterExpire\":\"close\",\"flowType\":\"individual\",\"notificationFrecuency\":\"1\",\"signRequirement\":\"not_required\",\"vigency\":\"5\",\"vigencyType\":\"working_days\",\"isPublic\":\"0\",\"document\":\"????\",\"signPositionX\":\"22\",\"signPositionY\":\"25\",\"signaturePage\":\"99\"}"
+              "data": "{\"description\":\"prueba jonner11 2020-01-03T13:47:31.635Z\",\"template_id\":\"1047\",\"approvers\":[\"130410847\",\"33333333-3\"],\"signers\":[\"11111111-1\",\"22222222-2\"],\"finalRecipients\":[\"signer-2\"],\"settings\":{\"is_public\":\"true\",\"vigency\":\"5\"},\"metadata\":{\"documento\":\"2312\",\"tipo\":\"anexo\",\"cod_sap\":\"3453\"},\"document\":\"@/ruta/del/archivo.pdf\",\"document_b64\":\"string\"}"
             }
 
             $.ajax(settings).done(function (response) {
@@ -3269,7 +3044,7 @@ paths:
 
             var options = {
               "method": "POST",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
               "path": "/api/document",
               "headers": {
@@ -3292,23 +3067,15 @@ paths:
             });
 
             req.write(JSON.stringify({
-              signers: '["nuermorut1", "numerorut2"]',
-              userRole: 'viewer',
-              approvers: '["130410847"]',
-              finalRecipients: '["signer-2"]',
-              templateId: '1047',
               description: 'prueba jonner11 2020-01-03T13:47:31.635Z',
-              afterExpire: 'close',
-              flowType: 'individual',
-              notificationFrecuency: '1',
-              signRequirement: 'not_required',
-              vigency: '5',
-              vigencyType: 'working_days',
-              isPublic: '0',
-              document: '????',
-              signPositionX: '22',
-              signPositionY: '25',
-              signaturePage: '99'
+              template_id: '1047',
+              approvers: ['130410847', '33333333-3'],
+              signers: ['11111111-1', '22222222-2'],
+              finalRecipients: ['signer-2'],
+              settings: {is_public: 'true', vigency: '5'},
+              metadata: {documento: '2312', tipo: 'anexo', cod_sap: '3453'},
+              document: '@/ruta/del/archivo.pdf',
+              document_b64: 'string'
             }));
             req.end();
         - lang: Php + Curl
@@ -3318,14 +3085,14 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/document",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/document",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
               CURLOPT_TIMEOUT => 30,
               CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
               CURLOPT_CUSTOMREQUEST => "POST",
-              CURLOPT_POSTFIELDS => "{\"signers\":\"[\\\"nuermorut1\\\", \\\"numerorut2\\\"]\",\"userRole\":\"viewer\",\"approvers\":\"[\\\"130410847\\\"]\",\"finalRecipients\":\"[\\\"signer-2\\\"]\",\"templateId\":\"1047\",\"description\":\"prueba jonner11 2020-01-03T13:47:31.635Z\",\"afterExpire\":\"close\",\"flowType\":\"individual\",\"notificationFrecuency\":\"1\",\"signRequirement\":\"not_required\",\"vigency\":\"5\",\"vigencyType\":\"working_days\",\"isPublic\":\"0\",\"document\":\"????\",\"signPositionX\":\"22\",\"signPositionY\":\"25\",\"signaturePage\":\"99\"}",
+              CURLOPT_POSTFIELDS => "{\"description\":\"prueba jonner11 2020-01-03T13:47:31.635Z\",\"template_id\":\"1047\",\"approvers\":[\"130410847\",\"33333333-3\"],\"signers\":[\"11111111-1\",\"22222222-2\"],\"finalRecipients\":[\"signer-2\"],\"settings\":{\"is_public\":\"true\",\"vigency\":\"5\"},\"metadata\":{\"documento\":\"2312\",\"tipo\":\"anexo\",\"cod_sap\":\"3453\"},\"document\":\"@/ruta/del/archivo.pdf\",\"document_b64\":\"string\"}",
               CURLOPT_HTTPHEADER => array(
                 "content-type: application/json",
                 "token: SOME_STRING_VALUE"
@@ -3347,13 +3114,11 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
-            payload = "{\"signers\":\"[\\\"nuermorut1\\\",
-            \\\"numerorut2\\\"]\",\"userRole\":\"viewer\",\"approvers\":\"[\\\"130410847\\\"]\",\"finalRecipients\":\"[\\\"signer-2\\\"]\",\"templateId\":\"1047\",\"description\":\"prueba
-            jonner11
-            2020-01-03T13:47:31.635Z\",\"afterExpire\":\"close\",\"flowType\":\"individual\",\"notificationFrecuency\":\"1\",\"signRequirement\":\"not_required\",\"vigency\":\"5\",\"vigencyType\":\"working_days\",\"isPublic\":\"0\",\"document\":\"????\",\"signPositionX\":\"22\",\"signPositionY\":\"25\",\"signaturePage\":\"99\"}"
+            payload = "{\"description\":\"prueba jonner11
+            2020-01-03T13:47:31.635Z\",\"template_id\":\"1047\",\"approvers\":[\"130410847\",\"33333333-3\"],\"signers\":[\"11111111-1\",\"22222222-2\"],\"finalRecipients\":[\"signer-2\"],\"settings\":{\"is_public\":\"true\",\"vigency\":\"5\"},\"metadata\":{\"documento\":\"2312\",\"tipo\":\"anexo\",\"cod_sap\":\"3453\"},\"document\":\"@/ruta/del/archivo.pdf\",\"document_b64\":\"string\"}"
 
 
             headers = {
@@ -3370,7 +3135,7 @@ paths:
 
 
             print(data.decode("utf-8"))
-  '/document/{documentsID}':
+  '/document/{document_hash}':
     get:
       summary: Obtiene un documento según su ID
       operationId: document.info
@@ -3385,13 +3150,40 @@ paths:
          En esta API es posible obtener un documento por su ID generado en la API [Crear Documento](#operation/documents.create).
       parameters:
         - *ref_0
-        - name: documentsID
+        - &ref_6
+          name: document_hash
           in: path
           description: Identificador del Documentos
           required: true
-          example: 23456
+          example: 7fef0af4f81641885aeff9f1e9b76bd0
           schema:
-            type: integer
+            type: string
+        - name: format_output
+          in: query
+          description: >
+            Corresponde al tipo de salida que requiere<br>
+
+
+            | format_output |
+            Descripción                                                 |
+
+            |---------------|-------------------------------------------------------------|
+
+            | url_edigital  | Link dentro de
+            e-Gestión                                    |
+
+            | url_S3        | Link de repositorio para su descarga
+            inmediata              |
+
+            | base64        | COntenido del archivo en
+            base64                             |
+
+            | info          | Información del document dendtro de la plataforma
+            (default) |
+          required: false
+          example: url_edigital
+          schema:
+            type: string
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -3400,8 +3192,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -3453,14 +3245,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url https://e-digital.cl/api/document/%7BdocumentsID%7D \
+              --url 'https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D?format_output=SOME_STRING_VALUE' \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/document/%7BdocumentsID%7D")
+              .url("https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D?format_output=SOME_STRING_VALUE")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -3469,7 +3261,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/document/%7BdocumentsID%7D");
+            RestClient("https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D?format_output=SOME_STRING_VALUE");
 
             var request = new RestRequest(Method.GET);
 
@@ -3481,7 +3273,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/document/%7BdocumentsID%7D",
+              "url": "https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D?format_output=SOME_STRING_VALUE",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -3497,9 +3289,9 @@ paths:
 
             var options = {
               "method": "GET",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/document/%7BdocumentsID%7D",
+              "path": "/api/document/%7Bdocument_hash%7D?format_output=SOME_STRING_VALUE",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -3526,7 +3318,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/document/%7BdocumentsID%7D",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D?format_output=SOME_STRING_VALUE",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -3553,288 +3345,15 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
-            conn.request("GET", "/api/document/%7BdocumentsID%7D",
+            conn.request("GET",
+            "/api/document/%7Bdocument_hash%7D?format_output=SOME_STRING_VALUE",
             headers=headers)
-
-
-            res = conn.getresponse()
-
-            data = res.read()
-
-
-            print(data.decode("utf-8"))
-    put:
-      summary: Modifica el estado de un documento
-      operationId: document.change
-      tags:
-        - Documents
-      description: >
-        | Información     |         Detalle          |
-
-        |-----------------|--------------------------|
-
-        |  ID operación   |     document.change      |
-
-
-        En esta API es posible cambiar el estado de un documento
-
-        Los posibles estado que se pueden aplicar son los que se muestra a
-        continuación.
-
-
-        <details>
-                <summary>Ver tabla de tipos de estado </summary>
-
-        |    Estado   |                              
-        Descripción                                       |
-
-        |-------------|---------------------------------------------------------------------------------|
-
-        |    anula    | Se utiliza cuando el documento se quiere
-        anular.                                |
-
-        |   rechaza   | Se utiliza cuando el documento se quiere
-        rechazar.                              |
-
-        |   aprueba   | Se utiliza cuando se quiere aprobar el
-        documento.                               |
-
-
-        </details>
-      parameters:
-        - *ref_0
-        - name: documentsID
-          in: path
-          description: Identificador del Documentos
-          required: true
-          example: 23456
-          schema:
-            type: integer
-        - name: estado
-          in: query
-          description: Corresponde al estado que se le quiere dar al documento.
-          required: true
-          example: anula
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - comment
-              properties:
-                comment:
-                  type: string
-                  description: >-
-                    Ejemplo &#58; `Documento Erroneo en las fechas` <br> Es el
-                    comentario de por que se le esta dando este estado al
-                    documento.
-                  example: Documento Erroneo en las fechas
-      responses:
-        '200':
-          description: Operación efectuada de forma satisfactoria
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - codigo
-                  - mensaje
-                properties:
-                  code:
-                    type: integer
-                    format: int32
-                    description: >-
-                      Código de resultado de la operación, siendo `0` un
-                      resultado satisfactorio. Cualquier otro código es
-                      indicativo de error.
-                    example: null
-                  message:
-                    type: string
-                    description: >-
-                      Mensaje de respuesta, traducción humana del código de
-                      resultado.
-                  duration:
-                    type: integer
-                    format: int32
-                    description: >-
-                      Tiempo (en milisegundos) que tardó en procesarse la
-                      solicitud.
-                  time:
-                    type: string
-                    description: >-
-                      Hora a la que llego la solicitud a E-Digital, en formato
-                      `yyyy-MM-dd HH:mm:ss.SSS`
-                  trackingId:
-                    type: string
-                    description: >-
-                      Código único de seguimiento. Este código representa al
-                      proceso completo de la solicitud realizada, si tienes
-                      problemas, te pediremos este código.
-              examples:
-                Token Inválido: *ref_1
-                Sin Permiso: *ref_2
-                Respuesta OK:
-                  value:
-                    code: 0
-                    duration: 780
-                    time: 2020-08-04T09:44:42.245Z
-                    message: Documento actualizado de forma satisfactoria
-                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
-        '400': *ref_3
-        '500': *ref_4
-      x-codeSamples:
-        - lang: Shell + Curl
-          source: |-
-            curl --request PUT \
-              --url 'https://e-digital.cl/api/document/%7BdocumentsID%7D?estado=SOME_STRING_VALUE' \
-              --header 'content-type: application/json' \
-              --header 'token: SOME_STRING_VALUE' \
-              --data '{"comment":"Documento Erroneo en las fechas"}'
-        - lang: Java + Okhttp
-          source: >-
-            OkHttpClient client = new OkHttpClient();
-
-
-            MediaType mediaType = MediaType.parse("application/json");
-
-            RequestBody body = RequestBody.create(mediaType,
-            "{\"comment\":\"Documento Erroneo en las fechas\"}");
-
-            Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/document/%7BdocumentsID%7D?estado=SOME_STRING_VALUE")
-              .put(body)
-              .addHeader("content-type", "application/json")
-              .addHeader("token", "SOME_STRING_VALUE")
-              .build();
-
-            Response response = client.newCall(request).execute();
-        - lang: Csharp + Restsharp
-          source: >-
-            var client = new
-            RestClient("https://e-digital.cl/api/document/%7BdocumentsID%7D?estado=SOME_STRING_VALUE");
-
-            var request = new RestRequest(Method.PUT);
-
-            request.AddHeader("content-type", "application/json");
-
-            request.AddHeader("token", "SOME_STRING_VALUE");
-
-            request.AddParameter("application/json", "{\"comment\":\"Documento
-            Erroneo en las fechas\"}", ParameterType.RequestBody);
-
-            IRestResponse response = client.Execute(request);
-        - lang: Javascript + Jquery
-          source: |-
-            var settings = {
-              "async": true,
-              "crossDomain": true,
-              "url": "https://e-digital.cl/api/document/%7BdocumentsID%7D?estado=SOME_STRING_VALUE",
-              "method": "PUT",
-              "headers": {
-                "content-type": "application/json",
-                "token": "SOME_STRING_VALUE"
-              },
-              "processData": false,
-              "data": "{\"comment\":\"Documento Erroneo en las fechas\"}"
-            }
-
-            $.ajax(settings).done(function (response) {
-              console.log(response);
-            });
-        - lang: Node + Native
-          source: >-
-            var http = require("https");
-
-
-            var options = {
-              "method": "PUT",
-              "hostname": "e-digital.cl",
-              "port": null,
-              "path": "/api/document/%7BdocumentsID%7D?estado=SOME_STRING_VALUE",
-              "headers": {
-                "content-type": "application/json",
-                "token": "SOME_STRING_VALUE"
-              }
-            };
-
-
-            var req = http.request(options, function (res) {
-              var chunks = [];
-
-              res.on("data", function (chunk) {
-                chunks.push(chunk);
-              });
-
-              res.on("end", function () {
-                var body = Buffer.concat(chunks);
-                console.log(body.toString());
-              });
-            });
-
-
-            req.write(JSON.stringify({comment: 'Documento Erroneo en las
-            fechas'}));
-
-            req.end();
-        - lang: Php + Curl
-          source: |-
-            <?php
-
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/document/%7BdocumentsID%7D?estado=SOME_STRING_VALUE",
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_ENCODING => "",
-              CURLOPT_MAXREDIRS => 10,
-              CURLOPT_TIMEOUT => 30,
-              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-              CURLOPT_CUSTOMREQUEST => "PUT",
-              CURLOPT_POSTFIELDS => "{\"comment\":\"Documento Erroneo en las fechas\"}",
-              CURLOPT_HTTPHEADER => array(
-                "content-type: application/json",
-                "token: SOME_STRING_VALUE"
-              ),
-            ));
-
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-
-            curl_close($curl);
-
-            if ($err) {
-              echo "cURL Error #:" . $err;
-            } else {
-              echo $response;
-            }
-        - lang: Python + Python3
-          source: >-
-            import http.client
-
-
-            conn = http.client.HTTPSConnection("e-digital.cl")
-
-
-            payload = "{\"comment\":\"Documento Erroneo en las fechas\"}"
-
-
-            headers = {
-                'content-type': "application/json",
-                'token': "SOME_STRING_VALUE"
-                }
-
-            conn.request("PUT",
-            "/api/document/%7BdocumentsID%7D?estado=SOME_STRING_VALUE", payload,
-            headers)
 
 
             res = conn.getresponse()
@@ -3866,13 +3385,7 @@ paths:
         de este.
       parameters:
         - *ref_0
-        - name: documentsID
-          in: path
-          description: Identificador del Documentos
-          required: true
-          example: c60974ea92b8ef69ed552b5f7f173063
-          schema:
-            type: string
+        - *ref_6
       requestBody:
         content:
           application/json:
@@ -3896,8 +3409,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -3945,7 +3458,7 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request DELETE \
-              --url https://e-digital.cl/api/document/%7BdocumentsID%7D \
+              --url https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D \
               --header 'content-type: application/json' \
               --header 'token: SOME_STRING_VALUE' \
               --data '{"comment":"Documento Sacado del Flujo"}'
@@ -3960,7 +3473,7 @@ paths:
             "{\"comment\":\"Documento Sacado del Flujo\"}");
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/document/%7BdocumentsID%7D")
+              .url("https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D")
               .delete(body)
               .addHeader("content-type", "application/json")
               .addHeader("token", "SOME_STRING_VALUE")
@@ -3970,7 +3483,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/document/%7BdocumentsID%7D");
+            RestClient("https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D");
 
             var request = new RestRequest(Method.DELETE);
 
@@ -3987,7 +3500,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/document/%7BdocumentsID%7D",
+              "url": "https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D",
               "method": "DELETE",
               "headers": {
                 "content-type": "application/json",
@@ -4006,9 +3519,9 @@ paths:
 
             var options = {
               "method": "DELETE",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/document/%7BdocumentsID%7D",
+              "path": "/api/document/%7Bdocument_hash%7D",
               "headers": {
                 "content-type": "application/json",
                 "token": "SOME_STRING_VALUE"
@@ -4037,7 +3550,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/document/%7BdocumentsID%7D",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -4066,7 +3579,7 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             payload = "{\"comment\":\"Documento Sacado del Flujo\"}"
@@ -4077,7 +3590,7 @@ paths:
                 'token': "SOME_STRING_VALUE"
                 }
 
-            conn.request("DELETE", "/api/document/%7BdocumentsID%7D", payload,
+            conn.request("DELETE", "/api/document/%7Bdocument_hash%7D", payload,
             headers)
 
 
@@ -4087,7 +3600,6 @@ paths:
 
 
             print(data.decode("utf-8"))
-  '/document/firm/{documentsID}':
     post:
       summary: Firmar un Documento (No Implementado)
       operationId: document.firm
@@ -4115,29 +3627,21 @@ paths:
         eje Y.
       parameters:
         - *ref_0
-        - name: documentsID
-          in: path
-          description: Identificador del Documentos
-          required: true
-          example: 23456
-          schema:
-            type: integer
+        - *ref_6
       requestBody:
         content:
           application/json:
             schema:
               type: object
               required:
-                - userID
-                - certificateID
-                - page
+                - certificate_pass
               properties:
-                userID:
+                certificate_pass:
                   type: integer
                   description: >-
-                    Ejemplo &#58; `1234` <br> Id unico de usuario que desea
-                    firmar documento.
-                  example: '1234'
+                    Ejemplo &#58; `Mi$3cr3tPa$$` <br> Password usado por el
+                    certificado.
+                  example: Mi$3cr3tPa$$
                 certificateID:
                   type: integer
                   description: >-
@@ -4170,20 +3674,6 @@ paths:
                     página (sin importar cuantas tenga) se especifica con el
                     valor `ultima`.
                   example: '1'
-                imageFirm:
-                  type: string
-                  description: >-
-                    Ejemplo &#58;
-                    `PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==`
-                    <br> Es la imagen de la firma en base64 con encode
-                    iso-8859-1 en caso de que lleve imagen.
-                  example: PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==
-                textFirm:
-                  type: string
-                  description: >-
-                    Ejemplo &#58; `Firma Representante` <br> Corresponde al
-                    texto de la firma en caso de que lleve texto.
-                  example: Firma Representante
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -4192,8 +3682,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -4248,10 +3738,10 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request POST \
-              --url https://e-digital.cl/api/document/firm/%7BdocumentsID%7D \
+              --url https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D \
               --header 'content-type: application/json' \
               --header 'token: SOME_STRING_VALUE' \
-              --data '{"userID":"1234","certificateID":"9834","x":"300","y":"700","templateId":"12","page":"1","imageFirm":"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==","textFirm":"Firma Representante"}'
+              --data '{"certificate_pass":"Mi$3cr3tPa$$","certificateID":"9834","x":"300","y":"700","templateId":"12","page":"1"}'
         - lang: Java + Okhttp
           source: >-
             OkHttpClient client = new OkHttpClient();
@@ -4260,11 +3750,10 @@ paths:
             MediaType mediaType = MediaType.parse("application/json");
 
             RequestBody body = RequestBody.create(mediaType,
-            "{\"userID\":\"1234\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\",\"imageFirm\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==\",\"textFirm\":\"Firma
-            Representante\"}");
+            "{\"certificate_pass\":\"Mi$3cr3tPa$$\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\"}");
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/document/firm/%7BdocumentsID%7D")
+              .url("https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D")
               .post(body)
               .addHeader("content-type", "application/json")
               .addHeader("token", "SOME_STRING_VALUE")
@@ -4274,7 +3763,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/document/firm/%7BdocumentsID%7D");
+            RestClient("https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D");
 
             var request = new RestRequest(Method.POST);
 
@@ -4283,8 +3772,8 @@ paths:
             request.AddHeader("token", "SOME_STRING_VALUE");
 
             request.AddParameter("application/json",
-            "{\"userID\":\"1234\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\",\"imageFirm\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==\",\"textFirm\":\"Firma
-            Representante\"}", ParameterType.RequestBody);
+            "{\"certificate_pass\":\"Mi$3cr3tPa$$\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\"}",
+            ParameterType.RequestBody);
 
             IRestResponse response = client.Execute(request);
         - lang: Javascript + Jquery
@@ -4292,14 +3781,14 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/document/firm/%7BdocumentsID%7D",
+              "url": "https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D",
               "method": "POST",
               "headers": {
                 "content-type": "application/json",
                 "token": "SOME_STRING_VALUE"
               },
               "processData": false,
-              "data": "{\"userID\":\"1234\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\",\"imageFirm\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==\",\"textFirm\":\"Firma Representante\"}"
+              "data": "{\"certificate_pass\":\"Mi$3cr3tPa$$\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\"}"
             }
 
             $.ajax(settings).done(function (response) {
@@ -4311,9 +3800,9 @@ paths:
 
             var options = {
               "method": "POST",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/document/firm/%7BdocumentsID%7D",
+              "path": "/api/document/%7Bdocument_hash%7D",
               "headers": {
                 "content-type": "application/json",
                 "token": "SOME_STRING_VALUE"
@@ -4334,14 +3823,12 @@ paths:
             });
 
             req.write(JSON.stringify({
-              userID: '1234',
+              certificate_pass: 'Mi$3cr3tPa$$',
               certificateID: '9834',
               x: '300',
               y: '700',
               templateId: '12',
-              page: '1',
-              imageFirm: 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==',
-              textFirm: 'Firma Representante'
+              page: '1'
             }));
             req.end();
         - lang: Php + Curl
@@ -4351,14 +3838,14 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/document/firm/%7BdocumentsID%7D",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
               CURLOPT_TIMEOUT => 30,
               CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
               CURLOPT_CUSTOMREQUEST => "POST",
-              CURLOPT_POSTFIELDS => "{\"userID\":\"1234\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\",\"imageFirm\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==\",\"textFirm\":\"Firma Representante\"}",
+              CURLOPT_POSTFIELDS => "{\"certificate_pass\":\"Mi$3cr3tPa$$\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\"}",
               CURLOPT_HTTPHEADER => array(
                 "content-type: application/json",
                 "token: SOME_STRING_VALUE"
@@ -4380,12 +3867,11 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             payload =
-            "{\"userID\":\"1234\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\",\"imageFirm\":\"PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg==\",\"textFirm\":\"Firma
-            Representante\"}"
+            "{\"certificate_pass\":\"Mi$3cr3tPa$$\",\"certificateID\":\"9834\",\"x\":\"300\",\"y\":\"700\",\"templateId\":\"12\",\"page\":\"1\"}"
 
 
             headers = {
@@ -4393,8 +3879,8 @@ paths:
                 'token': "SOME_STRING_VALUE"
                 }
 
-            conn.request("POST", "/api/document/firm/%7BdocumentsID%7D",
-            payload, headers)
+            conn.request("POST", "/api/document/%7Bdocument_hash%7D", payload,
+            headers)
 
 
             res = conn.getresponse()
@@ -4403,7 +3889,7 @@ paths:
 
 
             print(data.decode("utf-8"))
-  '/document/{documentsID}/logs':
+  '/document/{document_hash}/logs':
     get:
       summary: Obtiene Logs de un documento según su ID  (No Implementado)
       operationId: document.logs
@@ -4427,13 +3913,7 @@ paths:
         visualizarlos según su ID.
       parameters:
         - *ref_0
-        - name: documentsID
-          in: path
-          description: Identificador del Documentos
-          required: true
-          example: 23456
-          schema:
-            type: integer
+        - *ref_6
         - name: from
           in: query
           description: >-
@@ -4474,8 +3954,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -4543,14 +4023,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url 'https://e-digital.cl/api/document/%7BdocumentsID%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
+              --url 'https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/document/%7BdocumentsID%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
+              .url("https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -4559,7 +4039,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/document/%7BdocumentsID%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
+            RestClient("https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
 
             var request = new RestRequest(Method.GET);
 
@@ -4571,7 +4051,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/document/%7BdocumentsID%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+              "url": "https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -4587,9 +4067,9 @@ paths:
 
             var options = {
               "method": "GET",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/document/%7BdocumentsID%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+              "path": "/api/document/%7Bdocument_hash%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -4616,7 +4096,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/document/%7BdocumentsID%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/document/%7Bdocument_hash%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -4643,14 +4123,14 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
             conn.request("GET",
-            "/api/document/%7BdocumentsID%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+            "/api/document/%7Bdocument_hash%7D/logs?from=SOME_STRING_VALUE&to=SOME_STRING_VALUE&page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
             headers=headers)
 
 
@@ -4697,8 +4177,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -4750,22 +4230,22 @@ paths:
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
                     totalRegistros: 50
                     organizations:
-                      - Empresa1
-                      - Empresa2
+                      - cod_1: Empresa 1
+                      - cod_2: Empresa 2
         '400': *ref_3
         '500': *ref_4
       x-codeSamples:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url 'https://e-digital.cl/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
+              --url 'https://apipub.e-digital.global/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
+              .url("https://apipub.e-digital.global/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -4774,7 +4254,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
+            RestClient("https://apipub.e-digital.global/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
 
             var request = new RestRequest(Method.GET);
 
@@ -4786,7 +4266,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+              "url": "https://apipub.e-digital.global/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -4802,7 +4282,7 @@ paths:
 
             var options = {
               "method": "GET",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
               "path": "/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "headers": {
@@ -4831,7 +4311,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/organizations?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -4858,7 +4338,7 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             headers = { 'token': "SOME_STRING_VALUE" }
@@ -4875,7 +4355,7 @@ paths:
 
 
             print(data.decode("utf-8"))
-  '/organizations/{organizationID}':
+  '/organizations/{cod_organization}':
     get:
       summary: Obtiene informacion de una organización según su ID  (No Implementado)
       operationId: organizations.info
@@ -4892,14 +4372,14 @@ paths:
          En esta API es posible obtener la información de una organización en específica.
       parameters:
         - *ref_0
-        - name: organizationID
+        - &ref_7
+          name: cod_organization
           in: path
           description: Identificador de la organización
           required: true
-          example: 1119
+          example: cod_1
           schema:
-            type: integer
-            format: int32
+            type: string
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -4908,8 +4388,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -4957,22 +4437,24 @@ paths:
                     message: Listado de organizaciones obtenido de forma satisfactoria
                     trackingId: eaa362909975204aa43bd28-ba9e4503db58
                     organizations:
-                      nombreOrganizacion: EmpresaUno
-                      rutOrganizacion: 55.893.293.K
+                      cod_organization: cod_1
+                      nombreOrganizacion: Empresa 1
+                      cod_project: EMPRESA
+                      parent: null
         '400': *ref_3
         '500': *ref_4
       x-codeSamples:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url https://e-digital.cl/api/organizations/%7BorganizationID%7D \
+              --url https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/organizations/%7BorganizationID%7D")
+              .url("https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -4981,7 +4463,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/organizations/%7BorganizationID%7D");
+            RestClient("https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D");
 
             var request = new RestRequest(Method.GET);
 
@@ -4993,7 +4475,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/organizations/%7BorganizationID%7D",
+              "url": "https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -5009,9 +4491,9 @@ paths:
 
             var options = {
               "method": "GET",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/organizations/%7BorganizationID%7D",
+              "path": "/api/organizations/%7Bcod_organization%7D",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -5038,7 +4520,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/organizations/%7BorganizationID%7D",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -5065,13 +4547,13 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
-            conn.request("GET", "/api/organizations/%7BorganizationID%7D",
+            conn.request("GET", "/api/organizations/%7Bcod_organization%7D",
             headers=headers)
 
 
@@ -5081,7 +4563,7 @@ paths:
 
 
             print(data.decode("utf-8"))
-  '/organizations/{organizationID}/templates':
+  '/organizations/{cod_organization}/templates':
     get:
       summary: >-
         Obtiene el listado de los template de las organizaciones  (No
@@ -5099,14 +4581,7 @@ paths:
          En esta API es posible obtener un listado de todos los template de las organizaciones suscritas actualmente.
       parameters:
         - *ref_0
-        - name: organizationID
-          in: path
-          description: Identificador de la organización que se quiere listar sus template.
-          required: true
-          example: 1119
-          schema:
-            type: integer
-            format: int32
+        - *ref_7
         - name: page
           in: query
           description: Corresponde al número de páginas que se quiere obtener la respuesta.
@@ -5129,8 +4604,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -5190,14 +4665,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url 'https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
+              --url 'https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
+              .url("https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -5206,7 +4681,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
+            RestClient("https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
 
             var request = new RestRequest(Method.GET);
 
@@ -5218,7 +4693,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+              "url": "https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -5234,9 +4709,9 @@ paths:
 
             var options = {
               "method": "GET",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/organizations/%7BorganizationID%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+              "path": "/api/organizations/%7Bcod_organization%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -5263,7 +4738,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -5290,14 +4765,14 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
             conn.request("GET",
-            "/api/organizations/%7BorganizationID%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+            "/api/organizations/%7Bcod_organization%7D/templates?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
             headers=headers)
 
 
@@ -5307,424 +4782,7 @@ paths:
 
 
             print(data.decode("utf-8"))
-    post:
-      summary: Crea un template para una organización suscrita.  (No Implementado)
-      operationId: organizations.templates.create
-      tags:
-        - Organization
-      description: |
-        | Información     |               Detalle              |
-        |-----------------|------------------------------------|
-        |  ID operación   |   organizations.templates.create   |
-
-         Un Template es un ejemplo de donde se fijara la firma o las firmas dentro del documento.
-         Cada organización debe tener al menos un template y podría llegar a tener "n" template, para poder firmar los documentos.
-         En esta API es posible crear un template para una organización en específico.
-      parameters:
-        - *ref_0
-        - name: organizationID
-          in: path
-          description: Identificador de la organización que se quiere crear su template
-          required: true
-          example: 1119
-          schema:
-            type: integer
-            format: int32
-      responses:
-        '200':
-          description: Operación efectuada de forma satisfactoria
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - codigo
-                  - mensaje
-                properties:
-                  code:
-                    type: integer
-                    format: int32
-                    description: >-
-                      Código de resultado de la operación, siendo `0` un
-                      resultado satisfactorio. Cualquier otro código es
-                      indicativo de error.
-                    example: null
-                  message:
-                    type: string
-                    description: >-
-                      Mensaje de respuesta, traducción humana del código de
-                      resultado.
-                  duration:
-                    type: integer
-                    format: int32
-                    description: >-
-                      Tiempo (en milisegundos) que tardó en procesarse la
-                      solicitud.
-                  time:
-                    type: string
-                    description: >-
-                      Hora a la que llego la solicitud a E-Digital, en formato
-                      `yyyy-MM-dd HH:mm:ss.SSS`
-                  trackingId:
-                    type: string
-                    description: >-
-                      Código único de seguimiento. Este código representa al
-                      proceso completo de la solicitud realizada, si tienes
-                      problemas, te pediremos este código.
-                  templateId:
-                    type: integer
-                    format: int32
-                    description: Corresponde el ID del template creado.
-              examples:
-                Token Inválido: *ref_1
-                Sin Permiso: *ref_2
-                Respuesta OK:
-                  value:
-                    code: 0
-                    duration: 780
-                    time: 2020-08-04T09:44:42.245Z
-                    message: Template ingresado de forma satisfactoria.
-                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                    templateId: 1131
-        '400': *ref_3
-        '500': *ref_4
-      x-codeSamples:
-        - lang: Shell + Curl
-          source: |-
-            curl --request POST \
-              --url https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates \
-              --header 'token: SOME_STRING_VALUE'
-        - lang: Java + Okhttp
-          source: |-
-            OkHttpClient client = new OkHttpClient();
-
-            Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates")
-              .post(null)
-              .addHeader("token", "SOME_STRING_VALUE")
-              .build();
-
-            Response response = client.newCall(request).execute();
-        - lang: Csharp + Restsharp
-          source: >-
-            var client = new
-            RestClient("https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates");
-
-            var request = new RestRequest(Method.POST);
-
-            request.AddHeader("token", "SOME_STRING_VALUE");
-
-            IRestResponse response = client.Execute(request);
-        - lang: Javascript + Jquery
-          source: |-
-            var settings = {
-              "async": true,
-              "crossDomain": true,
-              "url": "https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates",
-              "method": "POST",
-              "headers": {
-                "token": "SOME_STRING_VALUE"
-              }
-            }
-
-            $.ajax(settings).done(function (response) {
-              console.log(response);
-            });
-        - lang: Node + Native
-          source: |-
-            var http = require("https");
-
-            var options = {
-              "method": "POST",
-              "hostname": "e-digital.cl",
-              "port": null,
-              "path": "/api/organizations/%7BorganizationID%7D/templates",
-              "headers": {
-                "token": "SOME_STRING_VALUE"
-              }
-            };
-
-            var req = http.request(options, function (res) {
-              var chunks = [];
-
-              res.on("data", function (chunk) {
-                chunks.push(chunk);
-              });
-
-              res.on("end", function () {
-                var body = Buffer.concat(chunks);
-                console.log(body.toString());
-              });
-            });
-
-            req.end();
-        - lang: Php + Curl
-          source: |-
-            <?php
-
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates",
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_ENCODING => "",
-              CURLOPT_MAXREDIRS => 10,
-              CURLOPT_TIMEOUT => 30,
-              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-              CURLOPT_CUSTOMREQUEST => "POST",
-              CURLOPT_HTTPHEADER => array(
-                "token: SOME_STRING_VALUE"
-              ),
-            ));
-
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-
-            curl_close($curl);
-
-            if ($err) {
-              echo "cURL Error #:" . $err;
-            } else {
-              echo $response;
-            }
-        - lang: Python + Python3
-          source: >-
-            import http.client
-
-
-            conn = http.client.HTTPSConnection("e-digital.cl")
-
-
-            headers = { 'token': "SOME_STRING_VALUE" }
-
-
-            conn.request("POST",
-            "/api/organizations/%7BorganizationID%7D/templates",
-            headers=headers)
-
-
-            res = conn.getresponse()
-
-            data = res.read()
-
-
-            print(data.decode("utf-8"))
-  '/organizations/{organizationID}/templates{templateID}':
-    delete:
-      summary: Permite eliminar un template  (No Implementado)
-      operationId: organizations.templates.remove
-      tags:
-        - Organization
-      description: >
-        | Información     |               Detalle              |
-
-        |-----------------|------------------------------------|
-
-        |  ID operación   |  organizations.templates.remove    |
-
-
-        Un template es una plantilla que muestra la parte del documento donde se
-        fijara firma,
-
-        en esta APi es posible eliminar esta plantilla de firma, lo que no
-        quiere decir que los documentos
-
-        que ya se encuentran firmados perderán su vigencia, los documentos que
-        ya se encuentran firmados con
-
-        este template se mantendrán de igual forma.
-      parameters:
-        - *ref_0
-        - name: organizationID
-          in: path
-          description: Identificador de la organización.
-          required: true
-          example: 1120
-          schema:
-            type: integer
-            format: int32
-        - name: templateID
-          in: path
-          description: Identificador del template.
-          required: true
-          example: 1121
-          schema:
-            type: integer
-            format: int32
-      responses:
-        '200':
-          description: Operación efectuada de forma satisfactoria
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - codigo
-                  - mensaje
-                properties:
-                  code:
-                    type: integer
-                    format: int32
-                    description: >-
-                      Código de resultado de la operación, siendo `0` un
-                      resultado satisfactorio. Cualquier otro código es
-                      indicativo de error.
-                    example: null
-                  message:
-                    type: string
-                    description: >-
-                      Mensaje de respuesta, traducción humana del código de
-                      resultado.
-                  duration:
-                    type: integer
-                    format: int32
-                    description: >-
-                      Tiempo (en milisegundos) que tardó en procesarse la
-                      solicitud.
-                  time:
-                    type: string
-                    description: >-
-                      Hora a la que llego la solicitud a E-Digital, en formato
-                      `yyyy-MM-dd HH:mm:ss.SSS`
-                  trackingId:
-                    type: string
-                    description: >-
-                      Código único de seguimiento. Este código representa al
-                      proceso completo de la solicitud realizada, si tienes
-                      problemas, te pediremos este código.
-              examples:
-                Token Inválido: *ref_1
-                Sin Permiso: *ref_2
-                Respuesta OK:
-                  value:
-                    code: 0
-                    duration: 780
-                    time: 2020-08-04T09:44:42.245Z
-                    message: Template eliminado de forma satisfactoria
-                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
-        '400': *ref_3
-        '500': *ref_4
-      x-codeSamples:
-        - lang: Shell + Curl
-          source: |-
-            curl --request DELETE \
-              --url https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D \
-              --header 'token: SOME_STRING_VALUE'
-        - lang: Java + Okhttp
-          source: |-
-            OkHttpClient client = new OkHttpClient();
-
-            Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D")
-              .delete(null)
-              .addHeader("token", "SOME_STRING_VALUE")
-              .build();
-
-            Response response = client.newCall(request).execute();
-        - lang: Csharp + Restsharp
-          source: >-
-            var client = new
-            RestClient("https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D");
-
-            var request = new RestRequest(Method.DELETE);
-
-            request.AddHeader("token", "SOME_STRING_VALUE");
-
-            IRestResponse response = client.Execute(request);
-        - lang: Javascript + Jquery
-          source: |-
-            var settings = {
-              "async": true,
-              "crossDomain": true,
-              "url": "https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D",
-              "method": "DELETE",
-              "headers": {
-                "token": "SOME_STRING_VALUE"
-              }
-            }
-
-            $.ajax(settings).done(function (response) {
-              console.log(response);
-            });
-        - lang: Node + Native
-          source: |-
-            var http = require("https");
-
-            var options = {
-              "method": "DELETE",
-              "hostname": "e-digital.cl",
-              "port": null,
-              "path": "/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D",
-              "headers": {
-                "token": "SOME_STRING_VALUE"
-              }
-            };
-
-            var req = http.request(options, function (res) {
-              var chunks = [];
-
-              res.on("data", function (chunk) {
-                chunks.push(chunk);
-              });
-
-              res.on("end", function () {
-                var body = Buffer.concat(chunks);
-                console.log(body.toString());
-              });
-            });
-
-            req.end();
-        - lang: Php + Curl
-          source: |-
-            <?php
-
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D",
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_ENCODING => "",
-              CURLOPT_MAXREDIRS => 10,
-              CURLOPT_TIMEOUT => 30,
-              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-              CURLOPT_CUSTOMREQUEST => "DELETE",
-              CURLOPT_HTTPHEADER => array(
-                "token: SOME_STRING_VALUE"
-              ),
-            ));
-
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-
-            curl_close($curl);
-
-            if ($err) {
-              echo "cURL Error #:" . $err;
-            } else {
-              echo $response;
-            }
-        - lang: Python + Python3
-          source: >-
-            import http.client
-
-
-            conn = http.client.HTTPSConnection("e-digital.cl")
-
-
-            headers = { 'token': "SOME_STRING_VALUE" }
-
-
-            conn.request("DELETE",
-            "/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D",
-            headers=headers)
-
-
-            res = conn.getresponse()
-
-            data = res.read()
-
-
-            print(data.decode("utf-8"))
+  '/organizations/{cod_organization}/templates/{template_id}':
     get:
       summary: >-
         Obtiene informacion de un template según su templateID  (No
@@ -5741,15 +4799,8 @@ paths:
          el cual mostrara la ubicación donde se fija la firma según lo indica este.
       parameters:
         - *ref_0
-        - name: organizationID
-          in: path
-          description: Identificador de la organización
-          required: true
-          example: 1120
-          schema:
-            type: integer
-            format: int32
-        - name: templateID
+        - *ref_7
+        - name: template_id
           in: path
           description: Identificador del template
           required: true
@@ -5765,8 +4816,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -5818,14 +4869,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D \
+              --url https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/templates/%7Btemplate_id%7D \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D")
+              .url("https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/templates/%7Btemplate_id%7D")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -5834,7 +4885,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D");
+            RestClient("https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/templates/%7Btemplate_id%7D");
 
             var request = new RestRequest(Method.GET);
 
@@ -5846,7 +4897,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D",
+              "url": "https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/templates/%7Btemplate_id%7D",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -5862,9 +4913,9 @@ paths:
 
             var options = {
               "method": "GET",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D",
+              "path": "/api/organizations/%7Bcod_organization%7D/templates/%7Btemplate_id%7D",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -5891,7 +4942,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/templates/%7Btemplate_id%7D",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -5918,14 +4969,14 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
             conn.request("GET",
-            "/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D",
+            "/api/organizations/%7Bcod_organization%7D/templates/%7Btemplate_id%7D",
             headers=headers)
 
 
@@ -5935,218 +4986,7 @@ paths:
 
 
             print(data.decode("utf-8"))
-    put:
-      summary: Modifica un template para una organización suscrita.  (No Implementado)
-      operationId: organizations.templates.change
-      tags:
-        - Organization
-      description: |
-        | Información     |               Detalle              |
-        |-----------------|------------------------------------|
-        |  ID operación   | organizations.templates.change     |
-
-         En el caso de haber creado un template en el API [Crear Template](#operation/organizations.templates.create)
-         En esta API es posible modificar un template para una organización suscrita.
-      parameters:
-        - *ref_0
-        - name: organizationID
-          in: path
-          description: Identificador de la organización
-          required: true
-          example: 1120
-          schema:
-            type: integer
-            format: int32
-        - name: templateID
-          in: path
-          description: Identificador del template a modificar
-          required: true
-          example: 1121
-          schema:
-            type: integer
-            format: int32
-      responses:
-        '200':
-          description: Operación efectuada de forma satisfactoria
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - codigo
-                  - mensaje
-                properties:
-                  code:
-                    type: integer
-                    format: int32
-                    description: >-
-                      Código de resultado de la operación, siendo `0` un
-                      resultado satisfactorio. Cualquier otro código es
-                      indicativo de error.
-                    example: null
-                  message:
-                    type: string
-                    description: >-
-                      Mensaje de respuesta, traducción humana del código de
-                      resultado.
-                  duration:
-                    type: integer
-                    format: int32
-                    description: >-
-                      Tiempo (en milisegundos) que tardó en procesarse la
-                      solicitud.
-                  time:
-                    type: string
-                    description: >-
-                      Hora a la que llego la solicitud a E-Digital, en formato
-                      `yyyy-MM-dd HH:mm:ss.SSS`
-                  trackingId:
-                    type: string
-                    description: >-
-                      Código único de seguimiento. Este código representa al
-                      proceso completo de la solicitud realizada, si tienes
-                      problemas, te pediremos este código.
-                  modificado:
-                    type: boolean
-                    enum:
-                      - 'true'
-                      - 'false'
-                    description: Corresponde a si se pudo modificar de forma satisfactoria.
-              examples:
-                Token Inválido: *ref_1
-                Sin Permiso: *ref_2
-                Respuesta OK:
-                  value:
-                    code: 0
-                    duration: 780
-                    time: 2020-08-04T09:44:42.245Z
-                    message: Template modificado de forma satisfactoria.
-                    trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                    modificado: true
-        '400': *ref_3
-        '500': *ref_4
-      x-codeSamples:
-        - lang: Shell + Curl
-          source: |-
-            curl --request PUT \
-              --url https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D \
-              --header 'token: SOME_STRING_VALUE'
-        - lang: Java + Okhttp
-          source: |-
-            OkHttpClient client = new OkHttpClient();
-
-            Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D")
-              .put(null)
-              .addHeader("token", "SOME_STRING_VALUE")
-              .build();
-
-            Response response = client.newCall(request).execute();
-        - lang: Csharp + Restsharp
-          source: >-
-            var client = new
-            RestClient("https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D");
-
-            var request = new RestRequest(Method.PUT);
-
-            request.AddHeader("token", "SOME_STRING_VALUE");
-
-            IRestResponse response = client.Execute(request);
-        - lang: Javascript + Jquery
-          source: |-
-            var settings = {
-              "async": true,
-              "crossDomain": true,
-              "url": "https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D",
-              "method": "PUT",
-              "headers": {
-                "token": "SOME_STRING_VALUE"
-              }
-            }
-
-            $.ajax(settings).done(function (response) {
-              console.log(response);
-            });
-        - lang: Node + Native
-          source: |-
-            var http = require("https");
-
-            var options = {
-              "method": "PUT",
-              "hostname": "e-digital.cl",
-              "port": null,
-              "path": "/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D",
-              "headers": {
-                "token": "SOME_STRING_VALUE"
-              }
-            };
-
-            var req = http.request(options, function (res) {
-              var chunks = [];
-
-              res.on("data", function (chunk) {
-                chunks.push(chunk);
-              });
-
-              res.on("end", function () {
-                var body = Buffer.concat(chunks);
-                console.log(body.toString());
-              });
-            });
-
-            req.end();
-        - lang: Php + Curl
-          source: |-
-            <?php
-
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D",
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_ENCODING => "",
-              CURLOPT_MAXREDIRS => 10,
-              CURLOPT_TIMEOUT => 30,
-              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-              CURLOPT_CUSTOMREQUEST => "PUT",
-              CURLOPT_HTTPHEADER => array(
-                "token: SOME_STRING_VALUE"
-              ),
-            ));
-
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-
-            curl_close($curl);
-
-            if ($err) {
-              echo "cURL Error #:" . $err;
-            } else {
-              echo $response;
-            }
-        - lang: Python + Python3
-          source: >-
-            import http.client
-
-
-            conn = http.client.HTTPSConnection("e-digital.cl")
-
-
-            headers = { 'token': "SOME_STRING_VALUE" }
-
-
-            conn.request("PUT",
-            "/api/organizations/%7BorganizationID%7D/templates%7BtemplateID%7D",
-            headers=headers)
-
-
-            res = conn.getresponse()
-
-            data = res.read()
-
-
-            print(data.decode("utf-8"))
-  '/organizations/{organitzationID}/users':
+  '/organizations/{cod_organization}/users':
     get:
       summary: >-
         Obtiene el listado de las usuarios de una organización  (No
@@ -6164,14 +5004,7 @@ paths:
          En esta API es posible obtener un listado de todos los usuarios pertenecientes a la organización según su ID.
       parameters:
         - *ref_0
-        - name: organizationID
-          in: path
-          description: Identificador de la organización
-          required: true
-          example: 1120
-          schema:
-            type: integer
-            format: int32
+        - *ref_7
         - name: page
           in: query
           description: Corresponde al número de páginas que se quiere obtener la respuesta.
@@ -6194,8 +5027,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -6255,14 +5088,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request GET \
-              --url 'https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
+              --url 'https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE' \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
+              .url("https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE")
               .get()
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -6271,7 +5104,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
+            RestClient("https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE");
 
             var request = new RestRequest(Method.GET);
 
@@ -6283,7 +5116,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+              "url": "https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "method": "GET",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -6299,9 +5132,9 @@ paths:
 
             var options = {
               "method": "GET",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/organizations/%7BorganitzationID%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+              "path": "/api/organizations/%7Bcod_organization%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -6328,7 +5161,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -6355,14 +5188,14 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
             conn.request("GET",
-            "/api/organizations/%7BorganitzationID%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
+            "/api/organizations/%7Bcod_organization%7D/users?page=SOME_INTEGER_VALUE&records=SOME_INTEGER_VALUE",
             headers=headers)
 
 
@@ -6372,7 +5205,7 @@ paths:
 
 
             print(data.decode("utf-8"))
-  '/organizations/{organitzationID}/users/{userID}':
+  '/organizations/{cod_organization}/users/{cod_user}':
     delete:
       summary: Permite desvincular un usario de una organización  (No Implementado)
       operationId: organizations.users.remove
@@ -6388,22 +5221,8 @@ paths:
          de una organización indicando el ID del usuario que de desea desvincular.
       parameters:
         - *ref_0
-        - name: organizationID
-          in: path
-          description: Identificador de la organización
-          required: true
-          example: 1120
-          schema:
-            type: integer
-            format: int32
-        - name: userID
-          in: path
-          description: Identificador del usuario
-          required: true
-          example: 1119
-          schema:
-            type: integer
-            format: int32
+        - *ref_7
+        - *ref_5
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -6412,8 +5231,8 @@ paths:
               schema:
                 type: object
                 required:
-                  - codigo
-                  - mensaje
+                  - code
+                  - message
                 properties:
                   code:
                     type: integer
@@ -6461,14 +5280,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request DELETE \
-              --url https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users/%7BuserID%7D \
+              --url https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/users/%7Bcod_user%7D \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users/%7BuserID%7D")
+              .url("https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/users/%7Bcod_user%7D")
               .delete(null)
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -6477,7 +5296,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users/%7BuserID%7D");
+            RestClient("https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/users/%7Bcod_user%7D");
 
             var request = new RestRequest(Method.DELETE);
 
@@ -6489,7 +5308,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users/%7BuserID%7D",
+              "url": "https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/users/%7Bcod_user%7D",
               "method": "DELETE",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -6505,9 +5324,9 @@ paths:
 
             var options = {
               "method": "DELETE",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/organizations/%7BorganitzationID%7D/users/%7BuserID%7D",
+              "path": "/api/organizations/%7Bcod_organization%7D/users/%7Bcod_user%7D",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -6534,7 +5353,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users/%7BuserID%7D",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/users/%7Bcod_user%7D",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -6561,14 +5380,14 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
             conn.request("DELETE",
-            "/api/organizations/%7BorganitzationID%7D/users/%7BuserID%7D",
+            "/api/organizations/%7Bcod_organization%7D/users/%7Bcod_user%7D",
             headers=headers)
 
 
@@ -6593,22 +5412,8 @@ paths:
          para que se vincule a una organización.
       parameters:
         - *ref_0
-        - name: organizationID
-          in: path
-          description: Identificador de la organización que se quiere crear su template
-          required: true
-          example: 1120
-          schema:
-            type: integer
-            format: int32
-        - name: userID
-          in: path
-          description: Identificador del usuario.
-          required: true
-          example: 1119
-          schema:
-            type: integer
-            format: int32
+        - *ref_7
+        - *ref_5
       responses:
         '200':
           description: Operación efectuada de forma satisfactoria
@@ -6673,14 +5478,14 @@ paths:
         - lang: Shell + Curl
           source: |-
             curl --request POST \
-              --url https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users/%7BuserID%7D \
+              --url https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/users/%7Bcod_user%7D \
               --header 'token: SOME_STRING_VALUE'
         - lang: Java + Okhttp
           source: |-
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-              .url("https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users/%7BuserID%7D")
+              .url("https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/users/%7Bcod_user%7D")
               .post(null)
               .addHeader("token", "SOME_STRING_VALUE")
               .build();
@@ -6689,7 +5494,7 @@ paths:
         - lang: Csharp + Restsharp
           source: >-
             var client = new
-            RestClient("https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users/%7BuserID%7D");
+            RestClient("https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/users/%7Bcod_user%7D");
 
             var request = new RestRequest(Method.POST);
 
@@ -6701,7 +5506,7 @@ paths:
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users/%7BuserID%7D",
+              "url": "https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/users/%7Bcod_user%7D",
               "method": "POST",
               "headers": {
                 "token": "SOME_STRING_VALUE"
@@ -6717,9 +5522,9 @@ paths:
 
             var options = {
               "method": "POST",
-              "hostname": "e-digital.cl",
+              "hostname": "apipub.e-digital.global",
               "port": null,
-              "path": "/api/organizations/%7BorganitzationID%7D/users/%7BuserID%7D",
+              "path": "/api/organizations/%7Bcod_organization%7D/users/%7Bcod_user%7D",
               "headers": {
                 "token": "SOME_STRING_VALUE"
               }
@@ -6746,7 +5551,7 @@ paths:
             $curl = curl_init();
 
             curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://e-digital.cl/api/organizations/%7BorganitzationID%7D/users/%7BuserID%7D",
+              CURLOPT_URL => "https://apipub.e-digital.global/api/organizations/%7Bcod_organization%7D/users/%7Bcod_user%7D",
               CURLOPT_RETURNTRANSFER => true,
               CURLOPT_ENCODING => "",
               CURLOPT_MAXREDIRS => 10,
@@ -6773,14 +5578,14 @@ paths:
             import http.client
 
 
-            conn = http.client.HTTPSConnection("e-digital.cl")
+            conn = http.client.HTTPSConnection("apipub.e-digital.global")
 
 
             headers = { 'token': "SOME_STRING_VALUE" }
 
 
             conn.request("POST",
-            "/api/organizations/%7BorganitzationID%7D/users/%7BuserID%7D",
+            "/api/organizations/%7Bcod_organization%7D/users/%7Bcod_user%7D",
             headers=headers)
 
 
@@ -6796,6 +5601,6 @@ tags:
   - name: Users
     description: Conjunto de API's que permiten la administración de los usuarios.
   - name: Organization
-    description: Conjunto de API's que permiten la administración de los organizaciones.
+    description: Conjunto de API's que permiten la administración de las organizaciones.
   - name: Documents
     description: Conjunto de API's que permiten la administración de los documentos.

@@ -15,17 +15,11 @@ operation:
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: organizationID
-      in: path
-      description: Identificador de la organización.
-      required: true
-      example: 1120
-      schema:
-       type: integer
-       format: int32
+    - $ref: '../api/components/parameters/organization.cod_organization.yaml#/parameter'
     - name: templateID
       in: path
-      description: Identificador del template.
+      description: Identificador del template.<br>
+       ***(CREO QUE ESTO FALTO A LO QUE ENVIARON)***
       required: true
       example: 1121
       schema:
@@ -43,8 +37,8 @@ operation:
           schema:
             type: object
             required:
-              - codigo
-              - mensaje
+              - code
+              - message
             properties:
               code:
                 type: integer

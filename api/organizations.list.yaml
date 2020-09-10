@@ -39,8 +39,8 @@ operation:
           schema:
             type: object
             required:
-              - codigo
-              - mensaje
+              - code
+              - message
             properties:
               code:
                 type: integer
@@ -81,4 +81,4 @@ operation:
                   message: Listado de organizaciones obtenido de forma satisfactoria.
                   trackingId: eaa362909975204aa43bd28-ba9e4503db58
                   totalRegistros: 50
-                  organizations: ['Empresa1','Empresa2']
+                  organizations: ['cod_1':'Empresa 1','cod_2':'Empresa 2']

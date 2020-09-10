@@ -14,13 +14,7 @@ operation:
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: documentsID
-      in: path
-      description: Identificador del Documentos
-      required: true
-      example: c60974ea92b8ef69ed552b5f7f173063
-      schema:
-        type: string
+    - $ref: '../api/components/parameters/document.hash.yaml#/parameter'
   requestBody:
     content:
       application/json:
@@ -46,8 +40,8 @@ operation:
           schema:
             type: object
             required:
-              - codigo
-              - mensaje
+              - code
+              - message
             properties:
               code:
                 type: integer

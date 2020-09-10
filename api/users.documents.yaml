@@ -22,30 +22,23 @@ operation:
 
     |    Filtro   |                               Descripción                                       |
     |-------------|---------------------------------------------------------------------------------|
-    |    todos    | Se obtiene el listado completo de los documentos del usuario.                   |
-    | pendiente   | Se obtienen solo los documentos pendietes del usuario.                          |
-    | finalizados | Se obtienen solo los documentos finalizados del usuario.                        |
-    | rechazados  | Se obtiene solo los documentos rechazados del usuario.                          |
+    | all         | Se obtiene el listado completo de los documentos del usuario.                   |
+    | open        | Se obtienen solo los documentos pendietes del usuario.                          |
+    | signed      | Se obtienen solo los documentos finalizados del usuario.                        |
+    | rejected    | Se obtiene solo los documentos rechazados del usuario.                          |
 
      </details>
-
+    - ESTE ENDOINT TAMBIÉN DEBE SER TRATADO CON UNA PÁGINACIÓN COMO EL HISTORIAL DEL LOG
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: userID
-      in: path
-      description: Identificador del Usuario
-      required: true
-      example: 1119
-      schema:
-       type: integer
-       format: int32
-    - name: tipoDocumento
+    - $ref: '../api/components/parameters/user.cod_user.yaml#/parameter'
+    - name: state_document
       description: Corresponde al filtro que se quiere aplicar a la lista obtenida.
       in: query
       schema:
         type: string
       required: true
-      example: todos
+      example: all
     - name: from
       in: query
       description: Corresponde a la fecha, desde que fecha quiere el resultado en formato `dd-MM-yyyy`
@@ -72,8 +65,8 @@ operation:
           schema:
             type: object
             required:
-              - codigo
-              - mensaje
+              - code
+              - message
             properties:
               code:
                 type: integer
@@ -99,14 +92,14 @@ operation:
                   type: string
                 description: Lista de documentos obtenidos para el usario y filtro solicitado.
           examples:
-              Token Inválido:
-                $ref: '../api/components/responses/token.invalido.yaml#/example'
-              Sin Permiso:
-                $ref: '../api/components/responses/sin.permiso.yaml#/example'
-              Respuesta OK:
-                value:
-                  code: 0
-                  duration: 780
-                  time: 2020-08-04 09:44:42.245
-                  message: Listado de documentos obtenido de forma satisfactoria.
-                  trackingId: eaa362909975204aa43bd28-ba9e4503db58
+            Token Inválido:
+              $ref: '../api/components/responses/token.invalido.yaml#/example'
+            Sin Permiso:
+              $ref: '../api/components/responses/sin.permiso.yaml#/example'
+            Respuesta OK:
+              value:
+                code: 0
+                duration: 780
+                time: 2020-08-04 09:44:42.245
+                message: Listado de documentos obtenido de forma satisfactoria.
+                trackingId: eaa362909975204aa43bd28-ba9e4503db58

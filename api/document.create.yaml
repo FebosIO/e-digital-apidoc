@@ -20,113 +20,55 @@ operation:
           type: object
           required:
             - signers
-            - userRole
-            - approvers
-            - finalRecipients
-            - templateId
+            - final_recipients
+            - template_id
             - description
-            - afterExpire
-            - flowType
-            - notificationFrecuency
-            - signRequirement
-            - vigency
-            - vigencyType
-            - isPublic
-            - document
-            - signPositionX
-            - signPositionY
-            - signaturePage
           properties:
-            signers:
-                type: array
-                description: Ejemplo &#58; `["nuermorut1", "numerorut2"]`
-                  <br> Cantidad de firmantes según posición del arreglo
-                example: '["nuermorut1", "numerorut2"]'
-            userRole:
-                type: string
-                enum:
-                  - "viewer"
-                  - "signer"
-                  - "approver"
-                description: Ejemplo &#58; `viewer`
-                  <br> Tipo de persona que firmara
-                example: 'viewer'
+            description:
+              type: string
+              description: |
+                Ejemplo &#58; `prueba jonner11 2020-01-03T13:47:31.635Z`
+                <br>  Es la descripción al momento de guardar el documento.
+              example: 'prueba jonner11 2020-01-03T13:47:31.635Z'
+            template_id:
+              type: integer
+              description: Ejemplo &#58; `1047`
+                <br>  Es template de firma documento que se ocupará.
+              example: '1047'
             approvers:
               type: array
-              description: Ejemplo &#58; `["130410847"]`
+              description: Ejemplo &#58; `["130410847", "33333333-3"]`
                 <br> Rut de los aprobadores
-              example: '["130410847"]'
+              example: ["130410847", "33333333-3"]
+            signers:
+              type: array
+              description: Ejemplo &#58; `["11111111-1", "22222222-2"]`
+                <br> Cantidad de firmantes según posición del arreglo
+              example: ["11111111-1", "22222222-2"]
             finalRecipients:
-                type: array
-                description:  Ejemplo &#58; `["signer-2"]`
-                  <br> Destinatarios finales del documento.
-                example: '["signer-2"]'
-            templateId:
-                type: integer
-                description: Ejemplo &#58; `1047`
-                  <br>  Es template de firma documento que se ocupara.
-                example: '1047'
-            description:
-                type: string
-                description: |
-                  Ejemplo &#58; `prueba jonner11 2020-01-03T13:47:31.635Z`
-                  <br>  Es la descripción al momento de guardar el documento.
-                example: 'prueba jonner11 2020-01-03T13:47:31.635Z'
-            afterExpire:
-                type: string
-                description: Ejemplo &#58; `close`
-                  <br> Que pasara una vez expirado el documento.
-                example: 'close'
-            flowType:
-                type: string
-                description: Ejemplo &#58; `individual`
-                  <br> Tipo de flujo
-                example: 'individual'
-            notificationFrecuency:
-                type: integer
-                description: Ejemplo &#58; `1`
-                 <br> Frecuencia de notificaciones
-                example: '1'
-            signRequirement:
-                type: string
-                description:  Ejemplo &#58; `not_required`
-                  <br>  ???
-                example: 'not_required'
-            vigency:
-                type: integer
-                description: Ejemplo &#58; `5`
-                  <br> Corresponde a la vigencia que se le dara al documento.
-                example: '5'
-            vigencyType:
-                type: string
-                description: Ejemplo &#58; `working_days`
-                  <br>  Es el tipo de vigencia que se le dara al documento.
-                example: 'working_days'
-            isPublic:
-              type: integer
-              description: Ejemplo &#58; `0`
-                <br>  Es si el documento sera publico o no.
-              example: '0'
+              type: array
+              description:  Ejemplo &#58; `["signer-2"]`
+                <br> Destinatarios finales del documento.
+              example: ["signer-2"]
+            settings:
+              description: JSON con parametros extra para modificar los asignados en las plantillas
+              type: object
+              example: {"is_public":"true", "vigency":"5"}
+            metadata:
+              description: Ejemplo &#58; `{"documento":"2312", "tipo":"anexo", "cod_sap":"3453"}`
+                <br>JSON con información extra asociada al documento
+              type: object
+              example: {"documento":"2312", "tipo":"anexo", "cod_sap":"3453"}
             document:
               type: string
-              description: Ejemplo &#58; `????`
-                <br>  ???
-              example: '????'
-            signPositionX:
-              type: integer
-              description: Ejemplo &#58; `22`
-                <br>  Coordenadas para posicionar la firma.
-              example: '22'
-            signPositionY:
-              type: integer
-              description: Ejemplo &#58; `25`
-                <br>  Coordenadas para posicionar la firma.
-              example: '25'
-            signaturePage:
-              type: integer
-              description: Ejemplo &#58; `99`
-                <br>  Página donde se debe colocar la firma.
-              example: '99'
+              description: |
+                  Ruta del documento a subir. Es campo requerido y se alterna con document_b64 <br>
+                  <br>***(HAY QUE VERIFICAR COMO SE REPESENTA ESTO EN LA DOCUMENTACIÓN)***
+              example: "@/ruta/del/archivo.pdf"
+            document_b64:
+              type: string
+              description: |
+                Contenido del archivo pdf en base64. Es campo requerido y se alterna con document_b64 <br>q
   responses:
     '400':
       $ref: '../api/components/responses/response.400.yaml#/response'
@@ -139,8 +81,8 @@ operation:
           schema:
             type: object
             required:
-              - codigo
-              - mensaje
+              - code
+              - message
             properties:
               code:
                 type: integer
@@ -160,10 +102,9 @@ operation:
               trackingId:
                 type: string
                 description: Código único de seguimiento. Este código representa al proceso completo de la solicitud realizada, si tienes problemas, te pediremos este código.
-              documentoId:
-                type: integer
-                format: int32
-                description: Código único de documento. Este código representa el id que se genero al momento de crear el documento.
+              document_hash:
+                type: string
+                description: Código único de documento. Este código representa el id que se generó al momento de crear el documento.
           examples:
             Token Inválido:
               $ref: '../api/components/responses/token.invalido.yaml#/example'
@@ -176,4 +117,4 @@ operation:
                 time: 2020-08-04 09:44:42.245
                 message: Documento creado de forma satisfactoria
                 trackingId: eaa362909975204aa43bd28-ba9e4503db58
-                documentoId: 23456
+                document_hash: 7fef0af4f81641885aeff9f1e9b76bd0

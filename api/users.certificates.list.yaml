@@ -15,14 +15,7 @@ operation:
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: userID
-      in: path
-      description: Identificador del Usuario
-      required: true
-      example: 1119
-      schema:
-       type: integer
-       format: int32
+    - $ref: '../api/components/parameters/user.cod_user.yaml#/parameter'
     - name: page
       in: query
       description: Corresponde al número de páginas que se quiere obtener la respuesta.
@@ -49,8 +42,8 @@ operation:
           schema:
             type: object
             required:
-              - codigo
-              - mensaje
+              - code
+              - message
             properties:
               code:
                 type: integer

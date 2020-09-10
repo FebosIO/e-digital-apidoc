@@ -1,0 +1,8 @@
+parameter:
+    name: document_hash
+    in: path
+    description: Identificador del Documentos
+    required: true
+    example: 7fef0af4f81641885aeff9f1e9b76bd0
+    schema:
+        type: string

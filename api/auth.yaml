@@ -11,6 +11,8 @@ operation:
     En este endpoint mediante la combinación de username, password y grant type es posible obtener un token
     el cual es obligatorio para poder realizar el llamado en cualquiera de nuestras api disponibles.
 
+  parameters:
+    - $ref: '../api/components/parameters/header.apikey.yaml#/parameter'
   requestBody:
     content:
       application/json:
@@ -46,8 +48,8 @@ operation:
           schema:
             type: object
             required:
-              - codigo
-              - mensaje
+              - code
+              - message
             properties:
               code:
                 type: integer

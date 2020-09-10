@@ -1,0 +1,8 @@
+parameter:
+    name: cod_organization
+    in: path
+    description: Identificador de la organización
+    required: true
+    example: cod_1
+    schema:
+        type: string

@@ -14,13 +14,7 @@ operation:
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: documentsID
-      in: path
-      description: Identificador del Documentos
-      required: true
-      example: 23456
-      schema:
-        type: integer
+    - $ref: '../api/components/parameters/document.hash.yaml#/parameter'
     - name: from
       in: query
       description: Corresponde a la fecha, desde que fecha quiere el resultado en formato `dd-MM-yyyy`
@@ -61,8 +55,8 @@ operation:
           schema:
             type: object
             required:
-              - codigo
-              - mensaje
+              - code
+              - message
             properties:
               code:
                 type: integer

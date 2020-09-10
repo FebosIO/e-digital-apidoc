@@ -1,0 +1,9 @@
+parameter:
+    name: cod_user
+    in: path
+    description: Identificador del Usuario (cod_user) es un código compuesto por el tipo documento de identidad más su número de identidad; dado a que existe un registro único de usuario en el sitema. En caso de exitir el usuario registrado por alguna otra organización sería imposible saber su ID que lo identifica en el sistema para poder consultar su existencia antes de crearlo. 
+    required: true
+    example: CEDULA-12345678-9
+    schema:
+     type: string
+     format: "{type_identity_document}-{identity_document}"

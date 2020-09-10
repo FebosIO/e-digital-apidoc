@@ -14,15 +14,8 @@ operation:
 
   parameters:
     - $ref: '../api/components/parameters/header.token.yaml#/parameter'
-    - name: userID
-      in: path
-      description: Identificador del Usuario
-      required: true
-      example: 1119
-      schema:
-       type: integer
-       format: int32
-    - name: certificateID
+    - $ref: '../api/components/parameters/user.cod_user.yaml#/parameter'
+    - name: certificate_id
       in: path
       description: Identificador del Certificado
       required: true
@@ -42,8 +35,8 @@ operation:
           schema:
             type: object
             required:
-              - codigo
-              - mensaje
+              - code
+              - message
             properties:
               code:
                 type: integer
